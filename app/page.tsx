@@ -79,30 +79,41 @@ export default function Home() {
               <span style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "17px" }}>Search Results</span>
               <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>{results.length} results</span>
             </div>
-            <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "10px", overflow: "hidden" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
-                <thead>
-                  <tr>
-                    {["Item", "Condition", "Price", ""].map(h => (
-                      <th key={h} style={{ textAlign: "left", padding: "10px 16px", fontSize: "11px", fontWeight: 500, color: "rgba(255,255,255,0.3)", textTransform: "uppercase" as const, letterSpacing: "0.5px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {results.map((item: any) => (
-                    <tr key={item.itemId}>
-                      <td style={{ padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)", color: "#fff", fontWeight: 500, maxWidth: "300px" }}>{item.title}</td>
-                      <td style={{ padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.5)" }}>{item.condition || 'N/A'}</td>
-                      <td style={{ padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)", fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "15px", color: "#00e87a" }}>
-                        {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
-                      </td>
-                      <td style={{ padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-                        <a href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#00e87a", fontSize: "12px", textDecoration: "none" }}>View →</a>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {results.map((item: any) => (
+                <div key={item.itemId} style={{ display: "flex", gap: "1.5rem", alignItems: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem 1.25rem" }}>
+                  
+                  {/* Image */}
+                  <div style={{ flexShrink: 0 }}>
+                    {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
+                      <img
+                        src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl}
+                        alt={item.title}
+                        style={{ width: "90px", height: "90px", objectFit: "contain", borderRadius: "8px", background: "rgba(255,255,255,0.05)" }}
+                      />
+                    ) : (
+                      <div style={{ width: "90px", height: "90px", background: "rgba(255,255,255,0.06)", borderRadius: "8px" }} />
+                    )}
+                  </div>
+
+                  {/* Details */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 500, fontSize: "14px", color: "#fff", marginBottom: "6px", lineHeight: 1.4 }}>{item.title}</div>
+                    <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>{item.condition || 'Condition not specified'}</div>
+                  </div>
+
+                  {/* Price + Link */}
+                  <div style={{ flexShrink: 0, textAlign: "right" }}>
+                    <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "22px", color: "#00e87a", letterSpacing: "-1px", marginBottom: "8px" }}>
+                      {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
+                    </div>
+                    <a href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>
+                      View on eBay →
+                    </a>
+                  </div>
+
+                </div>
+              ))}
             </div>
           </>
         )}
