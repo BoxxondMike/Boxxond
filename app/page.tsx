@@ -107,7 +107,7 @@ export default function Home() {
                     <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", color: "#f0b429", letterSpacing: "-1px", marginBottom: "8px" }}>
                       {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
                     </div>
-                    <a href={`https://rover.ebay.com/rover/1/710-53481-19255-0/1?ff3=4&pub=55755339145682&toolid=10001&campid=5339145682&customid=&mpre=${encodeURIComponent(item.itemWebUrl)}`} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>
+                    <a href={`https://rover.ebay.com/rover/1/710-53481-19255-0/1?ff3=4&pub=5339145682&toolid=10001&campid=5339145682&customid=&mpre=${encodeURIComponent(item.itemWebUrl)}`} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>
                       View on eBay →
                     </a>
                   </div>
