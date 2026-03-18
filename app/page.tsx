@@ -12,7 +12,6 @@ export default function Home() {
     setLoading(true);
     const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
     const data = await res.json();
-    console.log('data received', data);
 setResults(data.items || []);
     setLoading(false);
   };
