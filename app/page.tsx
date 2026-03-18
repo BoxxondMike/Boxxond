@@ -12,16 +12,16 @@ export default function Home() {
     setLoading(true);
     const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
     const data = await res.json();
-setResults(data.items || []);
+    setResults(data.items || []);
     setLoading(false);
   };
 
   return (
-    <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "DM Sans, sans-serif" }}>
+    <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
       
       {/* Nav */}
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 2rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "24px", letterSpacing: "-1px" }}>
+        <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "24px", letterSpacing: "-1px" }}>
           boxx<span style={{ color: "#00e87a" }}>ond</span>
         </div>
         <div style={{ display: "flex", gap: "2rem", fontSize: "14px", color: "rgba(255,255,255,0.5)" }}>
@@ -30,7 +30,7 @@ setResults(data.items || []);
           <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Sets</a>
           <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Breaks</a>
         </div>
-        <button style={{ background: "#00e87a", color: "#080c10", fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "13px", padding: "10px 22px", border: "none", borderRadius: "6px", cursor: "pointer" }}>
+        <button style={{ background: "#00e87a", color: "#080c10", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "13px", padding: "10px 22px", border: "none", borderRadius: "6px", cursor: "pointer" }}>
           Sign Up Free
         </button>
       </nav>
@@ -40,7 +40,7 @@ setResults(data.items || []);
         <div style={{ display: "inline-block", background: "rgba(0,232,122,0.1)", border: "1px solid rgba(0,232,122,0.25)", color: "#00e87a", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
           Football Card Price Tracker
         </div>
-        <h1 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "clamp(40px, 7vw, 68px)", lineHeight: 1.05, margin: "0 0 1.5rem", letterSpacing: "-2px" }}>
+        <h1 style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "clamp(40px, 7vw, 68px)", lineHeight: 1.05, margin: "0 0 1.5rem", letterSpacing: "-2px" }}>
           Know what your<br /><span style={{ color: "#00e87a" }}>cards are worth</span>
         </h1>
         <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "16px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 2.5rem" }}>
@@ -55,7 +55,7 @@ setResults(data.items || []);
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             style={{ flex: 1, background: "transparent", border: "none", outline: "none", color: "#fff", fontSize: "15px", padding: "14px 18px" }}
           />
-          <button onClick={handleSearch} style={{ background: "#00e87a", border: "none", color: "#080c10", fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "13px", padding: "0 22px", cursor: "pointer" }}>
+          <button onClick={handleSearch} style={{ background: "#00e87a", border: "none", color: "#080c10", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "13px", padding: "0 22px", cursor: "pointer" }}>
             {loading ? '...' : 'Search'}
           </button>
         </div>
@@ -65,7 +65,7 @@ setResults(data.items || []);
       <div style={{ display: "flex", justifyContent: "center", gap: "2.5rem", padding: "1.5rem 2rem", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         {[["2.4M+", "Sales tracked"], ["48hrs", "Data refresh"], ["£0", "Free to use"], ["12K+", "Cards indexed"]].map(([num, label]) => (
           <div key={label} style={{ textAlign: "center" }}>
-            <span style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "24px", letterSpacing: "-1px", display: "block" }}>{num}</span>
+            <span style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "24px", letterSpacing: "-1px", display: "block" }}>{num}</span>
             <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>{label}</span>
           </div>
         ))}
@@ -76,7 +76,7 @@ setResults(data.items || []);
         {results.length > 0 && (
           <>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-              <span style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "17px" }}>Search Results</span>
+              <span style={{ fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "17px" }}>Search Results</span>
               <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>{results.length} results</span>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -104,10 +104,10 @@ setResults(data.items || []);
 
                   {/* Price + Link */}
                   <div style={{ flexShrink: 0, textAlign: "right" }}>
-                    <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "22px", color: "#00e87a", letterSpacing: "-1px", marginBottom: "8px" }}>
+                    <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", color: "#00e87a", letterSpacing: "-1px", marginBottom: "8px" }}>
                       {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
                     </div>
-                    <a href={`https://rover.ebay.com/rover/1/710-53481-19255-0/1?ff3=4&pub=5575${`5339145682`}&toolid=10001&campid=5339145682&customid=&mpre=${encodeURIComponent(item.itemWebUrl)}`} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>
+                    <a href={`https://rover.ebay.com/rover/1/710-53481-19255-0/1?ff3=4&pub=55755339145682&toolid=10001&campid=5339145682&customid=&mpre=${encodeURIComponent(item.itemWebUrl)}`} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>
                       View on eBay →
                     </a>
                   </div>
