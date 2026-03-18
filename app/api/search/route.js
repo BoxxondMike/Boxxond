@@ -9,7 +9,7 @@ export async function GET(request) {
   const token = await getEbayToken();
 
   const response = await fetch(
-    `https://api.ebay.com/buy/browse/v1/item_summary/search?q=${encodeURIComponent(query)}&filter=soldItems&limit=20`,
+    `https://api.ebay.com/buy/browse/v1/item_summary/search?q=${encodeURIComponent(query)}&filter=buyingOptions%3A%7BFIXED_PRICE%7D&sort=endingSoonest&limit=20`,
     {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -20,8 +20,7 @@ export async function GET(request) {
   );
 
   const data = await response.json();
-
-  return Response.json(data);
+  return Response.json({ items: data.itemSummaries || [] });
 }
 
 async function getEbayToken() {
