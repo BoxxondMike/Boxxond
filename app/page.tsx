@@ -22,7 +22,7 @@ export default function Home() {
       {/* Nav */}
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 2rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "24px", letterSpacing: "-1px" }}>
-          boxx<span style={{ color: "#00e87a" }}>ond</span>
+          boxx<span style={{ color: "#f0b429" }}>ond</span>
         </div>
         <div style={{ display: "flex", gap: "2rem", fontSize: "14px", color: "rgba(255,255,255,0.5)" }}>
           <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Prices</a>
@@ -30,18 +30,18 @@ export default function Home() {
           <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Sets</a>
           <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Breaks</a>
         </div>
-        <button style={{ background: "#00e87a", color: "#080c10", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "13px", padding: "10px 22px", border: "none", borderRadius: "6px", cursor: "pointer" }}>
+        <button style={{ background: "#f0b429", color: "#080c10", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "13px", padding: "10px 22px", border: "none", borderRadius: "6px", cursor: "pointer" }}>
           Sign Up Free
         </button>
       </nav>
 
       {/* Hero */}
       <div style={{ padding: "4rem 2rem 3rem", maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
-        <div style={{ display: "inline-block", background: "rgba(0,232,122,0.1)", border: "1px solid rgba(0,232,122,0.25)", color: "#00e87a", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
+        <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
           Football Card Price Tracker
         </div>
         <h1 style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "clamp(40px, 7vw, 68px)", lineHeight: 1.05, margin: "0 0 1.5rem", letterSpacing: "-2px" }}>
-          Know what your<br /><span style={{ color: "#00e87a" }}>cards are worth</span>
+          Know what your<br /><span style={{ color: "#f0b429" }}>cards are worth</span>
         </h1>
         <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "16px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 2.5rem" }}>
           Real sold prices from eBay. No guesswork. Track players, sets and box values across the entire UK market.
@@ -55,7 +55,7 @@ export default function Home() {
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             style={{ flex: 1, background: "transparent", border: "none", outline: "none", color: "#fff", fontSize: "15px", padding: "14px 18px" }}
           />
-          <button onClick={handleSearch} style={{ background: "#00e87a", border: "none", color: "#080c10", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "13px", padding: "0 22px", cursor: "pointer" }}>
+          <button onClick={handleSearch} style={{ background: "#f0b429", border: "none", color: "#080c10", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "13px", padding: "0 22px", cursor: "pointer" }}>
             {loading ? '...' : 'Search'}
           </button>
         </div>
@@ -104,7 +104,7 @@ export default function Home() {
 
                   {/* Price + Link */}
                   <div style={{ flexShrink: 0, textAlign: "right" }}>
-                    <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", color: "#00e87a", letterSpacing: "-1px", marginBottom: "8px" }}>
+                    <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", color: "#f0b429", letterSpacing: "-1px", marginBottom: "8px" }}>
                       {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
                     </div>
                     <a href={`https://rover.ebay.com/rover/1/710-53481-19255-0/1?ff3=4&pub=55755339145682&toolid=10001&campid=5339145682&customid=&mpre=${encodeURIComponent(item.itemWebUrl)}`} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>
