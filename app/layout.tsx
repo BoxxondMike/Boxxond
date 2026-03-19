@@ -18,8 +18,10 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "Boxxond | Football Card Price Tracker",
   description: "Real sold prices from eBay. Track football card values across the UK market.",
+  icons: {
+    icon: "/logo.png",
+  },
 };
-
 export default function RootLayout({
   children,
 }: {

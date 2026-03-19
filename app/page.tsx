@@ -42,8 +42,8 @@ export default function Home() {
       {/* Nav */}
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 1.25rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#fff", textDecoration: "none" }}>
-          boxx<span style={{ color: "#f0b429" }}>ond</span>
-        </Link>
+  boxx<span style={{ color: "#f0b429" }}>ond</span>
+</Link>
         <div className="nav-links" style={{ fontSize: "14px" }}>
           <Link href="/" style={{ color: "#f0b429", textDecoration: "none" }}>Prices</Link>
           <Link href="/sets" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Sets</Link>
