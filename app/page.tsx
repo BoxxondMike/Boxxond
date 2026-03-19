@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function Home() {
   const [query, setQuery] = useState('');
@@ -21,13 +22,12 @@ export default function Home() {
       
       {/* Nav */}
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 2rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "24px", letterSpacing: "-1px" }}>
+        <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "24px", letterSpacing: "-1px", color: "#fff", textDecoration: "none" }}>
           boxx<span style={{ color: "#f0b429" }}>ond</span>
-        </div>
-        <div style={{ display: "flex", gap: "2rem", fontSize: "14px", color: "rgba(255,255,255,0.5)" }}>
-          <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Prices</a>
-          <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Players</a>
-          <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Sets</a>
+        </Link>
+        <div style={{ display: "flex", gap: "2rem", fontSize: "14px" }}>
+          <Link href="/" style={{ color: "#f0b429", textDecoration: "none" }}>Prices</Link>
+          <Link href="/sets" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Sets</Link>
           <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Breaks</a>
         </div>
         <button style={{ background: "#f0b429", color: "#080c10", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "13px", padding: "10px 22px", border: "none", borderRadius: "6px", cursor: "pointer" }}>
@@ -107,7 +107,7 @@ export default function Home() {
                     <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", color: "#f0b429", letterSpacing: "-1px", marginBottom: "8px" }}>
                       {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
                     </div>
-                    <a href={`https://rover.ebay.com/rover/1/710-53481-19255-0/1?ff3=4&pub=5339145682&toolid=10001&campid=5339145682&customid=&mpre=${encodeURIComponent(item.itemWebUrl)}`} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>
+                    <a href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>
                       View on eBay →
                     </a>
                   </div>
