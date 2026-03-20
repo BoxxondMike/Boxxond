@@ -1,7 +1,9 @@
 'use client';
-import Nav from '../components/Nav';
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Nav from '../components/Nav';
+import { supabase } from '../lib/supabase';
 
 const featuredQueries = [
   'Jude Bellingham Topps Chrome',
@@ -17,10 +19,24 @@ export default function Home() {
   const [recentSales, setRecentSales] = useState([]);
   const [featuredCards, setFeaturedCards] = useState([]);
   const [activeTab, setActiveTab] = useState('recent');
+  const [savedIds, setSavedIds] = useState<string[]>([]);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     fetchRecentSales();
     fetchFeaturedCards();
+  }, []);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user || null);
+      if (session?.user) {
+        const { data } = await supabase.from('saved_cards').select('item_id');
+        setSavedIds(data?.map((d: any) => d.item_id) || []);
+      }
+    };
+    getUser();
   }, []);
 
   const fetchRecentSales = async () => {
@@ -45,31 +61,54 @@ export default function Home() {
     setLoading(false);
   };
 
+  const handleSave = async (item: any) => {
+    if (!user) {
+      window.location.href = '/signup';
+      return;
+    }
+    const isAlreadySaved = savedIds.includes(item.itemId);
+    if (isAlreadySaved) {
+      await supabase.from('saved_cards').delete().eq('item_id', item.itemId).eq('user_id', user.id);
+      setSavedIds(savedIds.filter((id: string) => id !== item.itemId));
+    } else {
+      await supabase.from('saved_cards').insert({
+        user_id: user.id,
+        item_id: item.itemId,
+        title: item.title,
+        price: item.price ? parseFloat(item.price.value) : null,
+        currency: item.price?.currency || 'GBP',
+        image_url: item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl || null,
+        item_url: item.itemWebUrl,
+      });
+      setSavedIds([...savedIds, item.itemId]);
+    }
+  };
+
   const CardGrid = ({ items }: { items: any[] }) => (
-  <div style={{ display: "flex", gap: "12px", overflowX: "auto", paddingBottom: "8px", scrollbarWidth: "none" }}>
-    {items.map((item: any) => (
-      <a key={item.itemId} href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", flexShrink: 0, width: "200px" }}>
-        <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem", cursor: "pointer" }}
-          onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(240,180,41,0.3)')}
-          onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}>
-          {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
-            <img
-              src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl}
-              alt={item.title}
-              style={{ width: "100%", height: "160px", objectFit: "contain", borderRadius: "6px", background: "rgba(255,255,255,0.05)", marginBottom: "10px" }}
-            />
-          ) : (
-            <div style={{ width: "100%", height: "160px", background: "rgba(255,255,255,0.06)", borderRadius: "6px", marginBottom: "10px" }} />
-          )}
-          <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)", marginBottom: "8px", lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.title}</div>
-          <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "18px", color: "#f0b429", letterSpacing: "0px" }}>
-            {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
+    <div style={{ display: "flex", gap: "12px", overflowX: "auto", paddingBottom: "8px", scrollbarWidth: "none" }}>
+      {items.map((item: any) => (
+        <a key={item.itemId} href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", flexShrink: 0, width: "200px" }}>
+          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem", cursor: "pointer" }}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(240,180,41,0.3)')}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}>
+            {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
+              <img
+                src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl}
+                alt={item.title}
+                style={{ width: "100%", height: "160px", objectFit: "contain", borderRadius: "6px", background: "rgba(255,255,255,0.05)", marginBottom: "10px" }}
+              />
+            ) : (
+              <div style={{ width: "100%", height: "160px", background: "rgba(255,255,255,0.06)", borderRadius: "6px", marginBottom: "10px" }} />
+            )}
+            <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)", marginBottom: "8px", lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.title}</div>
+            <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "18px", color: "#f0b429", letterSpacing: "0px" }}>
+              {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
+            </div>
           </div>
-        </div>
-      </a>
-    ))}
-  </div>
-);
+        </a>
+      ))}
+    </div>
+  );
 
   return (
     <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
@@ -89,7 +128,7 @@ export default function Home() {
         }
       `}</style>
 
-   <Nav activePage="prices" />
+      <Nav activePage="prices" />
 
       {/* Hero */}
       <div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
@@ -111,7 +150,7 @@ export default function Home() {
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             style={{ flex: 1, background: "transparent", border: "none", outline: "none", color: "#fff", fontSize: "15px", padding: "14px 16px" }}
           />
-          <button onClick={handleSearch} style={{ background: "#f0b429", border: "none", color: "#080c10", fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "13px", padding: "0 18px", cursor: "pointer", whiteSpace: "nowrap" as const }}>
+          <button onClick={handleSearch} style={{ background: "#f0b429", border: "none", color: "#080c10", fontWeight: 700, fontSize: "13px", padding: "0 18px", cursor: "pointer", whiteSpace: "nowrap" as const }}>
             {loading ? '...' : 'Search'}
           </button>
         </div>
@@ -131,7 +170,7 @@ export default function Home() {
       {results.length > 0 && (
         <div style={{ padding: "2rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-            <span style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "17px" }}>Search Results</span>
+            <span style={{ fontWeight: 700, fontSize: "17px" }}>Search Results</span>
             <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>{results.length} results</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -149,10 +188,17 @@ export default function Home() {
                   <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>{item.condition || 'Condition not specified'}</div>
                 </div>
                 <div className="result-price">
-                  <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "22px", color: "#f0b429", letterSpacing: "-1px", marginBottom: "8px" }}>
+                  <div style={{ fontWeight: 700, fontSize: "22px", color: "#f0b429", marginBottom: "8px" }}>
                     {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
                   </div>
-                  <a href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>
+                  <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                    <a href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>
+                    <button
+                      onClick={() => handleSave(item)}
+                      style={{ background: savedIds.includes(item.itemId) ? "rgba(240,180,41,0.2)" : "rgba(255,255,255,0.05)", border: `1px solid ${savedIds.includes(item.itemId) ? "rgba(240,180,41,0.5)" : "rgba(255,255,255,0.1)"}`, borderRadius: "6px", padding: "4px 10px", cursor: "pointer", fontSize: "12px", color: savedIds.includes(item.itemId) ? "#f0b429" : "rgba(255,255,255,0.4)" }}>
+                      {savedIds.includes(item.itemId) ? '★ Saved' : '☆ Save'}
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -162,21 +208,18 @@ export default function Home() {
 
       {/* Trending Section */}
       <div style={{ padding: "2rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
-
-        {/* Tabs */}
         <div style={{ display: "flex", gap: "0", marginBottom: "1.5rem", background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "4px", width: "fit-content" }}>
           {[['recent', 'Recent Sales'], ['featured', 'Featured Cards']].map(([tab, label]) => (
-            <button key={tab} onClick={() => setActiveTab(tab)} style={{ background: activeTab === tab ? "#f0b429" : "transparent", color: activeTab === tab ? "#080c10" : "rgba(255,255,255,0.5)", fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "13px", padding: "8px 18px", border: "none", borderRadius: "7px", cursor: "pointer", transition: "all 0.2s" }}>
+            <button key={tab} onClick={() => setActiveTab(tab)} style={{ background: activeTab === tab ? "#f0b429" : "transparent", color: activeTab === tab ? "#080c10" : "rgba(255,255,255,0.5)", fontWeight: 700, fontSize: "13px", padding: "8px 18px", border: "none", borderRadius: "7px", cursor: "pointer", transition: "all 0.2s" }}>
               {label}
             </button>
           ))}
         </div>
 
-        {/* Tab Content */}
         {activeTab === 'recent' && (
           <>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-              <span style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "17px" }}>Recent Sales</span>
+              <span style={{ fontWeight: 700, fontSize: "17px" }}>Recent Sales</span>
               <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Live from eBay UK</span>
             </div>
             {recentSales.length > 0 ? <CardGrid items={recentSales} /> : (
@@ -188,7 +231,7 @@ export default function Home() {
         {activeTab === 'featured' && (
           <>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-              <span style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "17px" }}>Featured Cards</span>
+              <span style={{ fontWeight: 700, fontSize: "17px" }}>Featured Cards</span>
               <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Hand picked for you</span>
             </div>
             {featuredCards.length > 0 ? <CardGrid items={featuredCards} /> : (
@@ -196,7 +239,6 @@ export default function Home() {
             )}
           </>
         )}
-
       </div>
 
     </main>

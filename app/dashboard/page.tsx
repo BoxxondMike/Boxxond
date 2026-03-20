@@ -8,6 +8,7 @@ import { supabase } from '../../lib/supabase';
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [savedCards, setSavedCards] = useState<any[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -17,11 +18,21 @@ export default function DashboardPage() {
         router.push('/login');
       } else {
         setUser(session.user);
+        const { data } = await supabase
+          .from('saved_cards')
+          .select('*')
+          .order('created_at', { ascending: false });
+        setSavedCards(data || []);
       }
       setLoading(false);
     };
     getUser();
   }, []);
+
+  const handleUnsave = async (itemId: string) => {
+    await supabase.from('saved_cards').delete().eq('item_id', itemId);
+    setSavedCards(savedCards.filter((c: any) => c.item_id !== itemId));
+  };
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -68,9 +79,9 @@ export default function DashboardPage() {
         {/* Stats */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "12px", marginBottom: "2.5rem" }}>
           {[
-            { label: "Saved Cards", value: "0", desc: "Cards in your watchlist" },
-            { label: "Price Alerts", value: "0", desc: "Active alerts" },
-            { label: "Searches", value: "0", desc: "Total searches made" },
+            { label: "Saved Cards", value: savedCards.length.toString(), desc: "Cards in your watchlist" },
+            { label: "Price Alerts", value: "0", desc: "Active alerts — coming soon" },
+            { label: "Portfolio Value", value: savedCards.length > 0 ? `£${savedCards.reduce((sum: number, c: any) => sum + (c.price || 0), 0).toFixed(2)}` : "£0", desc: "Total value of saved cards" },
           ].map((stat) => (
             <div key={stat.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1.25rem" }}>
               <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase" as const, letterSpacing: "0.5px", marginBottom: "0.5rem" }}>{stat.label}</div>
@@ -80,14 +91,55 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* Coming Soon Features */}
+        {/* Saved Cards */}
         <div style={{ marginBottom: "2rem" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+            <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0, letterSpacing: "-0.3px" }}>Saved Cards</h2>
+            <Link href="/" style={{ fontSize: "13px", color: "#f0b429", textDecoration: "none" }}>+ Add more</Link>
+          </div>
+
+          {savedCards.length === 0 ? (
+            <div style={{ textAlign: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "3rem" }}>
+              <div style={{ fontSize: "32px", marginBottom: "1rem" }}>☆</div>
+              <div style={{ fontWeight: 600, fontSize: "16px", marginBottom: "0.5rem" }}>No saved cards yet</div>
+              <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)", marginBottom: "1.5rem" }}>Search for a card and hit Save to add it here</div>
+              <Link href="/" style={{ background: "#f0b429", color: "#080c10", fontWeight: 700, fontSize: "13px", padding: "10px 20px", borderRadius: "6px", textDecoration: "none" }}>
+                Start Searching
+              </Link>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {savedCards.map((card: any) => (
+                <div key={card.id} style={{ display: "flex", gap: "1rem", alignItems: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem 1.25rem" }}>
+                  {card.image_url && (
+                    <img src={card.image_url} alt={card.title} style={{ width: "60px", height: "60px", objectFit: "contain", borderRadius: "6px", background: "rgba(255,255,255,0.05)", flexShrink: 0 }} />
+                  )}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 500, fontSize: "13px", color: "#fff", marginBottom: "4px", lineHeight: 1.4 }}>{card.title}</div>
+                    <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)" }}>Saved {new Date(card.created_at).toLocaleDateString('en-GB')}</div>
+                  </div>
+                  <div style={{ textAlign: "right", flexShrink: 0 }}>
+                    <div style={{ fontWeight: 700, fontSize: "18px", color: "#f0b429", marginBottom: "6px" }}>
+                      {card.price ? `£${card.price.toFixed(2)}` : 'N/A'}
+                    </div>
+                    <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+                      <a href={card.item_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", textDecoration: "none" }}>View →</a>
+                      <button onClick={() => handleUnsave(card.item_id)} style={{ fontSize: "11px", color: "rgba(239,68,68,0.6)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Remove</button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Coming Soon */}
+        <div>
           <h2 style={{ fontSize: "18px", fontWeight: 700, margin: "0 0 1rem", letterSpacing: "-0.3px" }}>Coming Soon</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             {[
-              { title: "Saved Cards", desc: "Save cards from search results and track their prices", icon: "🔖" },
               { title: "Price Alerts", desc: "Get notified when a card drops below your target price", icon: "🔔" },
-              { title: "Portfolio Tracker", desc: "Track the total value of your card collection", icon: "📈" },
+              { title: "Portfolio Tracker", desc: "Track the total value of your card collection over time", icon: "📈" },
             ].map((feature) => (
               <div key={feature.title} style={{ display: "flex", gap: "1rem", alignItems: "flex-start", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "10px", padding: "1rem 1.25rem" }}>
                 <span style={{ fontSize: "20px" }}>{feature.icon}</span>
@@ -99,13 +151,6 @@ export default function DashboardPage() {
               </div>
             ))}
           </div>
-        </div>
-
-        {/* CTA */}
-        <div style={{ textAlign: "center" }}>
-          <Link href="/" style={{ display: "inline-block", background: "#f0b429", color: "#080c10", fontWeight: 700, fontSize: "14px", padding: "12px 24px", borderRadius: "8px", textDecoration: "none" }}>
-            Start Searching Cards →
-          </Link>
         </div>
 
       </div>
