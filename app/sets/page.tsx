@@ -177,7 +177,7 @@ export default function SetsPage() {
     <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
 
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 2rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "24px", letterSpacing: "-1px", color: "#fff", textDecoration: "none" }}>
+        <Link href="/" style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "24px", letterSpacing: "-1px", color: "#fff", textDecoration: "none" }}>
           boxx<span style={{ color: "#f0b429" }}>ond</span>
         </Link>
         <div style={{ display: "flex", gap: "2rem", fontSize: "14px" }}>
@@ -185,7 +185,7 @@ export default function SetsPage() {
           <Link href="/sets" style={{ color: "#f0b429", textDecoration: "none" }}>Sets</Link>
           <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Breaks</a>
         </div>
-        <button style={{ background: "#f0b429", color: "#080c10", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "13px", padding: "10px 22px", border: "none", borderRadius: "6px", cursor: "pointer" }}>
+        <button style={{ background: "#f0b429", color: "#080c10", fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "13px", padding: "10px 22px", border: "none", borderRadius: "6px", cursor: "pointer" }}>
           Sign Up Free
         </button>
       </nav>
@@ -194,7 +194,7 @@ export default function SetsPage() {
         <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1rem", letterSpacing: "1px", textTransform: "uppercase" }}>
           Card Set Guide
         </div>
-        <h1 style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "clamp(32px, 5vw, 52px)", letterSpacing: "-1.5px", margin: "0 0 1rem", lineHeight: 1.05 }}>
+        <h1 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "clamp(32px, 5vw, 52px)", letterSpacing: "-1.5px", margin: "0 0 1rem", lineHeight: 1.05 }}>
           Know your <span style={{ color: "#f0b429" }}>sets</span>
         </h1>
         <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "16px", lineHeight: 1.6, maxWidth: "500px", margin: 0 }}>
@@ -205,7 +205,7 @@ export default function SetsPage() {
       {sports.map((sport) => (
         <div key={sport.name} style={{ padding: "2rem", maxWidth: "960px", margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
-            <h2 style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-0.5px", margin: 0 }}>{sport.name}</h2>
+            <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "22px", letterSpacing: "-0.5px", margin: 0 }}>{sport.name}</h2>
             <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.06)" }}/>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "16px" }}>
@@ -219,7 +219,7 @@ export default function SetsPage() {
                     <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "0.5px" }}>{set.manufacturer}</span>
                     <span style={{ background: difficultyColour[set.difficulty], color: difficultyText[set.difficulty], fontSize: "10px", padding: "2px 8px", borderRadius: "4px", fontWeight: 500 }}>{set.difficulty}</span>
                   </div>
-                  <div style={{ fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "18px", color: "#fff", marginBottom: "0.5rem", letterSpacing: "-0.3px" }}>{set.name}</div>
+                  <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "18px", color: "#fff", marginBottom: "0.5rem", letterSpacing: "-0.3px" }}>{set.name}</div>
                   <div style={{ fontSize: "12px", color: "#f0b429", marginBottom: "0.75rem" }}>{set.year}</div>
                   <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.5)", lineHeight: 1.6, marginBottom: "1rem" }}>{set.description}</div>
                   <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>

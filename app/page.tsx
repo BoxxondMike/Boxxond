@@ -62,7 +62,7 @@ export default function Home() {
               <div style={{ width: "100%", height: "160px", background: "rgba(255,255,255,0.06)", borderRadius: "6px", marginBottom: "10px" }} />
             )}
             <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)", marginBottom: "8px", lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.title}</div>
-            <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "18px", color: "#f0b429", letterSpacing: "-0.5px" }}>
+            <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "18px", color: "#f0b429", letterSpacing: "-0.5px" }}>
               {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
             </div>
           </div>
@@ -99,7 +99,7 @@ export default function Home() {
           <Link href="/sets" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Sets</Link>
           <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Breaks</a>
         </div>
-        <button style={{ background: "#f0b429", color: "#080c10", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "13px", padding: "8px 16px", border: "none", borderRadius: "6px", cursor: "pointer" }}>
+        <button style={{ background: "#f0b429", color: "#080c10", fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "13px", padding: "8px 16px", border: "none", borderRadius: "6px", cursor: "pointer" }}>
           Sign Up
         </button>
       </nav>
@@ -109,7 +109,7 @@ export default function Home() {
         <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
           Trading Card Price Tracker
         </div>
-        <h1 style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "clamp(36px, 7vw, 68px)", lineHeight: 1.05, margin: "0 0 1.25rem", letterSpacing: "-2px" }}>
+        <h1 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "clamp(36px, 7vw, 68px)", lineHeight: 1.05, margin: "0 0 1.25rem", letterSpacing: "-2px" }}>
           Know what your<br /><span style={{ color: "#f0b429" }}>cards are worth</span>
         </h1>
         <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 2rem" }}>
@@ -124,7 +124,7 @@ export default function Home() {
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             style={{ flex: 1, background: "transparent", border: "none", outline: "none", color: "#fff", fontSize: "15px", padding: "14px 16px" }}
           />
-          <button onClick={handleSearch} style={{ background: "#f0b429", border: "none", color: "#080c10", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "13px", padding: "0 18px", cursor: "pointer", whiteSpace: "nowrap" as const }}>
+          <button onClick={handleSearch} style={{ background: "#f0b429", border: "none", color: "#080c10", fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "13px", padding: "0 18px", cursor: "pointer", whiteSpace: "nowrap" as const }}>
             {loading ? '...' : 'Search'}
           </button>
         </div>
@@ -134,7 +134,7 @@ export default function Home() {
       <div className="stats-bar" style={{ padding: "1.25rem", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         {[["eBay UK", "Live Data"], ["Free", "To Use"], ["Football Cards", "UK Market"], ["Daily", "Updated"]].map(([num, label]) => (
           <div key={label} style={{ textAlign: "center" }}>
-            <span style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "18px", letterSpacing: "-0.5px", display: "block" }}>{num}</span>
+            <span style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "18px", letterSpacing: "-0.5px", display: "block" }}>{num}</span>
             <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>{label}</span>
           </div>
         ))}
@@ -144,7 +144,7 @@ export default function Home() {
       {results.length > 0 && (
         <div style={{ padding: "2rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-            <span style={{ fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "17px" }}>Search Results</span>
+            <span style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "17px" }}>Search Results</span>
             <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>{results.length} results</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -162,7 +162,7 @@ export default function Home() {
                   <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>{item.condition || 'Condition not specified'}</div>
                 </div>
                 <div className="result-price">
-                  <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", color: "#f0b429", letterSpacing: "-1px", marginBottom: "8px" }}>
+                  <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "22px", color: "#f0b429", letterSpacing: "-1px", marginBottom: "8px" }}>
                     {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
                   </div>
                   <a href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>
@@ -179,7 +179,7 @@ export default function Home() {
         {/* Tabs */}
         <div style={{ display: "flex", gap: "0", marginBottom: "1.5rem", background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "4px", width: "fit-content" }}>
           {[['recent', 'Recent Sales'], ['featured', 'Featured Cards']].map(([tab, label]) => (
-            <button key={tab} onClick={() => setActiveTab(tab)} style={{ background: activeTab === tab ? "#f0b429" : "transparent", color: activeTab === tab ? "#080c10" : "rgba(255,255,255,0.5)", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "13px", padding: "8px 18px", border: "none", borderRadius: "7px", cursor: "pointer", transition: "all 0.2s" }}>
+            <button key={tab} onClick={() => setActiveTab(tab)} style={{ background: activeTab === tab ? "#f0b429" : "transparent", color: activeTab === tab ? "#080c10" : "rgba(255,255,255,0.5)", fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "13px", padding: "8px 18px", border: "none", borderRadius: "7px", cursor: "pointer", transition: "all 0.2s" }}>
               {label}
             </button>
           ))}
@@ -189,7 +189,7 @@ export default function Home() {
         {activeTab === 'recent' && (
           <>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-              <span style={{ fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "17px" }}>Recent Sales</span>
+              <span style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "17px" }}>Recent Sales</span>
               <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Live from eBay UK</span>
             </div>
             {recentSales.length > 0 ? <CardGrid items={recentSales} /> : (
@@ -201,7 +201,7 @@ export default function Home() {
         {activeTab === 'featured' && (
           <>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-              <span style={{ fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "17px" }}>Featured Cards</span>
+              <span style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "17px" }}>Featured Cards</span>
               <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Hand picked for you</span>
             </div>
             {featuredCards.length > 0 ? <CardGrid items={featuredCards} /> : (

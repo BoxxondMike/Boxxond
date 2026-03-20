@@ -65,7 +65,7 @@ export default function RootLayout({
 
               <div style={{ display: "flex", gap: "4rem", flexWrap: "wrap" }}>
                 <div>
-                  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-syne)", fontWeight: 700 }}>Explore</div>
+                  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-dm-sans)", fontWeight: 700 }}>Explore</div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
                     <Link href="/" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Price Tracker</Link>
                     <Link href="/sets" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Card Sets</Link>
@@ -74,7 +74,7 @@ export default function RootLayout({
                 </div>
 
                 <div>
-  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-syne)", fontWeight: 700 }}>Soccer</div>
+  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-dm-sans)", fontWeight: 700 }}>Soccer</div>
   <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
     <Link href="/sets/topps-chrome" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Topps Chrome</Link>
     <Link href="/sets/panini-prizm-epl" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Panini Prizm EPL</Link>
@@ -84,7 +84,7 @@ export default function RootLayout({
 </div>
 
 <div>
-  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-syne)", fontWeight: 700 }}>Other Sports</div>
+  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-dm-sans)", fontWeight: 700 }}>Other Sports</div>
   <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
     <Link href="/sets/panini-prizm-nba" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Prizm NBA</Link>
     <Link href="/sets/panini-prizm-nfl" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Prizm NFL</Link>
@@ -95,7 +95,7 @@ export default function RootLayout({
               </div>
 
               <div>
-                <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-syne)", fontWeight: 700 }}>Follow Us</div>
+                <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-dm-sans)", fontWeight: 700 }}>Follow Us</div>
                 <a href="https://instagram.com/boxxond" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
                   <div style={{ width: "36px", height: "36px", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f0b429" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
