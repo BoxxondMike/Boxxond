@@ -9,6 +9,9 @@ export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [savedCards, setSavedCards] = useState<any[]>([]);
+  const [alerts, setAlerts] = useState<any[]>([]);
+  const [alertTerm, setAlertTerm] = useState('');
+  const [alertMaxPrice, setAlertMaxPrice] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -23,6 +26,11 @@ export default function DashboardPage() {
           .select('*')
           .order('created_at', { ascending: false });
         setSavedCards(data || []);
+        const { data: alertsData } = await supabase
+          .from('card_alerts')
+          .select('*')
+          .order('created_at', { ascending: false });
+        setAlerts(alertsData || []);
       }
       setLoading(false);
     };
@@ -32,6 +40,25 @@ export default function DashboardPage() {
   const handleUnsave = async (itemId: string) => {
     await supabase.from('saved_cards').delete().eq('item_id', itemId);
     setSavedCards(savedCards.filter((c: any) => c.item_id !== itemId));
+  };
+
+  const handleAddAlert = async () => {
+    if (!alertTerm.trim()) return;
+    const { data, error } = await supabase.from('card_alerts').insert({
+      user_id: user.id,
+      search_term: alertTerm.trim(),
+      max_price: alertMaxPrice ? parseFloat(alertMaxPrice) : null,
+    }).select();
+    if (!error && data) {
+      setAlerts([data[0], ...alerts]);
+      setAlertTerm('');
+      setAlertMaxPrice('');
+    }
+  };
+
+  const handleDeleteAlert = async (id: string) => {
+    await supabase.from('card_alerts').delete().eq('id', id);
+    setAlerts(alerts.filter((a: any) => a.id !== id));
   };
 
   const handleSignOut = async () => {
@@ -50,7 +77,6 @@ export default function DashboardPage() {
   return (
     <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
 
-      {/* Nav */}
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 1.25rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#fff", textDecoration: "none" }}>
           boxx<span style={{ color: "#f0b429" }}>ond</span>
@@ -65,7 +91,6 @@ export default function DashboardPage() {
 
       <div style={{ padding: "2.5rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
 
-        {/* Welcome */}
         <div style={{ marginBottom: "2.5rem" }}>
           <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
             Dashboard
@@ -76,11 +101,10 @@ export default function DashboardPage() {
           <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "14px", margin: 0 }}>{user?.email}</p>
         </div>
 
-        {/* Stats */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "12px", marginBottom: "2.5rem" }}>
           {[
             { label: "Saved Cards", value: savedCards.length.toString(), desc: "Cards in your watchlist" },
-            { label: "Price Alerts", value: "0", desc: "Active alerts — coming soon" },
+            { label: "Price Alerts", value: alerts.length.toString(), desc: "Active alerts" },
             { label: "Portfolio Value", value: savedCards.length > 0 ? `£${savedCards.reduce((sum: number, c: any) => sum + (c.price || 0), 0).toFixed(2)}` : "£0", desc: "Total value of saved cards" },
           ].map((stat) => (
             <div key={stat.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1.25rem" }}>
@@ -92,7 +116,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Saved Cards */}
-        <div style={{ marginBottom: "2rem" }}>
+        <div style={{ marginBottom: "2.5rem" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
             <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0, letterSpacing: "-0.3px" }}>Saved Cards</h2>
             <Link href="/" style={{ fontSize: "13px", color: "#f0b429", textDecoration: "none" }}>+ Add more</Link>
@@ -133,23 +157,63 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* Coming Soon */}
+        {/* Card Alerts */}
         <div>
-          <h2 style={{ fontSize: "18px", fontWeight: 700, margin: "0 0 1rem", letterSpacing: "-0.3px" }}>Coming Soon</h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            {[
-              { title: "Price Alerts", desc: "Get notified when a card drops below your target price", icon: "🔔" },
-              { title: "Portfolio Tracker", desc: "Track the total value of your card collection over time", icon: "📈" },
-            ].map((feature) => (
-              <div key={feature.title} style={{ display: "flex", gap: "1rem", alignItems: "flex-start", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "10px", padding: "1rem 1.25rem" }}>
-                <span style={{ fontSize: "20px" }}>{feature.icon}</span>
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: "14px", marginBottom: "3px" }}>{feature.title}</div>
-                  <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>{feature.desc}</div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
+            <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0, letterSpacing: "-0.3px" }}>Card Alerts</h2>
+          </div>
+          <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)", marginBottom: "1.25rem", marginTop: 0 }}>
+            Set up alerts for players or cards you are tracking.
+          </p>
+
+          <div style={{ display: "flex", gap: "10px", marginBottom: "1.5rem", flexWrap: "wrap" as const }}>
+            <input
+              type="text"
+              placeholder="e.g. Jude Bellingham Topps Chrome"
+              value={alertTerm}
+              onChange={(e) => setAlertTerm(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleAddAlert()}
+              style={{ flex: 1, minWidth: "200px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "10px 14px", color: "#fff", fontSize: "14px", outline: "none" }}
+            />
+            <input
+              type="number"
+              placeholder="Max price £ (optional)"
+              value={alertMaxPrice}
+              onChange={(e) => setAlertMaxPrice(e.target.value)}
+              style={{ width: "180px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "10px 14px", color: "#fff", fontSize: "14px", outline: "none" }}
+            />
+            <button
+              onClick={handleAddAlert}
+              style={{ background: "#f0b429", color: "#080c10", fontWeight: 700, fontSize: "13px", padding: "10px 20px", border: "none", borderRadius: "8px", cursor: "pointer", whiteSpace: "nowrap" as const }}>
+              Add Alert
+            </button>
+          </div>
+
+          {alerts.length === 0 ? (
+            <div style={{ textAlign: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "2rem" }}>
+              <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.3)" }}>No alerts set up yet — add one above</div>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {alerts.map((alert: any) => (
+                <div key={alert.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "10px", padding: "1rem 1.25rem" }}>
+                  <div>
+                    <div style={{ fontWeight: 500, fontSize: "14px", color: "#fff", marginBottom: "3px" }}>{alert.search_term}</div>
+                    <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.3)" }}>
+                      {alert.max_price ? `Max price: £${alert.max_price}` : 'Any price'}
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                    <Link href={`/?q=${encodeURIComponent(alert.search_term)}`} style={{ fontSize: "12px", color: "#f0b429", textDecoration: "none" }}>Search now →</Link>
+                    <button onClick={() => handleDeleteAlert(alert.id)} style={{ fontSize: "11px", color: "rgba(239,68,68,0.6)", background: "none", border: "none", cursor: "pointer" }}>Remove</button>
+                  </div>
                 </div>
-                <div style={{ marginLeft: "auto", background: "rgba(240,180,41,0.1)", color: "#f0b429", fontSize: "10px", padding: "3px 8px", borderRadius: "4px", fontWeight: 500, whiteSpace: "nowrap" as const }}>Coming Soon</div>
-              </div>
-            ))}
+              ))}
+            </div>
+          )}
+
+          <div style={{ marginTop: "1rem", background: "rgba(240,180,41,0.06)", border: "1px solid rgba(240,180,41,0.15)", borderRadius: "8px", padding: "0.75rem 1rem", fontSize: "12px", color: "rgba(255,255,255,0.4)" }}>
+            🔔 Email notifications for alerts coming soon
           </div>
         </div>
 
