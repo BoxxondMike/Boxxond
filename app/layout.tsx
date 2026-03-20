@@ -59,7 +59,7 @@ export default function RootLayout({
                   boxx<span style={{ color: "#f0b429" }}>ond</span>
                 </div>
                 <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.35)", maxWidth: "220px", lineHeight: 1.6 }}>
-                  Real sold prices from eBay. The UK's football card price tracker.
+                  Real sold prices from eBay. The UK's trading card price tracker covering Soccer, Basketball, Baseball and NFL.
                 </div>
               </div>
 
@@ -74,14 +74,24 @@ export default function RootLayout({
                 </div>
 
                 <div>
-                  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-syne)", fontWeight: 700 }}>Sets</div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
-                    <Link href="/sets/topps-chrome" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Topps Chrome</Link>
-                    <Link href="/sets/panini-prizm-epl" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Panini Prizm EPL</Link>
-                    <Link href="/sets/topps-match-attax" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Match Attax</Link>
-                    <Link href="/sets/merlin" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Merlin</Link>
-                  </div>
-                </div>
+  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-syne)", fontWeight: 700 }}>Soccer</div>
+  <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+    <Link href="/sets/topps-chrome" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Topps Chrome</Link>
+    <Link href="/sets/panini-prizm-epl" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Panini Prizm EPL</Link>
+    <Link href="/sets/topps-match-attax" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Match Attax</Link>
+    <Link href="/sets/merlin" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Merlin</Link>
+  </div>
+</div>
+
+<div>
+  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-syne)", fontWeight: 700 }}>Other Sports</div>
+  <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+    <Link href="/sets/panini-prizm-nba" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Prizm NBA</Link>
+    <Link href="/sets/panini-prizm-nfl" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Prizm NFL</Link>
+    <Link href="/sets/topps-chrome-baseball" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Topps Chrome Baseball</Link>
+    <Link href="/sets" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>View All Sets →</Link>
+  </div>
+</div>
               </div>
 
               <div>
