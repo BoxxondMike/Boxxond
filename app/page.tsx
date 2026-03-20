@@ -82,12 +82,12 @@ export default function Home() {
 
       {/* Stats */}
       <div className="stats-bar" style={{ padding: "1.25rem", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        {[["2.4M+", "Sales tracked"], ["48hrs", "Data refresh"], ["£0", "Free to use"], ["12K+", "Cards indexed"]].map(([num, label]) => (
-          <div key={label} style={{ textAlign: "center" }}>
-            <span style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", display: "block" }}>{num}</span>
-            <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>{label}</span>
-          </div>
-        ))}
+        {[["eBay UK", "Live Data"], ["Free", "To Use"], ["Football Cards", "UK Market"], ["Daily", "Updated"]].map(([num, label]) => (
+  <div key={label} style={{ textAlign: "center" }}>
+    <span style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "18px", letterSpacing: "-0.5px", display: "block" }}>{num}</span>
+    <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>{label}</span>
+  </div>
+))}
       </div>
 
       {/* Results */}
