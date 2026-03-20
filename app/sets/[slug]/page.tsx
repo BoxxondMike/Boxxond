@@ -1,6 +1,16 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const set = sets[slug];
+  if (!set) return {};
+  return {
+    title: `${set.name} Football Cards | Prices, Parallels & Guide | Boxxond`,
+    description: `Everything you need to know about ${set.name}. Prices, parallels, print runs and collector tips. Real sold prices from eBay UK.`,
+  };
+}
+
 const sets: Record<string, any> = {
   'topps-chrome': {
     name: 'Topps Chrome',
