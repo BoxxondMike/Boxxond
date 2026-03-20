@@ -1,3 +1,4 @@
+import Nav from '../../../components/Nav';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -372,42 +373,30 @@ export default async function SetPage({ params }: { params: Promise<{ slug: stri
   return (
     <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
 
-      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 2rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "24px", letterSpacing: "-1px", color: "#fff", textDecoration: "none" }}>
-          boxx<span style={{ color: "#f0b429" }}>ond</span>
-        </Link>
-        <div style={{ display: "flex", gap: "2rem", fontSize: "14px" }}>
-          <Link href="/" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Prices</Link>
-          <Link href="/sets" style={{ color: "#f0b429", textDecoration: "none" }}>Sets</Link>
-          <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Breaks</a>
-        </div>
-        <button style={{ background: "#f0b429", color: "#080c10", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "13px", padding: "10px 22px", border: "none", borderRadius: "6px", cursor: "pointer" }}>
-          Sign Up Free
-        </button>
-      </nav>
+      <Nav activePage="sets" />
 
       <div style={{ padding: "2.5rem 2rem", maxWidth: "800px", margin: "0 auto" }}>
 
         <Link href="/sets" style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", textDecoration: "none", display: "inline-block", marginBottom: "1.5rem" }}>Back to Sets</Link>
 
         <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "0.75rem", flexWrap: "wrap" }}>
-          <h1 style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "clamp(28px, 5vw, 44px)", letterSpacing: "-1px", margin: 0 }}>{set.name}</h1>
+          <h1 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "clamp(28px, 5vw, 44px)", letterSpacing: "-1px", margin: 0 }}>{set.name}</h1>
           <span style={{ background: difficultyColour[set.difficulty], color: difficultyText[set.difficulty], fontSize: "11px", padding: "3px 10px", borderRadius: "4px", fontWeight: 500 }}>{set.difficulty}</span>
         </div>
         <div style={{ fontSize: "13px", color: "#f0b429", marginBottom: "2rem" }}>{set.manufacturer} · {set.year}</div>
 
         <section style={{ marginBottom: "2.5rem" }}>
-          <h2 style={{ fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "16px", marginBottom: "0.75rem", color: "rgba(255,255,255,0.9)" }}>Overview</h2>
+          <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "16px", marginBottom: "0.75rem", color: "rgba(255,255,255,0.9)" }}>Overview</h2>
           <p style={{ color: "rgba(255,255,255,0.6)", lineHeight: 1.8, fontSize: "15px", margin: 0 }}>{set.overview}</p>
         </section>
 
         <section style={{ marginBottom: "2.5rem" }}>
-          <h2 style={{ fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "16px", marginBottom: "0.75rem", color: "rgba(255,255,255,0.9)" }}>What to look for</h2>
+          <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "16px", marginBottom: "0.75rem", color: "rgba(255,255,255,0.9)" }}>What to look for</h2>
           <p style={{ color: "rgba(255,255,255,0.6)", lineHeight: 1.8, fontSize: "15px", margin: 0 }}>{set.whatToLookFor}</p>
         </section>
 
         <section style={{ marginBottom: "2.5rem" }}>
-          <h2 style={{ fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "16px", marginBottom: "1rem", color: "rgba(255,255,255,0.9)" }}>Parallels and Print Runs</h2>
+          <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "16px", marginBottom: "1rem", color: "rgba(255,255,255,0.9)" }}>Parallels and Print Runs</h2>
           <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "10px", overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
               <thead>
@@ -421,7 +410,7 @@ export default async function SetPage({ params }: { params: Promise<{ slug: stri
                 {set.parallels.map((p: any, i: number) => (
                   <tr key={i}>
                     <td style={{ padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)", color: "#fff", fontWeight: 500 }}>{p.name}</td>
-                    <td style={{ padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)", color: "#f0b429", fontFamily: "var(--font-syne)", fontWeight: 700 }}>{p.printRun}</td>
+                    <td style={{ padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)", color: "#f0b429", fontFamily: "var(--font-dm-sans)", fontWeight: 700 }}>{p.printRun}</td>
                     <td style={{ padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.5)" }}>{p.colour}</td>
                   </tr>
                 ))}
@@ -431,11 +420,11 @@ export default async function SetPage({ params }: { params: Promise<{ slug: stri
         </section>
 
         <section style={{ marginBottom: "2.5rem" }}>
-          <h2 style={{ fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "16px", marginBottom: "1rem", color: "rgba(255,255,255,0.9)" }}>Collector Tips</h2>
+          <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "16px", marginBottom: "1rem", color: "rgba(255,255,255,0.9)" }}>Collector Tips</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             {set.tips.map((tip: string, i: number) => (
               <div key={i} style={{ display: "flex", gap: "12px", alignItems: "flex-start", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px", padding: "12px 16px" }}>
-                <span style={{ color: "#f0b429", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "14px", flexShrink: 0 }}>0{i + 1}</span>
+                <span style={{ color: "#f0b429", fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "14px", flexShrink: 0 }}>0{i + 1}</span>
                 <span style={{ color: "rgba(255,255,255,0.6)", fontSize: "14px", lineHeight: 1.6 }}>{tip}</span>
               </div>
             ))}
@@ -444,7 +433,7 @@ export default async function SetPage({ params }: { params: Promise<{ slug: stri
 
         <section style={{ background: "rgba(240,180,41,0.06)", border: "1px solid rgba(240,180,41,0.2)", borderRadius: "12px", padding: "1.5rem" }}>
           <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" as const, letterSpacing: "1px", marginBottom: "0.5rem" }}>Typical Price Range</div>
-          <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "28px", color: "#f0b429", letterSpacing: "-1px" }}>{set.priceRange}</div>
+          <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "28px", color: "#f0b429", letterSpacing: "-1px" }}>{set.priceRange}</div>
           <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.3)", marginTop: "0.5rem" }}>Based on recent eBay UK sold prices</div>
         </section>
 

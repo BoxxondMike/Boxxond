@@ -1,5 +1,6 @@
 'use client';
 
+import Nav from '../../components/Nav';
 import Link from 'next/link';
 
 const sports = [
@@ -176,19 +177,7 @@ export default function SetsPage() {
   return (
     <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
 
-      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 2rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <Link href="/" style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "24px", letterSpacing: "-1px", color: "#fff", textDecoration: "none" }}>
-          boxx<span style={{ color: "#f0b429" }}>ond</span>
-        </Link>
-        <div style={{ display: "flex", gap: "2rem", fontSize: "14px" }}>
-          <Link href="/" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Prices</Link>
-          <Link href="/sets" style={{ color: "#f0b429", textDecoration: "none" }}>Sets</Link>
-          <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Breaks</a>
-        </div>
-        <button style={{ background: "#f0b429", color: "#080c10", fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "13px", padding: "10px 22px", border: "none", borderRadius: "6px", cursor: "pointer" }}>
-          Sign Up Free
-        </button>
-      </nav>
+     <Nav activePage="sets" />
 
       <div style={{ padding: "3rem 2rem 2rem", maxWidth: "960px", margin: "0 auto" }}>
         <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1rem", letterSpacing: "1px", textTransform: "uppercase" }}>

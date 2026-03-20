@@ -1,5 +1,5 @@
 'use client';
-
+import Nav from '../components/Nav';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
@@ -89,23 +89,7 @@ export default function Home() {
         }
       `}</style>
 
-      {/* Nav */}
-      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 1.25rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#fff", textDecoration: "none" }}>
-          boxx<span style={{ color: "#f0b429" }}>ond</span>
-        </Link>
-        <div className="nav-links" style={{ fontSize: "14px" }}>
-          <Link href="/" style={{ color: "#f0b429", textDecoration: "none" }}>Prices</Link>
-          <Link href="/sets" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Sets</Link>
-          <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Breaks</a>
-        </div>
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-  <Link href="/login" style={{ fontSize: "13px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Log in</Link>
-  <Link href="/signup" style={{ background: "#f0b429", color: "#080c10", fontWeight: 700, fontSize: "13px", padding: "8px 16px", borderRadius: "6px", textDecoration: "none" }}>
-    Sign Up
-  </Link>
-</div>
-      </nav>
+   <Nav activePage="prices" />
 
       {/* Hero */}
       <div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
