@@ -46,30 +46,30 @@ export default function Home() {
   };
 
   const CardGrid = ({ items }: { items: any[] }) => (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "12px" }}>
-      {items.map((item: any) => (
-        <a key={item.itemId} href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
-          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem", cursor: "pointer" }}
-            onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(240,180,41,0.3)')}
-            onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}>
-            {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
-              <img
-                src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl}
-                alt={item.title}
-                style={{ width: "100%", height: "160px", objectFit: "contain", borderRadius: "6px", background: "rgba(255,255,255,0.05)", marginBottom: "10px" }}
-              />
-            ) : (
-              <div style={{ width: "100%", height: "160px", background: "rgba(255,255,255,0.06)", borderRadius: "6px", marginBottom: "10px" }} />
-            )}
-            <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)", marginBottom: "8px", lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.title}</div>
-            <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "18px", color: "#f0b429", letterSpacing: "-0.5px" }}>
-              {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
-            </div>
+  <div style={{ display: "flex", gap: "12px", overflowX: "auto", paddingBottom: "8px", scrollbarWidth: "none" }}>
+    {items.map((item: any) => (
+      <a key={item.itemId} href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", flexShrink: 0, width: "200px" }}>
+        <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem", cursor: "pointer" }}
+          onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(240,180,41,0.3)')}
+          onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}>
+          {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
+            <img
+              src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl}
+              alt={item.title}
+              style={{ width: "100%", height: "160px", objectFit: "contain", borderRadius: "6px", background: "rgba(255,255,255,0.05)", marginBottom: "10px" }}
+            />
+          ) : (
+            <div style={{ width: "100%", height: "160px", background: "rgba(255,255,255,0.06)", borderRadius: "6px", marginBottom: "10px" }} />
+          )}
+          <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)", marginBottom: "8px", lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.title}</div>
+          <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "18px", color: "#f0b429", letterSpacing: "0px" }}>
+            {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
           </div>
-        </a>
-      ))}
-    </div>
-  );
+        </div>
+      </a>
+    ))}
+  </div>
+);
 
   return (
     <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
