@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Syne, DM_Sans } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import Script from "next/script";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -22,6 +23,7 @@ export const metadata: Metadata = {
     icon: "/logo.png",
   },
 };
+
 export default function RootLayout({
   children,
 }: {
@@ -29,6 +31,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-0GPKL0Z4TK"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-0GPKL0Z4TK');
+          `}
+        </Script>
+      </head>
       <body className={`${syne.variable} ${dmSans.variable}`}>
         {children}
 
@@ -36,10 +52,8 @@ export default function RootLayout({
         <footer style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "#080c10", padding: "3rem 2rem", marginTop: "4rem" }}>
           <div style={{ maxWidth: "960px", margin: "0 auto" }}>
             
-            {/* Top row */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "2rem", marginBottom: "2.5rem" }}>
               
-              {/* Logo and tagline */}
               <div>
                 <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#fff", marginBottom: "0.5rem" }}>
                   boxx<span style={{ color: "#f0b429" }}>ond</span>
@@ -49,7 +63,6 @@ export default function RootLayout({
                 </div>
               </div>
 
-              {/* Links */}
               <div style={{ display: "flex", gap: "4rem", flexWrap: "wrap" }}>
                 <div>
                   <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-syne)", fontWeight: 700 }}>Explore</div>
@@ -71,7 +84,6 @@ export default function RootLayout({
                 </div>
               </div>
 
-              {/* Social */}
               <div>
                 <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-syne)", fontWeight: 700 }}>Follow Us</div>
                 <a href="https://instagram.com/boxxond" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
@@ -88,7 +100,6 @@ export default function RootLayout({
 
             </div>
 
-            {/* Bottom row */}
             <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
               <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.2)" }}>
                 © 2025 Boxxond. All rights reserved.
