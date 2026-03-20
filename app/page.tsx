@@ -1,12 +1,40 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+
+const featuredQueries = [
+  'Jude Bellingham Topps Chrome',
+  'Cole Palmer Prizm',
+  'Bukayo Saka card',
+  'LeBron James Prizm',
+];
 
 export default function Home() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [recentSales, setRecentSales] = useState([]);
+  const [featuredCards, setFeaturedCards] = useState([]);
+  const [activeTab, setActiveTab] = useState('recent');
+
+  useEffect(() => {
+    fetchRecentSales();
+    fetchFeaturedCards();
+  }, []);
+
+  const fetchRecentSales = async () => {
+    const res = await fetch('/api/search?q=Topps+Chrome+football+card&featured=true');
+    const data = await res.json();
+    setRecentSales(data.items?.slice(0, 4) || []);
+  };
+
+  const fetchFeaturedCards = async () => {
+    const randomQuery = featuredQueries[Math.floor(Math.random() * featuredQueries.length)];
+    const res = await fetch(`/api/search?q=${encodeURIComponent(randomQuery)}&featured=true`);
+    const data = await res.json();
+    setFeaturedCards(data.items?.slice(0, 4) || []);
+  };
 
   const handleSearch = async () => {
     if (!query) return;
@@ -17,6 +45,32 @@ export default function Home() {
     setLoading(false);
   };
 
+  const CardGrid = ({ items }: { items: any[] }) => (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "12px" }}>
+      {items.map((item: any) => (
+        <a key={item.itemId} href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem", cursor: "pointer" }}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(240,180,41,0.3)')}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}>
+            {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
+              <img
+                src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl}
+                alt={item.title}
+                style={{ width: "100%", height: "160px", objectFit: "contain", borderRadius: "6px", background: "rgba(255,255,255,0.05)", marginBottom: "10px" }}
+              />
+            ) : (
+              <div style={{ width: "100%", height: "160px", background: "rgba(255,255,255,0.06)", borderRadius: "6px", marginBottom: "10px" }} />
+            )}
+            <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)", marginBottom: "8px", lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.title}</div>
+            <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "18px", color: "#f0b429", letterSpacing: "-0.5px" }}>
+              {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  );
+
   return (
     <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
 
@@ -26,30 +80,26 @@ export default function Home() {
         .result-image { width: 90px; height: 90px; flex-shrink: 0; }
         .result-price { text-align: right; flex-shrink: 0; }
         .stats-bar { display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
-        .hero-title { font-size: clamp(36px, 7vw, 68px); }
-        .nav-btn { display: block; }
         @media (max-width: 640px) {
           .nav-links { display: none; }
-          .nav-btn { display: block; }
           .result-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
-          .result-image { width: 100%; height: 200px; object-fit: contain; }
+          .result-image { width: 100% !important; height: 200px !important; }
           .result-price { text-align: left; width: 100%; display: flex; justify-content: space-between; align-items: center; }
           .stats-bar { gap: 1.5rem; }
-          .hero-title { font-size: clamp(32px, 9vw, 52px) !important; letter-spacing: -1px !important; }
         }
       `}</style>
 
       {/* Nav */}
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 1.25rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#fff", textDecoration: "none" }}>
-  boxx<span style={{ color: "#f0b429" }}>ond</span>
-</Link>
+          boxx<span style={{ color: "#f0b429" }}>ond</span>
+        </Link>
         <div className="nav-links" style={{ fontSize: "14px" }}>
           <Link href="/" style={{ color: "#f0b429", textDecoration: "none" }}>Prices</Link>
           <Link href="/sets" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Sets</Link>
           <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Breaks</a>
         </div>
-        <button className="nav-btn" style={{ background: "#f0b429", color: "#080c10", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "13px", padding: "8px 16px", border: "none", borderRadius: "6px", cursor: "pointer" }}>
+        <button style={{ background: "#f0b429", color: "#080c10", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "13px", padding: "8px 16px", border: "none", borderRadius: "6px", cursor: "pointer" }}>
           Sign Up
         </button>
       </nav>
@@ -59,11 +109,11 @@ export default function Home() {
         <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
           Trading Card Price Tracker
         </div>
-        <h1 className="hero-title" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, lineHeight: 1.05, margin: "0 0 1.25rem", letterSpacing: "-2px" }}>
+        <h1 style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "clamp(36px, 7vw, 68px)", lineHeight: 1.05, margin: "0 0 1.25rem", letterSpacing: "-2px" }}>
           Know what your<br /><span style={{ color: "#f0b429" }}>cards are worth</span>
         </h1>
         <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 2rem" }}>
-         Real sold prices from eBay. No guesswork. Track players, sets and box values across Soccer, Basketball, Baseball and NFL.
+          Real sold prices from eBay. No guesswork. Track players, sets and box values across soccer, basketball, baseball and NFL.
         </p>
         <div style={{ display: "flex", maxWidth: "520px", margin: "0 auto", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px", overflow: "hidden" }}>
           <input
@@ -83,66 +133,83 @@ export default function Home() {
       {/* Stats */}
       <div className="stats-bar" style={{ padding: "1.25rem", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         {[["eBay UK", "Live Data"], ["Free", "To Use"], ["Football Cards", "UK Market"], ["Daily", "Updated"]].map(([num, label]) => (
-  <div key={label} style={{ textAlign: "center" }}>
-    <span style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "18px", letterSpacing: "-0.5px", display: "block" }}>{num}</span>
-    <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>{label}</span>
-  </div>
-))}
+          <div key={label} style={{ textAlign: "center" }}>
+            <span style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "18px", letterSpacing: "-0.5px", display: "block" }}>{num}</span>
+            <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>{label}</span>
+          </div>
+        ))}
       </div>
 
-      {/* Results */}
+      {/* Search Results */}
+      {results.length > 0 && (
+        <div style={{ padding: "2rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+            <span style={{ fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "17px" }}>Search Results</span>
+            <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>{results.length} results</span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            {results.map((item: any) => (
+              <div key={item.itemId} className="result-card" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem 1.25rem" }}>
+                <div style={{ flexShrink: 0 }}>
+                  {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
+                    <img src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl} alt={item.title} className="result-image" style={{ objectFit: "contain", borderRadius: "8px", background: "rgba(255,255,255,0.05)" }} />
+                  ) : (
+                    <div className="result-image" style={{ background: "rgba(255,255,255,0.06)", borderRadius: "8px" }} />
+                  )}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: 500, fontSize: "14px", color: "#fff", marginBottom: "6px", lineHeight: 1.4 }}>{item.title}</div>
+                  <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>{item.condition || 'Condition not specified'}</div>
+                </div>
+                <div className="result-price">
+                  <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", color: "#f0b429", letterSpacing: "-1px", marginBottom: "8px" }}>
+                    {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
+                  </div>
+                  <a href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Trending Section */}
       <div style={{ padding: "2rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
-        {results.length > 0 && (
+
+        {/* Tabs */}
+        <div style={{ display: "flex", gap: "0", marginBottom: "1.5rem", background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "4px", width: "fit-content" }}>
+          {[['recent', 'Recent Sales'], ['featured', 'Featured Cards']].map(([tab, label]) => (
+            <button key={tab} onClick={() => setActiveTab(tab)} style={{ background: activeTab === tab ? "#f0b429" : "transparent", color: activeTab === tab ? "#080c10" : "rgba(255,255,255,0.5)", fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "13px", padding: "8px 18px", border: "none", borderRadius: "7px", cursor: "pointer", transition: "all 0.2s" }}>
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'recent' && (
           <>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-              <span style={{ fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "17px" }}>Search Results</span>
-              <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>{results.length} results</span>
+              <span style={{ fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "17px" }}>Recent Sales</span>
+              <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Live from eBay UK</span>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              {results.map((item: any) => (
-                <div key={item.itemId} className="result-card" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem 1.25rem" }}>
-                  
-                  {/* Image */}
-                  <div style={{ flexShrink: 0 }}>
-                    {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
-                      <img
-                        src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl}
-                        alt={item.title}
-                        className="result-image"
-                        style={{ objectFit: "contain", borderRadius: "8px", background: "rgba(255,255,255,0.05)" }}
-                      />
-                    ) : (
-                      <div className="result-image" style={{ background: "rgba(255,255,255,0.06)", borderRadius: "8px" }} />
-                    )}
-                  </div>
-
-                  {/* Details */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontWeight: 500, fontSize: "14px", color: "#fff", marginBottom: "6px", lineHeight: 1.4 }}>{item.title}</div>
-                    <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>{item.condition || 'Condition not specified'}</div>
-                  </div>
-
-                  {/* Price + Link */}
-                  <div className="result-price">
-                    <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", color: "#f0b429", letterSpacing: "-1px", marginBottom: "8px" }}>
-                      {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
-                    </div>
-                    <a href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>
-                      View on eBay →
-                    </a>
-                  </div>
-
-                </div>
-              ))}
-            </div>
+            {recentSales.length > 0 ? <CardGrid items={recentSales} /> : (
+              <div style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", padding: "2rem 0" }}>Loading...</div>
+            )}
           </>
         )}
 
-        {results.length === 0 && !loading && (
-          <div style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", paddingTop: "2rem", fontSize: "15px" }}>
-            Search for a player or card above to see real eBay prices
-          </div>
+        {activeTab === 'featured' && (
+          <>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+              <span style={{ fontFamily: "var(--font-syne)", fontWeight: 700, fontSize: "17px" }}>Featured Cards</span>
+              <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Hand picked for you</span>
+            </div>
+            {featuredCards.length > 0 ? <CardGrid items={featuredCards} /> : (
+              <div style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", padding: "2rem 0" }}>Loading...</div>
+            )}
+          </>
         )}
+
       </div>
 
     </main>

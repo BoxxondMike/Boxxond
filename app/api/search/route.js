@@ -1,6 +1,7 @@
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('q');
+  const featured = searchParams.get('featured');
 
   if (!query) {
     return Response.json({ error: 'No search query provided' }, { status: 400 });
@@ -8,8 +9,11 @@ export async function GET(request) {
 
   const token = await getEbayToken();
 
+  // Featured cards use specific trending searches
+  const searchQuery = featured ? query : query;
+
   const response = await fetch(
-    `https://api.ebay.com/buy/browse/v1/item_summary/search?q=${encodeURIComponent(query)}&filter=buyingOptions%3A%7BFIXED_PRICE%7D&sort=endingSoonest&limit=20`,
+    `https://api.ebay.com/buy/browse/v1/item_summary/search?q=${encodeURIComponent(searchQuery)}&filter=buyingOptions%3A%7BFIXED_PRICE%7D&sort=endingSoonest&limit=${featured ? '4' : '20'}`,
     {
       headers: {
         'Authorization': `Bearer ${token}`,
