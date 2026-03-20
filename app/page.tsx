@@ -99,9 +99,12 @@ export default function Home() {
           <Link href="/sets" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Sets</Link>
           <a href="#" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Breaks</a>
         </div>
-        <button style={{ background: "#f0b429", color: "#080c10", fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "13px", padding: "8px 16px", border: "none", borderRadius: "6px", cursor: "pointer" }}>
-          Sign Up
-        </button>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+  <Link href="/login" style={{ fontSize: "13px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Log in</Link>
+  <Link href="/signup" style={{ background: "#f0b429", color: "#080c10", fontWeight: 700, fontSize: "13px", padding: "8px 16px", borderRadius: "6px", textDecoration: "none" }}>
+    Sign Up
+  </Link>
+</div>
       </nav>
 
       {/* Hero */}
