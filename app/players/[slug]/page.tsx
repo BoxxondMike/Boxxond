@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Nav from '../../../components/Nav';
 import Link from 'next/link';
+import { supabase } from '../../../lib/supabase';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
 export default function PlayerPage() {
   const params = useParams();
@@ -11,14 +13,17 @@ export default function PlayerPage() {
   const playerName = slug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
 
   const [results, setResults] = useState<any[]>([]);
+  const [sortedResults, setSortedResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [avgPrice, setAvgPrice] = useState(0);
   const [highPrice, setHighPrice] = useState(0);
   const [lowPrice, setLowPrice] = useState(0);
+  const [priceHistory, setPriceHistory] = useState<any[]>([]);
+  const [sortOrder, setSortOrder] = useState<'high' | 'low'>('high');
 
   useEffect(() => {
     const fetchCards = async () => {
-      const res = await fetch(`/api/search?q=${encodeURIComponent(playerName + ' card')}`);
+     const res = await fetch(`/api/search?q=${encodeURIComponent(playerName + ' trading card')}&sort=${sortOrder === 'high' ? 'price' : 'endingSoonest'}`);
       const data = await res.json();
       const items = data.items || [];
       setResults(items);
@@ -28,14 +33,57 @@ export default function PlayerPage() {
         .map((item: any) => parseFloat(item.price.value));
 
       if (prices.length > 0) {
-        setAvgPrice(prices.reduce((a: number, b: number) => a + b, 0) / prices.length);
+        const avg = prices.reduce((a: number, b: number) => a + b, 0) / prices.length;
+        setAvgPrice(avg);
         setHighPrice(Math.max(...prices));
         setLowPrice(Math.min(...prices));
+
+        await supabase.from('price_history').insert({
+          search_term: playerName.toLowerCase(),
+          avg_price: parseFloat(avg.toFixed(2)),
+          listing_count: items.length,
+        });
       }
+
+      const { data: historyData } = await supabase
+        .from('price_history')
+        .select('*')
+        .eq('search_term', playerName.toLowerCase())
+        .order('recorded_at', { ascending: true })
+        .limit(30);
+
+      if (historyData) {
+        setPriceHistory(historyData.map((h: any) => ({
+          date: new Date(h.recorded_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }),
+          price: parseFloat(h.avg_price),
+        })));
+      }
+
       setLoading(false);
     };
     fetchCards();
-  }, [slug]);
+  }, [slug, sortOrder]);
+
+  useEffect(() => {
+    const sorted = [...results].sort((a: any, b: any) => {
+      const priceA = parseFloat(a.price?.value || '0');
+      const priceB = parseFloat(b.price?.value || '0');
+      return sortOrder === 'high' ? priceB - priceA : priceA - priceB;
+    });
+    setSortedResults(sorted);
+  }, [results, sortOrder]);
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div style={{ background: "#0f1419", border: "1px solid rgba(240,180,41,0.3)", borderRadius: "8px", padding: "8px 12px" }}>
+          <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.5)", marginBottom: "4px" }}>{label}</div>
+          <div style={{ fontSize: "16px", fontWeight: 700, color: "#f0b429" }}>£{payload[0].value.toFixed(2)}</div>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
@@ -43,10 +91,8 @@ export default function PlayerPage() {
 
       <div style={{ padding: "2.5rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
 
-        {/* Back */}
         <Link href="/" style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", textDecoration: "none", display: "inline-block", marginBottom: "1.5rem" }}>← Back to search</Link>
 
-        {/* Header */}
         <div style={{ marginBottom: "2rem" }}>
           <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
             Player Price Guide
@@ -61,7 +107,7 @@ export default function PlayerPage() {
 
         {/* Price Stats */}
         {!loading && results.length > 0 && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "12px", marginBottom: "2.5rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "12px", marginBottom: "2rem" }}>
             {[
               { label: "Average Price", value: `£${avgPrice.toFixed(2)}` },
               { label: "Highest Price", value: `£${highPrice.toFixed(2)}` },
@@ -76,20 +122,55 @@ export default function PlayerPage() {
           </div>
         )}
 
+        {/* Price History Chart */}
+        {priceHistory.length > 1 && (
+          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1.5rem", marginBottom: "2rem" }}>
+            <h2 style={{ fontSize: "16px", fontWeight: 700, margin: "0 0 1.5rem" }}>Price History</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <LineChart data={priceHistory}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="date" tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `£${v}`} />
+                <Tooltip content={<CustomTooltip />} />
+                <Line type="monotone" dataKey="price" stroke="#f0b429" strokeWidth={2} dot={{ fill: "#f0b429", r: 3 }} activeDot={{ r: 5 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+
         {/* Results */}
         <div>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem", flexWrap: "wrap" as const, gap: "10px" }}>
             <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0 }}>Current Listings</h2>
-            <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Live from eBay UK</span>
+            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+              <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)" }}>Sort:</span>
+              {[['high', 'High to Low'], ['low', 'Low to High']].map(([val, label]) => (
+                <button
+                  key={val}
+                  onClick={() => setSortOrder(val as 'high' | 'low')}
+                  style={{
+                    background: sortOrder === val ? "#f0b429" : "rgba(255,255,255,0.05)",
+                    color: sortOrder === val ? "#080c10" : "rgba(255,255,255,0.5)",
+                    border: `1px solid ${sortOrder === val ? "#f0b429" : "rgba(255,255,255,0.1)"}`,
+                    borderRadius: "6px",
+                    padding: "5px 12px",
+                    fontSize: "12px",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}>
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {loading ? (
             <div style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", padding: "3rem 0" }}>Loading {playerName} cards...</div>
-          ) : results.length === 0 ? (
+          ) : sortedResults.length === 0 ? (
             <div style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", padding: "3rem 0" }}>No listings found for {playerName}</div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              {results.map((item: any) => (
+              {sortedResults.map((item: any) => (
                 <div key={item.itemId} style={{ display: "flex", gap: "1rem", alignItems: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem 1.25rem" }}>
                   {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
                     <img
