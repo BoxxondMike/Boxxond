@@ -23,7 +23,7 @@ export default function PlayerPage() {
 
   useEffect(() => {
     const fetchCards = async () => {
-     const res = await fetch(`/api/search?q=${encodeURIComponent(playerName + ' trading card')}&sort=${sortOrder === 'high' ? 'price' : 'endingSoonest'}`);
+     const res = await fetch(`/api/search?q=${encodeURIComponent(playerName)}&sort=${sortOrder === 'high' ? 'price' : 'endingSoonest'}&playerSearch=true`);
       const data = await res.json();
       const items = data.items || [];
       setResults(items);
