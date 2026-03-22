@@ -22,6 +22,15 @@ export default function Home() {
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [user, setUser] = useState<any>(null);
   const [activeSport, setActiveSport] = useState('');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [condition, setCondition] = useState('');
+  const [sortBy, setSortBy] = useState('');
+  const formatPrice = (value: number) => {
+  const parts = value.toFixed(2).split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return parts.join('.');
+};
 
   useEffect(() => {
     fetchRecentSales();
@@ -54,14 +63,20 @@ export default function Home() {
   };
 
   const handleSearch = async () => {
-  if (!query) return;
-  setLoading(true);
-  const searchQuery = activeSport ? `${query} ${activeSport}` : query;
-  const res = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}`);
-  const data = await res.json();
-  setResults(data.items || []);
-  setLoading(false);
-};
+    if (!query) return;
+    setLoading(true);
+    const searchQuery = activeSport ? `${query} ${activeSport}` : query;
+    const params = new URLSearchParams();
+    params.set('q', searchQuery);
+    if (minPrice) params.set('minPrice', minPrice);
+    if (maxPrice) params.set('maxPrice', maxPrice);
+    if (condition) params.set('condition', condition);
+    if (sortBy) params.set('sort', sortBy);
+    const res = await fetch(`/api/search?${params.toString()}`);
+    const data = await res.json();
+    setResults(data.items || []);
+    setLoading(false);
+  };
 
   const handleSave = async (item: any) => {
     if (!user) {
@@ -104,7 +119,7 @@ export default function Home() {
             )}
             <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)", marginBottom: "8px", lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.title}</div>
             <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "18px", color: "#f0b429", letterSpacing: "0px" }}>
-              {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
+            {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${Number(parseFloat(item.price.value).toFixed(2)).toLocaleString('en-GB')}` : 'N/A'}
             </div>
           </div>
         </a>
@@ -116,13 +131,12 @@ export default function Home() {
     <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
 
       <style>{`
-        .nav-links { display: flex; gap: 2rem; }
         .result-card { display: flex; gap: 1.5rem; align-items: center; }
         .result-image { width: 90px; height: 90px; flex-shrink: 0; }
         .result-price { text-align: right; flex-shrink: 0; }
         .stats-bar { display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
+        select option { background: #080c10; color: #fff; }
         @media (max-width: 640px) {
-          .nav-links { display: none; }
           .result-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
           .result-image { width: 100% !important; height: 200px !important; }
           .result-price { text-align: left; width: 100%; display: flex; justify-content: space-between; align-items: center; }
@@ -137,38 +151,41 @@ export default function Home() {
         <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
           Trading Card Price Tracker
         </div>
-        <h1 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "clamp(36px, 7vw, 68px)", lineHeight: 1.05, margin: "0 0 1.25rem", letterSpacing: "-2px" }}>
+        <h1 style={{ fontWeight: 800, fontSize: "clamp(36px, 7vw, 68px)", lineHeight: 1.05, margin: "0 0 1.25rem", letterSpacing: "-2px" }}>
           Know what your<br /><span style={{ color: "#f0b429" }}>cards are worth</span>
         </h1>
         <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 2rem" }}>
           Real sold prices from eBay. No guesswork. Track players, sets and box values across soccer, basketball, baseball and NFL.
         </p>
+
         {/* Sport Filter */}
-<div style={{ display: "flex", gap: "8px", justifyContent: "center", marginBottom: "1.5rem", flexWrap: "wrap" as const }}>
-  {[
-    { label: "All Sports", value: "" },
-    { label: "Soccer", value: "football soccer card" },
-    { label: "Basketball", value: "basketball card NBA" },
-    { label: "Baseball", value: "baseball card MLB" },
-    { label: "NFL", value: "american football NFL card" },
-  ].map((sport) => (
-    <button
-      key={sport.label}
-      onClick={() => setActiveSport(sport.value)}
-      style={{
-        background: activeSport === sport.value ? "#f0b429" : "rgba(255,255,255,0.05)",
-        color: activeSport === sport.value ? "#080c10" : "rgba(255,255,255,0.5)",
-        border: `1px solid ${activeSport === sport.value ? "#f0b429" : "rgba(255,255,255,0.1)"}`,
-        borderRadius: "20px",
-        padding: "6px 16px",
-        fontSize: "13px",
-        fontWeight: 600,
-        cursor: "pointer",
-      }}>
-      {sport.label}
-    </button>
-  ))}
-</div>
+        <div style={{ display: "flex", gap: "8px", justifyContent: "center", marginBottom: "1.5rem", flexWrap: "wrap" as const }}>
+          {[
+            { label: "All Sports", value: "" },
+            { label: "Soccer", value: "football soccer card" },
+            { label: "Basketball", value: "basketball card NBA" },
+            { label: "Baseball", value: "baseball card MLB" },
+            { label: "NFL", value: "american football NFL card" },
+          ].map((sport) => (
+            <button
+              key={sport.label}
+              onClick={() => setActiveSport(sport.value)}
+              style={{
+                background: activeSport === sport.value ? "#f0b429" : "rgba(255,255,255,0.05)",
+                color: activeSport === sport.value ? "#080c10" : "rgba(255,255,255,0.5)",
+                border: `1px solid ${activeSport === sport.value ? "#f0b429" : "rgba(255,255,255,0.1)"}`,
+                borderRadius: "20px",
+                padding: "6px 16px",
+                fontSize: "13px",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}>
+              {sport.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Search Bar */}
         <div style={{ display: "flex", maxWidth: "520px", margin: "0 auto", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px", overflow: "hidden" }}>
           <input
             type="text"
@@ -186,9 +203,9 @@ export default function Home() {
 
       {/* Stats */}
       <div className="stats-bar" style={{ padding: "1.25rem", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        {[["eBay UK", "Live Data"], ["Free", "To Use"], ["Football Cards", "UK Market"], ["Daily", "Updated"]].map(([num, label]) => (
+        {[["eBay UK", "Live Data"], ["Free", "To Use"], ["Trading Cards", "UK Market"], ["Daily", "Updated"]].map(([num, label]) => (
           <div key={label} style={{ textAlign: "center" }}>
-            <span style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "18px", letterSpacing: "-0.5px", display: "block" }}>{num}</span>
+            <span style={{ fontWeight: 800, fontSize: "18px", letterSpacing: "-0.5px", display: "block" }}>{num}</span>
             <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>{label}</span>
           </div>
         ))}
@@ -197,10 +214,48 @@ export default function Home() {
       {/* Search Results */}
       {results.length > 0 && (
         <div style={{ padding: "2rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-            <span style={{ fontWeight: 700, fontSize: "17px" }}>Search Results</span>
+
+          {/* Filters */}
+          <div style={{ display: "flex", gap: "8px", marginBottom: "1.25rem", flexWrap: "wrap" as const, alignItems: "center" }}>
+            <select
+              value={condition}
+              onChange={(e) => setCondition(e.target.value)}
+              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "6px 12px", color: "rgba(255,255,255,0.7)", fontSize: "13px", outline: "none", cursor: "pointer" }}>
+              <option value="">All Conditions</option>
+              <option value="New">New</option>
+              <option value="Used">Used</option>
+              <option value="Graded">Graded</option>
+            </select>
+            <input
+              type="number"
+              placeholder="Min £"
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+              style={{ width: "80px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "6px 12px", color: "#fff", fontSize: "13px", outline: "none" }}
+            />
+            <input
+              type="number"
+              placeholder="Max £"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+              style={{ width: "80px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "6px 12px", color: "#fff", fontSize: "13px", outline: "none" }}
+            />
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "6px 12px", color: "rgba(255,255,255,0.7)", fontSize: "13px", outline: "none", cursor: "pointer" }}>
+              <option value="">Sort: Default</option>
+              <option value="price">Price: High to Low</option>
+              <option value="lowPrice">Price: Low to High</option>
+            </select>
+            <button
+              onClick={handleSearch}
+              style={{ background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", borderRadius: "8px", padding: "6px 16px", fontSize: "13px", fontWeight: 600, cursor: "pointer" }}>
+              Apply Filters
+            </button>
             <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>{results.length} results</span>
           </div>
+
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {results.map((item: any) => (
               <div key={item.itemId} className="result-card" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem 1.25rem" }}>
@@ -212,19 +267,19 @@ export default function Home() {
                   )}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-  <div style={{ fontWeight: 500, fontSize: "14px", color: "#fff", marginBottom: "6px", lineHeight: 1.4 }}>{item.title}</div>
-  <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" as const }}>
-    <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>{item.condition || 'Condition not specified'}</span>
-   <Link
-  href={`/players/${query.toLowerCase().trim().split(' ').slice(0, 2).join('-')}`}
-  style={{ fontSize: "11px", color: "#f0b429", textDecoration: "none", background: "rgba(240,180,41,0.1)", padding: "2px 8px", borderRadius: "4px" }}>
-  View Player Page →
-</Link>
-  </div>
-</div>
+                  <div style={{ fontWeight: 500, fontSize: "14px", color: "#fff", marginBottom: "6px", lineHeight: 1.4 }}>{item.title}</div>
+                  <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" as const }}>
+                    <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>{item.condition || 'Condition not specified'}</span>
+                    <Link
+                      href={`/players/${query.toLowerCase().trim().split(' ').slice(0, 2).join('-')}`}
+                      style={{ fontSize: "11px", color: "#f0b429", textDecoration: "none", background: "rgba(240,180,41,0.1)", padding: "2px 8px", borderRadius: "4px" }}>
+                      View Player Page →
+                    </Link>
+                  </div>
+                </div>
                 <div className="result-price">
                   <div style={{ fontWeight: 700, fontSize: "22px", color: "#f0b429", marginBottom: "8px" }}>
-                    {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
+                   {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${formatPrice(parseFloat(item.price.value))}` : 'N/A'}
                   </div>
                   <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
                     <a href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>

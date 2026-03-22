@@ -2,9 +2,11 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('q');
   const featured = searchParams.get('featured');
-  const sort = searchParams.get('sort') === 'price' ? '-price' : 'endingSoonest';
+  const sortParam = searchParams.get('sort');
+  const minPrice = searchParams.get('minPrice');
+  const maxPrice = searchParams.get('maxPrice');
+  const condition = searchParams.get('condition');
   const isPlayerSearch = searchParams.get('playerSearch') === 'true';
-  const categoryFilter = isPlayerSearch ? '&category_ids=261328' : '';
 
   if (!query) {
     return Response.json({ error: 'No search query provided' }, { status: 400 });
@@ -12,8 +14,23 @@ export async function GET(request) {
 
   const token = await getEbayToken();
 
+  // Build sort
+  let sort = 'endingSoonest';
+  if (sortParam === 'price') sort = '-price';
+  if (sortParam === 'lowPrice') sort = 'price';
+
+  // Build filters
+  let filters = 'buyingOptions%3A%7BFIXED_PRICE%7D';
+  if (minPrice && maxPrice) filters += `,price:%5B${minPrice}..${maxPrice}%5D`;
+  else if (minPrice) filters += `,price:%5B${minPrice}..%5D`;
+  else if (maxPrice) filters += `,price:%5B..${maxPrice}%5D`;
+  if (condition) filters += `,conditions:%7B${condition.toUpperCase()}%7D`;
+
+  // Category filter for player searches
+  const categoryFilter = isPlayerSearch ? '&category_ids=261328' : '';
+
   const response = await fetch(
-    `https://api.ebay.com/buy/browse/v1/item_summary/search?q=${encodeURIComponent(query)}${categoryFilter}&filter=buyingOptions%3A%7BFIXED_PRICE%7D&sort=${sort}&limit=${featured ? '4' : '50'}`,
+    `https://api.ebay.com/buy/browse/v1/item_summary/search?q=${encodeURIComponent(query)}${categoryFilter}&filter=${filters}&sort=${sort}&limit=${featured ? '4' : '50'}`,
     {
       headers: {
         'Authorization': `Bearer ${token}`,
