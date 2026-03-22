@@ -212,9 +212,16 @@ export default function Home() {
                   )}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 500, fontSize: "14px", color: "#fff", marginBottom: "6px", lineHeight: 1.4 }}>{item.title}</div>
-                  <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>{item.condition || 'Condition not specified'}</div>
-                </div>
+  <div style={{ fontWeight: 500, fontSize: "14px", color: "#fff", marginBottom: "6px", lineHeight: 1.4 }}>{item.title}</div>
+  <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" as const }}>
+    <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>{item.condition || 'Condition not specified'}</span>
+    <Link
+      href={`/players/${query.toLowerCase().replace(/\s+/g, '-')}`}
+      style={{ fontSize: "11px", color: "#f0b429", textDecoration: "none", background: "rgba(240,180,41,0.1)", padding: "2px 8px", borderRadius: "4px" }}>
+      View Player Page →
+    </Link>
+  </div>
+</div>
                 <div className="result-price">
                   <div style={{ fontWeight: 700, fontSize: "22px", color: "#f0b429", marginBottom: "8px" }}>
                     {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
