@@ -41,20 +41,18 @@ export async function GET(request: Request) {
       if (items.length === 0) continue;
 
       const cardListHtml = items.slice(0, 5).map((item: any) => `
-        <tr>
-          <td style="padding: 12px; border-bottom: 1px solid #1a1a2e;">
-            <img src="${item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl || ''}" width="60" height="60" style="border-radius: 6px; object-fit: contain;" />
-          </td>
-          <td style="padding: 12px; border-bottom: 1px solid #1a1a2e; color: #ffffff; font-size: 13px;">
-            ${item.title}
-          </td>
-          <td style="padding: 12px; border-bottom: 1px solid #1a1a2e; color: #f0b429; font-weight: 700; font-size: 16px; white-space: nowrap;">
-            ${item.price ? `£${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
-          </td>
-          <td style="padding: 12px; border-bottom: 1px solid #1a1a2e;">
-            <a href="${item.itemWebUrl}" style="background: #f0b429; color: #080c10; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: 700;">View</a>
-          </td>
-        </tr>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-bottom: 1px solid #1a1a2e;">
+          <img src="${item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl || ''}" width="60" height="60" style="border-radius: 6px; object-fit: contain; flex-shrink: 0;" />
+          <div style="flex: 1; min-width: 0;">
+            <div style="color: #ffffff; font-size: 13px; margin-bottom: 6px; line-height: 1.4;">${item.title}</div>
+            <div style="color: #f0b429; font-weight: 700; font-size: 16px; margin-bottom: 8px;">
+              ${item.price ? `£${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
+            </div>
+            <a href="${item.itemWebUrl}" style="background: #f0b429; color: #080c10; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: 700; display: inline-block;">
+              View on eBay →
+            </a>
+          </div>
+        </div>
       `).join('');
 
       await resend.emails.send({
@@ -76,9 +74,9 @@ export async function GET(request: Request) {
                   We found ${items.length} listings matching your alert${alert.max_price ? ` under £${alert.max_price}` : ''}.
                 </p>
               </div>
-              <table width="100%" style="background: #0d1117; border-radius: 12px; border-collapse: collapse; overflow: hidden;">
+              <div style="background: #0d1117; border-radius: 12px; overflow: hidden; margin-bottom: 20px;">
                 ${cardListHtml}
-              </table>
+              </div>
               <div style="text-align: center; padding: 24px 0;">
                 <a href="${process.env.NEXT_PUBLIC_SITE_URL}" style="background: #f0b429; color: #080c10; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 15px;">
                   View All Results on Boxxond
