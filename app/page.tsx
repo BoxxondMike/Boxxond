@@ -21,6 +21,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState('recent');
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [user, setUser] = useState<any>(null);
+  const [activeSport, setActiveSport] = useState('');
 
   useEffect(() => {
     fetchRecentSales();
@@ -53,13 +54,14 @@ export default function Home() {
   };
 
   const handleSearch = async () => {
-    if (!query) return;
-    setLoading(true);
-    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-    const data = await res.json();
-    setResults(data.items || []);
-    setLoading(false);
-  };
+  if (!query) return;
+  setLoading(true);
+  const searchQuery = activeSport ? `${query} ${activeSport}` : query;
+  const res = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}`);
+  const data = await res.json();
+  setResults(data.items || []);
+  setLoading(false);
+};
 
   const handleSave = async (item: any) => {
     if (!user) {
@@ -141,6 +143,32 @@ export default function Home() {
         <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 2rem" }}>
           Real sold prices from eBay. No guesswork. Track players, sets and box values across soccer, basketball, baseball and NFL.
         </p>
+        {/* Sport Filter */}
+<div style={{ display: "flex", gap: "8px", justifyContent: "center", marginBottom: "1.5rem", flexWrap: "wrap" as const }}>
+  {[
+    { label: "All Sports", value: "" },
+    { label: "Soccer", value: "football soccer card" },
+    { label: "Basketball", value: "basketball card NBA" },
+    { label: "Baseball", value: "baseball card MLB" },
+    { label: "NFL", value: "american football NFL card" },
+  ].map((sport) => (
+    <button
+      key={sport.label}
+      onClick={() => setActiveSport(sport.value)}
+      style={{
+        background: activeSport === sport.value ? "#f0b429" : "rgba(255,255,255,0.05)",
+        color: activeSport === sport.value ? "#080c10" : "rgba(255,255,255,0.5)",
+        border: `1px solid ${activeSport === sport.value ? "#f0b429" : "rgba(255,255,255,0.1)"}`,
+        borderRadius: "20px",
+        padding: "6px 16px",
+        fontSize: "13px",
+        fontWeight: 600,
+        cursor: "pointer",
+      }}>
+      {sport.label}
+    </button>
+  ))}
+</div>
         <div style={{ display: "flex", maxWidth: "520px", margin: "0 auto", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px", overflow: "hidden" }}>
           <input
             type="text"
