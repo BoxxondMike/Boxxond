@@ -13,7 +13,7 @@ export async function GET(request) {
   const searchQuery = featured ? query : query;
 
   const response = await fetch(
-    `https://api.ebay.com/buy/browse/v1/item_summary/search?q=${encodeURIComponent(searchQuery)}&filter=buyingOptions%3A%7BFIXED_PRICE%7D&sort=endingSoonest&limit=${featured ? '4' : '20'}`,
+    `https://api.ebay.com/buy/browse/v1/item_summary/search?q=${encodeURIComponent(searchQuery)}&filter=buyingOptions%3A%7BFIXED_PRICE%7D&sort=endingSoonest&limit=${featured ? '4' : '50'}`,
     {
       headers: {
         'Authorization': `Bearer ${token}`,
