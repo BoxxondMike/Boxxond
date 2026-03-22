@@ -23,7 +23,7 @@ export default function PlayerPage() {
 
   useEffect(() => {
     const fetchCards = async () => {
-     const res = await fetch(`/api/search?q=${encodeURIComponent(playerName)}&sort=${sortOrder === 'high' ? 'price' : 'endingSoonest'}&playerSearch=true`);
+      const res = await fetch(`/api/search?q=${encodeURIComponent(playerName)}&sort=${sortOrder === 'high' ? 'price' : 'endingSoonest'}&playerSearch=true`);
       const data = await res.json();
       const items = data.items || [];
       setResults(items);
@@ -73,6 +73,10 @@ export default function PlayerPage() {
     setSortedResults(sorted);
   }, [results, sortOrder]);
 
+  const formatPrice = (price: number) => {
+    return price.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
@@ -109,9 +113,9 @@ export default function PlayerPage() {
         {!loading && results.length > 0 && (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "12px", marginBottom: "2rem" }}>
             {[
-              { label: "Average Price", value: `£${avgPrice.toFixed(2)}` },
-              { label: "Highest Price", value: `£${highPrice.toFixed(2)}` },
-              { label: "Lowest Price", value: `£${lowPrice.toFixed(2)}` },
+              { label: "Average Price", value: `£${formatPrice(avgPrice)}` },
+              { label: "Highest Price", value: `£${formatPrice(highPrice)}` },
+              { label: "Lowest Price", value: `£${formatPrice(lowPrice)}` },
               { label: "Listings Found", value: results.length.toString() },
             ].map((stat) => (
               <div key={stat.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1.25rem" }}>
@@ -187,7 +191,7 @@ export default function PlayerPage() {
                   </div>
                   <div style={{ textAlign: "right", flexShrink: 0 }}>
                     <div style={{ fontWeight: 700, fontSize: "20px", color: "#f0b429", marginBottom: "6px" }}>
-                      {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
+                      {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${formatPrice(parseFloat(item.price.value))}` : 'N/A'}
                     </div>
                     <a href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>
                   </div>
