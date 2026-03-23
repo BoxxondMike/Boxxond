@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/send-alerts?secret=boxxond_alerts_2024_xkq92",
+      "schedule": "0 9 * * *"
+    }
+  ]
+}
