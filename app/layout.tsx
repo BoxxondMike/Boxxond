@@ -18,7 +18,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: "Boxxond | UK Trading Card Price Tracker",
-  description: "Track real sold prices for soccer, basketball, baseball and NFL trading cards on eBay UK. Search any player, set or card and see what it's actually worth.",
+  description: "Track live market prices and new listings for trading cards on eBay UK. Search any player, set or card and see what it's worth right now.",
   icons: {
     icon: "/logo.png",
   },

@@ -155,7 +155,7 @@ export default function Home() {
           Know what your<br /><span style={{ color: "#f0b429" }}>cards are worth</span>
         </h1>
         <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 2rem" }}>
-          Real sold prices from eBay. No guesswork. Track players, sets and box values across soccer, basketball, baseball and NFL.
+          Track live market prices and new listings for trading cards on eBay UK. Search any player, set or card and see what it's worth right now.
         </p>
 
         {/* Sport Filter */}
