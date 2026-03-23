@@ -34,8 +34,8 @@ export async function GET(request: Request) {
       if (!email) continue;
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SITE_URL}/api/search?q=${encodeURIComponent(alert.search_term)}${alert.max_price ? `&maxPrice=${alert.max_price}` : ''}&limit=5`
-      );
+  `${process.env.NEXT_PUBLIC_SITE_URL}/api/search?q=${encodeURIComponent(alert.search_term)}${alert.max_price ? `&maxPrice=${alert.max_price}` : ''}&sort=newlyListed&limit=5`
+);
       const data = await res.json();
       const items = data.items || [];
       if (items.length === 0) continue;

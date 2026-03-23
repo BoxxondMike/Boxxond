@@ -16,8 +16,9 @@ export async function GET(request) {
 
   // Build sort
   let sort = 'endingSoonest';
-  if (sortParam === 'price') sort = '-price';
-  if (sortParam === 'lowPrice') sort = 'price';
+if (sortParam === 'price') sort = '-price';
+if (sortParam === 'lowPrice') sort = 'price';
+if (sortParam === 'newlyListed') sort = 'newlyListed';
 
   // Build filters
   let filters = 'buyingOptions%3A%7BFIXED_PRICE%7D';
