@@ -7,8 +7,21 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const set = sets[slug];
   if (!set) return {};
   return {
-    title: `${set.name} Football Cards | Prices, Parallels & Guide | Boxxond`,
-    description: `Everything you need to know about ${set.name}. Prices, parallels, print runs and collector tips. Real sold prices from eBay UK.`,
+    title: `${set.name} Card Prices, Parallels & Collector Guide | Boxxond`,
+    description: `${set.name} trading card guide. ${set.overview.slice(0, 120)}... Real sold prices from eBay UK, parallel details and collector tips.`,
+    openGraph: {
+      title: `${set.name} Card Prices & Guide | Boxxond`,
+      description: `${set.name} prices, parallels and collector guide. Real eBay UK sold prices.`,
+      url: `https://boxxond.com/sets/${slug}`,
+      siteName: 'Boxxond',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${set.name} Card Prices & Guide | Boxxond`,
+      description: `${set.name} prices, parallels and collector guide. Real eBay UK sold prices.`,
+    },
+    keywords: [`${set.name}`, `${set.name} prices`, `${set.name} parallels`, `${set.manufacturer} cards`, 'trading card prices UK', 'eBay card prices'],
   };
 }
 
@@ -610,7 +623,11 @@ export default async function SetPage({ params }: { params: Promise<{ slug: stri
           <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "28px", color: "#f0b429", letterSpacing: "-1px" }}>{set.priceRange}</div>
           <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.3)", marginTop: "0.5rem" }}>Based on recent eBay UK sold prices</div>
         </section>
-
+<div style={{ marginTop: "1.5rem", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px", padding: "1rem 1.25rem" }}>
+  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.25)", lineHeight: 1.6 }}>
+    <strong style={{ color: "rgba(255,255,255,0.35)" }}>Disclaimer:</strong> Set information, parallel details and price ranges on this page are provided for guidance only. Print runs, parallels and pricing vary by year and release. Always verify current details with official manufacturer sources before making purchasing decisions. Boxxond is not affiliated with Topps, Panini or any card manufacturer.
+  </div>
+</div>
       </div>
     </main>
   );

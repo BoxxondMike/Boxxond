@@ -17,11 +17,24 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Boxxond | Trading Card Price Tracker",
-  description: "Real sold prices from eBay. Track soccer, basketball, baseball and NFL card values across the UK market.",
+  title: "Boxxond | UK Trading Card Price Tracker",
+  description: "Track real sold prices for soccer, basketball, baseball and NFL trading cards on eBay UK. Search any player, set or card and see what it's actually worth.",
   icons: {
     icon: "/logo.png",
   },
+  openGraph: {
+    title: "Boxxond | UK Trading Card Price Tracker",
+    description: "Track real sold prices for soccer, basketball, baseball and NFL trading cards on eBay UK. Search any player, set or card and see what it's actually worth.",
+    url: "https://boxxond.com",
+    siteName: "Boxxond",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Boxxond | UK Trading Card Price Tracker",
+    description: "Track real sold prices for soccer, basketball, baseball and NFL trading cards on eBay UK.",
+  },
+  keywords: ["trading card prices", "football card prices UK", "eBay card prices", "Topps Chrome prices", "Panini Prizm prices", "sports card tracker UK"],
 };
 
 export default function RootLayout({
