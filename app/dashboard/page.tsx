@@ -12,6 +12,7 @@ export default function DashboardPage() {
   const [alerts, setAlerts] = useState<any[]>([]);
   const [alertTerm, setAlertTerm] = useState('');
   const [alertMaxPrice, setAlertMaxPrice] = useState('');
+  const [alertType, setAlertType] = useState('player');
   const router = useRouter();
 
   useEffect(() => {
@@ -101,6 +102,7 @@ export default function DashboardPage() {
           <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "14px", margin: 0 }}>{user?.email}</p>
         </div>
 
+        {/* Stats */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "12px", marginBottom: "2.5rem" }}>
           {[
             { label: "Saved Cards", value: savedCards.length.toString(), desc: "Cards in your watchlist" },
@@ -163,18 +165,51 @@ export default function DashboardPage() {
             <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0, letterSpacing: "-0.3px" }}>Card Alerts</h2>
           </div>
           <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)", marginBottom: "1.25rem", marginTop: 0 }}>
-            Set up alerts for players or cards you are tracking.
+            Get notified when new listings appear for players or teams you're tracking.
           </p>
 
+          {/* Alert Type Tabs */}
+          <div style={{ display: "flex", gap: "0", marginBottom: "1rem", background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "4px", width: "fit-content" }}>
+            {[['player', 'Player / Card'], ['team', 'Team']].map(([tab, label]) => (
+              <button key={tab} onClick={() => { setAlertType(tab); setAlertTerm(''); }} style={{ background: alertType === tab ? "#f0b429" : "transparent", color: alertType === tab ? "#080c10" : "rgba(255,255,255,0.5)", fontWeight: 700, fontSize: "13px", padding: "8px 18px", border: "none", borderRadius: "7px", cursor: "pointer" }}>
+                {label}
+              </button>
+            ))}
+          </div>
+
           <div style={{ display: "flex", gap: "10px", marginBottom: "1.5rem", flexWrap: "wrap" as const }}>
-            <input
-              type="text"
-              placeholder="e.g. Jude Bellingham Topps Chrome"
-              value={alertTerm}
-              onChange={(e) => setAlertTerm(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleAddAlert()}
-              style={{ flex: 1, minWidth: "200px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "10px 14px", color: "#fff", fontSize: "14px", outline: "none" }}
-            />
+            {alertType === 'player' ? (
+              <input
+                type="text"
+                placeholder="e.g. Jude Bellingham Topps Chrome"
+                value={alertTerm}
+                onChange={(e) => setAlertTerm(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleAddAlert()}
+                style={{ flex: 1, minWidth: "200px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "10px 14px", color: "#fff", fontSize: "14px", outline: "none" }}
+              />
+            ) : (
+              <select
+                value={alertTerm}
+                onChange={(e) => setAlertTerm(e.target.value)}
+                style={{ flex: 1, minWidth: "200px", background: "#080c10", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "10px 14px", color: alertTerm ? "#fff" : "rgba(255,255,255,0.4)", fontSize: "14px", outline: "none", cursor: "pointer" }}>
+                <option value="">Select a team...</option>
+                <optgroup label="Premier League">
+                  {['Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Burnley', 'Sunderland', 'Liverpool', 'Man City', 'Man United', 'Newcastle', 'Nottm Forest', 'Leeds', 'Spurs', 'West Ham', 'Wolves'].map(team => (
+                    <option key={team} value={`${team} football card`}>{team}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="NBA Teams">
+                  {['Lakers', 'Warriors', 'Celtics', 'Bulls', 'Heat', 'Knicks', 'Nets', 'Suns', 'Bucks', 'Nuggets'].map(team => (
+                    <option key={team} value={`${team} basketball card`}>{team}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="NFL Teams">
+                  {['Chiefs', 'Eagles', '49ers', 'Cowboys', 'Patriots', 'Packers', 'Bills', 'Bengals', 'Ravens', 'Dolphins'].map(team => (
+                    <option key={team} value={`${team} NFL card`}>{team}</option>
+                  ))}
+                </optgroup>
+              </select>
+            )}
             <input
               type="number"
               placeholder="Max price £ (optional)"
@@ -213,7 +248,7 @@ export default function DashboardPage() {
           )}
 
           <div style={{ marginTop: "1rem", background: "rgba(240,180,41,0.06)", border: "1px solid rgba(240,180,41,0.15)", borderRadius: "8px", padding: "0.75rem 1rem", fontSize: "12px", color: "rgba(255,255,255,0.4)" }}>
-            🔔 Email notifications for alerts coming soon
+            🔔 Daily email notifications active — new listings delivered to your inbox
           </div>
         </div>
 
