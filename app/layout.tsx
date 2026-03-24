@@ -72,7 +72,7 @@ export default function RootLayout({
                   boxx<span style={{ color: "#f0b429" }}>ond</span>
                 </div>
                 <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.35)", maxWidth: "220px", lineHeight: 1.6 }}>
-                  Real sold prices from eBay. The UK's trading card price tracker covering Soccer, Basketball, Baseball and NFL.
+                 Live market prices from eBay UK. The UK's trading card price tracker covering Soccer, Basketball, Baseball and NFL.
                 </div>
               </div>
 
