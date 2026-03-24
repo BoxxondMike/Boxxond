@@ -295,7 +295,6 @@ export default function Home() {
           </div>
         </div>
       )}
-
       {/* Trending Section */}
       <div style={{ padding: "2rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
         <div style={{ display: "flex", gap: "0", marginBottom: "1.5rem", background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "4px", width: "fit-content" }}>
@@ -330,7 +329,42 @@ export default function Home() {
           </>
         )}
       </div>
-
+{/* Trending Players */}
+<div style={{ padding: "2rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
+  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+    <span style={{ fontWeight: 700, fontSize: "17px" }}>Trending Players</span>
+    <span style={{ background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.2)", color: "#f0b429", padding: "3px 10px", borderRadius: "20px", fontSize: "11px" }}>Updated weekly</span>
+  </div>
+  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "10px" }}>
+   {[
+  { name: "Jude Bellingham", slug: "jude-bellingham", sport: "Soccer" },
+  { name: "Cole Palmer", slug: "cole-palmer", sport: "Soccer" },
+  { name: "Bukayo Saka", slug: "bukayo-saka", sport: "Soccer" },
+  { name: "Lamine Yamal", slug: "lamine-yamal", sport: "Soccer" },
+  { name: "Erling Haaland", slug: "erling-haaland", sport: "Soccer" },
+  { name: "Kylian Mbappe", slug: "kylian-mbappe", sport: "Soccer" },
+  { name: "LeBron James", slug: "lebron-james", sport: "Basketball" },
+  { name: "Stephen Curry", slug: "stephen-curry", sport: "Basketball" },
+  { name: "Patrick Mahomes", slug: "patrick-mahomes", sport: "NFL" },
+  { name: "Josh Allen", slug: "josh-allen", sport: "NFL" },
+  { name: "Shohei Ohtani", slug: "shohei-ohtani", sport: "Baseball" },
+  { name: "Juan Soto", slug: "juan-soto", sport: "Baseball" },
+].map((player) => (
+      <Link key={player.slug} href={`/players/${player.slug}`} style={{ textDecoration: "none" }}>
+        <div
+          style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "10px", padding: "1rem", textAlign: "center", cursor: "pointer" }}
+          onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(240,180,41,0.3)')}
+          onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}>
+          <div style={{ width: "100%", height: "70px", marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", background: player.sport === 'Soccer' ? 'rgba(240,180,41,0.08)' : player.sport === 'Basketball' ? 'rgba(239,68,68,0.08)' : player.sport === 'Baseball' ? 'rgba(34,197,94,0.08)' : 'rgba(59,130,246,0.08)', borderRadius: "8px", border: `1px solid ${player.sport === 'Soccer' ? 'rgba(240,180,41,0.2)' : player.sport === 'Basketball' ? 'rgba(239,68,68,0.2)' : player.sport === 'Baseball' ? 'rgba(34,197,94,0.2)' : 'rgba(59,130,246,0.2)'}`, fontSize: "32px" }}>
+  {player.sport === 'Soccer' ? '⚽' : player.sport === 'Basketball' ? '🏀' : player.sport === 'Baseball' ? '⚾' : '🏈'}
+</div>
+          <div style={{ fontSize: "12px", fontWeight: 600, color: "#fff", marginBottom: "3px", lineHeight: 1.3 }}>{player.name}</div>
+          <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)" }}>{player.sport}</div>
+        </div>
+      </Link>
+    ))}
+  </div>
+</div>
     </main>
   );
 }
