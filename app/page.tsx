@@ -154,9 +154,23 @@ export default function Home() {
         <h1 style={{ fontWeight: 800, fontSize: "clamp(36px, 7vw, 68px)", lineHeight: 1.05, margin: "0 0 1.25rem", letterSpacing: "-2px" }}>
           Know what your<br /><span style={{ color: "#f0b429" }}>cards are worth</span>
         </h1>
-        <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 2rem" }}>
-          Track live market prices and new listings for trading cards on eBay UK. Search any player, set or card and see what it's worth right now.
-        </p>
+      <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 1.5rem" }}>
+  Search live eBay UK listings and get daily alerts when new cards drop for your favourite players and teams.
+</p>
+
+{/* CTA Buttons */}
+<div style={{ display: "flex", gap: "12px", justifyContent: "center", marginBottom: "2rem", flexWrap: "wrap" as const }}>
+  <button
+    onClick={() => document.querySelector('input')?.focus()}
+    style={{ background: "#f0b429", color: "#080c10", fontWeight: 700, fontSize: "14px", padding: "12px 24px", border: "none", borderRadius: "8px", cursor: "pointer" }}>
+    Search Cards
+  </button>
+  <Link
+    href={user ? "/dashboard" : "/signup"}
+    style={{ background: "rgba(255,255,255,0.05)", color: "#fff", fontWeight: 700, fontSize: "14px", padding: "12px 24px", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", textDecoration: "none" }}>
+    Set Up Alerts →
+  </Link>
+</div>
 
         {/* Sport Filter */}
         <div style={{ display: "flex", gap: "8px", justifyContent: "center", marginBottom: "1.5rem", flexWrap: "wrap" as const }}>
