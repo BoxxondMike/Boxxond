@@ -6,12 +6,13 @@ import Nav from '../components/Nav';
 import { supabase } from '../lib/supabase';
 
 const featuredQueries = [
-  'Jude Bellingham Topps Chrome',
-  'Cole Palmer Prizm',
-  'Bukayo Saka card',
+  'Jude Bellingham auto refractor',
+  'Cole Palmer Topps Chrome auto',
+  'Lamine Yamal Prizm refractor',
+  'Bukayo Saka auto card',
   'LeBron James Prizm',
+  'Patrick Mahomes auto',
 ];
-
 export default function Home() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -50,16 +51,16 @@ export default function Home() {
   }, []);
 
   const fetchRecentSales = async () => {
-    const res = await fetch('/api/search?q=Topps+Chrome+football+card&featured=true');
-    const data = await res.json();
-    setRecentSales(data.items?.slice(0, 4) || []);
-  };
+  const res = await fetch('/api/search?q=Topps+Chrome+refractor+auto+football&featured=true');
+  const data = await res.json();
+  setRecentSales(data.items?.slice(0, 8) || []);
+};
 
   const fetchFeaturedCards = async () => {
     const randomQuery = featuredQueries[Math.floor(Math.random() * featuredQueries.length)];
     const res = await fetch(`/api/search?q=${encodeURIComponent(randomQuery)}&featured=true`);
     const data = await res.json();
-    setFeaturedCards(data.items?.slice(0, 4) || []);
+    setFeaturedCards(data.items?.slice(0, 8) || []);
   };
 
   const handleSearch = async () => {
@@ -102,7 +103,7 @@ export default function Home() {
   };
 
   const CardGrid = ({ items }: { items: any[] }) => (
-    <div style={{ display: "flex", gap: "12px", overflowX: "auto", paddingBottom: "8px", scrollbarWidth: "none" }}>
+    <div style={{ display: "flex", gap: "12px", overflowX: "scroll", paddingBottom: "8px", scrollbarWidth: "thin", scrollbarColor: "rgba(240,180,41,0.3) transparent" }}>
       {items.map((item: any) => (
         <a key={item.itemId} href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", flexShrink: 0, width: "200px" }}>
           <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem", cursor: "pointer" }}
@@ -119,7 +120,7 @@ export default function Home() {
             )}
             <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)", marginBottom: "8px", lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.title}</div>
             <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "18px", color: "#f0b429", letterSpacing: "0px" }}>
-            {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${Number(parseFloat(item.price.value).toFixed(2)).toLocaleString('en-GB')}` : 'N/A'}
+            {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${formatPrice(parseFloat(item.price.value))}` : 'N/A'}
             </div>
           </div>
         </a>
