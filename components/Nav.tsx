@@ -44,10 +44,7 @@ export default function Nav({ activePage }: { activePage?: string }) {
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 1.25rem", borderBottom: "1px solid rgba(255,255,255,0.06)", position: "relative" }}>
 
         {/* Logo */}
-        <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#fff", textDecoration: "none", display: "flex", alignItems: "center", gap: "8px" }}>
-          boxx<span style={{ color: "#f0b429" }}>ond</span>
-          <span style={{ fontSize: "9px", fontWeight: 600, background: "rgba(240,180,41,0.15)", border: "1px solid rgba(240,180,41,0.3)", color: "#f0b429", padding: "2px 6px", borderRadius: "4px", letterSpacing: "0.5px", verticalAlign: "middle" }}>BETA</span>
-        </Link>
+        <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px" }}><span style={{ letterSpacing: "-1px" }}>boxx<span style={{ color: "#f0b429" }}>ond</span></span><span style={{ fontSize: "9px", fontWeight: 600, background: "rgba(240,180,41,0.15)", border: "1px solid rgba(240,180,41,0.3)", color: "#f0b429", padding: "2px 6px", borderRadius: "4px", marginLeft: "6px", letterSpacing: "0.5px", verticalAlign: "middle" }}>BETA</span></Link>
 
         {/* Desktop Links */}
         <div className="nav-desktop-links" style={{ fontSize: "14px" }}>
