@@ -37,6 +37,7 @@ if (sortParam === 'newlyListed') sort = 'newlyListed';
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
         'X-EBAY-C-MARKETPLACE-ID': 'EBAY_GB',
+        'X-EBAY-C-ENDUSERCTX': 'affiliateCampaignId=5339145682,affiliateReferenceId=boxxond',
       },
     }
   );

@@ -96,7 +96,7 @@ export default function Home() {
         price: item.price ? parseFloat(item.price.value) : null,
         currency: item.price?.currency || 'GBP',
         image_url: item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl || null,
-        item_url: item.itemWebUrl,
+        item_url: item.itemAffiliateWebUrl || item.itemWebUrl,
       });
       setSavedIds([...savedIds, item.itemId]);
     }
@@ -105,7 +105,7 @@ export default function Home() {
   const CardGrid = ({ items }: { items: any[] }) => (
     <div style={{ display: "flex", gap: "12px", overflowX: "scroll", paddingBottom: "8px", scrollbarWidth: "thin", scrollbarColor: "rgba(240,180,41,0.3) transparent" }}>
       {items.map((item: any) => (
-        <a key={item.itemId} href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", flexShrink: 0, width: "200px" }}>
+        <a key={item.itemId} href={item.itemAffiliateWebUrl || item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", flexShrink: 0, width: "200px" }}>
           <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem", cursor: "pointer" }}
             onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(240,180,41,0.3)')}
             onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}>
@@ -297,7 +297,7 @@ export default function Home() {
                    {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${formatPrice(parseFloat(item.price.value))}` : 'N/A'}
                   </div>
                   <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                    <a href={item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>
+                    <a href={item.itemAffiliateWebUrl || item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>
                     <button
                       onClick={() => handleSave(item)}
                       style={{ background: savedIds.includes(item.itemId) ? "rgba(240,180,41,0.2)" : "rgba(255,255,255,0.05)", border: `1px solid ${savedIds.includes(item.itemId) ? "rgba(240,180,41,0.5)" : "rgba(255,255,255,0.1)"}`, borderRadius: "6px", padding: "4px 10px", cursor: "pointer", fontSize: "12px", color: savedIds.includes(item.itemId) ? "#f0b429" : "rgba(255,255,255,0.4)" }}>
