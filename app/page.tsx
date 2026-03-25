@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Nav from '../components/Nav';
 import { supabase } from '../lib/supabase';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 const featuredQueries = [
   'Jude Bellingham auto refractor',
@@ -27,15 +28,23 @@ export default function Home() {
   const [maxPrice, setMaxPrice] = useState('');
   const [condition, setCondition] = useState('');
   const [sortBy, setSortBy] = useState('');
+  const searchParams = useSearchParams();
+const router = useRouter();
   const formatPrice = (value: number) => {
   const parts = value.toFixed(2).split('.');
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return parts.join('.');
+  
 };
 
-  useEffect(() => {
+ useEffect(() => {
     fetchRecentSales();
     fetchFeaturedCards();
+    const q = searchParams.get('q');
+    if (q) {
+      setQuery(q);
+      handleSearchWithQuery(q);
+    }
   }, []);
 
   useEffect(() => {
@@ -62,22 +71,25 @@ export default function Home() {
     const data = await res.json();
     setFeaturedCards(data.items?.slice(0, 8) || []);
   };
-
+const handleSearchWithQuery = async (q: string) => {
+  setLoading(true);
+  const searchQuery = activeSport ? `${q} ${activeSport}` : q;
+  const params = new URLSearchParams();
+  params.set('q', searchQuery);
+  if (minPrice) params.set('minPrice', minPrice);
+  if (maxPrice) params.set('maxPrice', maxPrice);
+  if (condition) params.set('condition', condition);
+  if (sortBy) params.set('sort', sortBy);
+  const res = await fetch(`/api/search?${params.toString()}`);
+  const data = await res.json();
+  setResults(data.items || []);
+  setLoading(false);
+};
   const handleSearch = async () => {
-    if (!query) return;
-    setLoading(true);
-    const searchQuery = activeSport ? `${query} ${activeSport}` : query;
-    const params = new URLSearchParams();
-    params.set('q', searchQuery);
-    if (minPrice) params.set('minPrice', minPrice);
-    if (maxPrice) params.set('maxPrice', maxPrice);
-    if (condition) params.set('condition', condition);
-    if (sortBy) params.set('sort', sortBy);
-    const res = await fetch(`/api/search?${params.toString()}`);
-    const data = await res.json();
-    setResults(data.items || []);
-    setLoading(false);
-  };
+  if (!query) return;
+  router.push(`/?q=${encodeURIComponent(query)}`);
+  handleSearchWithQuery(query);
+};
 
   const handleSave = async (item: any) => {
     if (!user) {

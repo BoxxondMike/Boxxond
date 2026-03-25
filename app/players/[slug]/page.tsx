@@ -6,12 +6,27 @@ import Nav from '../../../components/Nav';
 import Link from 'next/link';
 import { supabase } from '../../../lib/supabase';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-
+const playerProfiles: Record<string, { club: string; nation: string; position: string; sport: string; related: string[] }> = {
+  'jude-bellingham': { club: 'Real Madrid', nation: 'England', position: 'Midfielder', sport: 'Soccer', related: ['cole-palmer', 'bukayo-saka', 'phil-foden', 'declan-rice'] },
+  'cole-palmer': { club: 'Chelsea', nation: 'England', position: 'Midfielder', sport: 'Soccer', related: ['jude-bellingham', 'bukayo-saka', 'phil-foden', 'jack-grealish'] },
+  'bukayo-saka': { club: 'Arsenal', nation: 'England', position: 'Winger', sport: 'Soccer', related: ['jude-bellingham', 'cole-palmer', 'martin-odegaard', 'leandro-trossard'] },
+  'lamine-yamal': { club: 'Barcelona', nation: 'Spain', position: 'Winger', sport: 'Soccer', related: ['jude-bellingham', 'pedri', 'gavi', 'vinicius-junior'] },
+  'erling-haaland': { club: 'Man City', nation: 'Norway', position: 'Striker', sport: 'Soccer', related: ['kylian-mbappe', 'harry-kane', 'victor-osimhen', 'darwin-nunez'] },
+  'kylian-mbappe': { club: 'Real Madrid', nation: 'France', position: 'Forward', sport: 'Soccer', related: ['lamine-yamal', 'erling-haaland', 'vinicius-junior', 'jude-bellingham'] },
+  'phil-foden': { club: 'Man City', nation: 'England', position: 'Midfielder', sport: 'Soccer', related: ['jude-bellingham', 'cole-palmer', 'jack-grealish', 'erling-haaland'] },
+  'lebron-james': { club: 'LA Lakers', nation: 'USA', position: 'Forward', sport: 'Basketball', related: ['stephen-curry', 'kevin-durant', 'giannis-antetokounmpo', 'luka-doncic'] },
+  'stephen-curry': { club: 'Golden State Warriors', nation: 'USA', position: 'Guard', sport: 'Basketball', related: ['lebron-james', 'kevin-durant', 'klay-thompson', 'draymond-green'] },
+  'patrick-mahomes': { club: 'Kansas City Chiefs', nation: 'USA', position: 'Quarterback', sport: 'NFL', related: ['josh-allen', 'lamar-jackson', 'joe-burrow', 'justin-herbert'] },
+  'josh-allen': { club: 'Buffalo Bills', nation: 'USA', position: 'Quarterback', sport: 'NFL', related: ['patrick-mahomes', 'lamar-jackson', 'joe-burrow', 'jalen-hurts'] },
+  'shohei-ohtani': { club: 'LA Dodgers', nation: 'Japan', position: 'Pitcher/DH', sport: 'Baseball', related: ['mike-trout', 'mookie-betts', 'juan-soto', 'freddie-freeman'] },
+  'declan-rice': { club: 'Arsenal', nation: 'England', position: 'Midfielder', sport: 'Soccer', related: ['jude-bellingham', 'bukayo-saka', 'cole-palmer', 'martin-odegaard'] },
+};
 export default function PlayerPage() {
   const params = useParams();
   const slug = params.slug as string;
   const playerName = slug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
-
+const [currentPage, setCurrentPage] = useState(1);
+const itemsPerPage = 25;
   const [results, setResults] = useState<any[]>([]);
   const [sortedResults, setSortedResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,12 +79,13 @@ export default function PlayerPage() {
     fetchCards();
   }, [slug, sortOrder]);
 
-  useEffect(() => {
+ useEffect(() => {
     const sorted = [...results].sort((a: any, b: any) => {
       const priceA = parseFloat(a.price?.value || '0');
       const priceB = parseFloat(b.price?.value || '0');
       return sortOrder === 'high' ? priceB - priceA : priceA - priceB;
     });
+    setCurrentPage(1);
     setSortedResults(sorted);
   }, [results, sortOrder]);
 
@@ -92,22 +108,45 @@ export default function PlayerPage() {
   return (
     <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
       <Nav />
-
+{/* Player Profile Header */}
+{(() => {
+  const profile = playerProfiles[slug];
+  return (
+    <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
+      <div style={{ padding: "2rem 1.25rem", maxWidth: "960px", margin: "0 auto", display: "flex", alignItems: "center", gap: "1.5rem" }}>
+        <div style={{ width: "72px", height: "72px", borderRadius: "50%", background: "rgba(240,180,41,0.1)", border: "2px solid rgba(240,180,41,0.3)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: "24px", fontWeight: 800, color: "#f0b429" }}>
+          {playerName.split(' ').map((n: string) => n.charAt(0)).join('')}
+        </div>
+        <div style={{ flex: 1 }}>
+          <h1 style={{ fontSize: "clamp(22px, 4vw, 36px)", fontWeight: 800, margin: "0 0 6px", letterSpacing: "-0.5px" }}>{playerName}</h1>
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" as const }}>
+            {profile ? (
+              <>
+                <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)" }}>🏟 {profile.club}</span>
+                <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)" }}>🌍 {profile.nation}</span>
+                <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)" }}>⚽ {profile.position}</span>
+              </>
+            ) : (
+              <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.3)" }}>Trading Card Price Guide</span>
+            )}
+          </div>
+        </div>
+        <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", letterSpacing: "1px", textTransform: "uppercase" as const, flexShrink: 0 }}>
+          Player Price Guide
+        </div>
+      </div>
+    </div>
+  );
+})()}
       <div style={{ padding: "2.5rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
 
         <Link href="/" style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", textDecoration: "none", display: "inline-block", marginBottom: "1.5rem" }}>← Back to search</Link>
 
         <div style={{ marginBottom: "2rem" }}>
-          <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
-            Player Price Guide
-          </div>
-          <h1 style={{ fontSize: "clamp(28px, 5vw, 44px)", fontWeight: 800, margin: "0 0 0.5rem", letterSpacing: "-1px" }}>
-            {playerName}
-          </h1>
-          <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "14px", margin: 0 }}>
-            Real eBay UK prices for {playerName} trading cards
-          </p>
-        </div>
+  <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "14px", margin: 0 }}>
+    Live eBay UK prices for {playerName} trading cards
+  </p>
+</div>
 
         {/* Price Stats */}
         {!loading && results.length > 0 && (
@@ -144,8 +183,8 @@ export default function PlayerPage() {
 
         {/* Results */}
         <div>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem", flexWrap: "wrap" as const, gap: "10px" }}>
-            <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0 }}>Current Listings</h2>
+         <div id="results-section" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem", flexWrap: "wrap" as const, gap: "10px" }}>
+  <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0 }}>Current Listings</h2>
             <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
               <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)" }}>Sort:</span>
               {[['high', 'High to Low'], ['low', 'Low to High']].map(([val, label]) => (
@@ -166,6 +205,23 @@ export default function PlayerPage() {
                 </button>
               ))}
             </div>
+            {sortedResults.length > itemsPerPage && (
+  <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "1.5rem", alignItems: "center" }}>
+    <button
+     onClick={() => { setCurrentPage(1); document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' }); }}
+      disabled={currentPage === 1}
+      style={{ background: currentPage === 1 ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: currentPage === 1 ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.5)", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: currentPage === 1 ? "default" : "pointer" }}>
+      ← Prev
+    </button>
+    <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Page {currentPage} of {Math.ceil(sortedResults.length / itemsPerPage)}</span>
+    <button
+      onClick={() => { setCurrentPage(2); document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' }); }}
+      disabled={currentPage === Math.ceil(sortedResults.length / itemsPerPage)}
+      style={{ background: currentPage === 2 ? "rgba(240,180,41,0.1)" : "rgba(255,255,255,0.05)", border: `1px solid ${currentPage === 2 ? "rgba(240,180,41,0.3)" : "rgba(255,255,255,0.1)"}`, color: currentPage === 2 ? "#f0b429" : "rgba(255,255,255,0.5)", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: currentPage === Math.ceil(sortedResults.length / itemsPerPage) ? "default" : "pointer" }}>
+      Next →
+    </button>
+  </div>
+)}
           </div>
 
           {loading ? (
@@ -174,7 +230,7 @@ export default function PlayerPage() {
             <div style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", padding: "3rem 0" }}>No listings found for {playerName}</div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              {sortedResults.map((item: any) => (
+              {sortedResults.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item: any) => (
                 <div key={item.itemId} style={{ display: "flex", gap: "1rem", alignItems: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem 1.25rem" }}>
                   {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
                     <img
@@ -200,7 +256,34 @@ export default function PlayerPage() {
             </div>
           )}
         </div>
-
+{/* Related Players */}
+{playerProfiles[slug] && (
+  <div style={{ marginTop: "3rem" }}>
+    <h2 style={{ fontSize: "18px", fontWeight: 700, margin: "0 0 1.25rem" }}>Related Players</h2>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "10px" }}>
+      {playerProfiles[slug].related.map((relatedSlug) => {
+        const relatedProfile = playerProfiles[relatedSlug];
+        const relatedName = relatedSlug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
+        return (
+          <Link key={relatedSlug} href={`/players/${relatedSlug}`} style={{ textDecoration: "none" }}>
+            <div
+              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "10px", padding: "1rem", textAlign: "center", cursor: "pointer" }}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(240,180,41,0.3)')}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}>
+              <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.2)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 8px", fontSize: "14px", fontWeight: 800, color: "#f0b429" }}>
+                {relatedName.split(' ').map((n: string) => n.charAt(0)).join('')}
+              </div>
+              <div style={{ fontSize: "12px", fontWeight: 600, color: "#fff", marginBottom: "3px", lineHeight: 1.3 }}>{relatedName}</div>
+              {relatedProfile && (
+                <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)" }}>{relatedProfile.nation} · {relatedProfile.club}</div>
+              )}
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  </div>
+)}
       </div>
     </main>
   );
