@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import Nav from '../components/Nav';
 import { supabase } from '../lib/supabase';
@@ -14,7 +14,7 @@ const featuredQueries = [
   'LeBron James Prizm',
   'Patrick Mahomes auto',
 ];
-export default function Home() {
+function HomeContent() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -393,5 +393,12 @@ const handleSearchWithQuery = async (q: string) => {
   </div>
 </div>
     </main>
+  );
+}
+export default function Home() {
+  return (
+    <Suspense fallback={<main style={{ background: "#080c10", minHeight: "100vh" }} />}>
+      <HomeContent />
+    </Suspense>
   );
 }
