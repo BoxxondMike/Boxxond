@@ -137,7 +137,7 @@ export default function RootLayout({
         © 2026 Boxxond. All rights reserved.
       </div>
       <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.2)" }}>
-        Price data sourced from eBay UK. Not affiliated with eBay.
+        Price data sourced from eBay UK via the eBay Browse API. Boxxond is an eBay Partner Network affiliate.
       </div>
     </div>
 
