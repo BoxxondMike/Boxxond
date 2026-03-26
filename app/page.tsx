@@ -392,6 +392,7 @@ const handleSearchWithQuery = async (q: string) => {
     ))}
   </div>
 </div>
+
     </main>
   );
 }
