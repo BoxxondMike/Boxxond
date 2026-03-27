@@ -20,7 +20,6 @@ function HomeContent() {
   const [loading, setLoading] = useState(false);
   const [recentSales, setRecentSales] = useState([]);
   const [featuredCards, setFeaturedCards] = useState([]);
-  const [activeTab, setActiveTab] = useState('recent');
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [user, setUser] = useState<any>(null);
   const [activeSport, setActiveSport] = useState('');
@@ -62,14 +61,14 @@ const router = useRouter();
   const fetchRecentSales = async () => {
   const res = await fetch('/api/search?q=Topps+Chrome+refractor+auto+football&featured=true');
   const data = await res.json();
-  setRecentSales(data.items?.slice(0, 8) || []);
+  setRecentSales(data.items?.slice(0, 12) || []);
 };
 
   const fetchFeaturedCards = async () => {
     const randomQuery = featuredQueries[Math.floor(Math.random() * featuredQueries.length)];
     const res = await fetch(`/api/search?q=${encodeURIComponent(randomQuery)}&featured=true`);
     const data = await res.json();
-    setFeaturedCards(data.items?.slice(0, 8) || []);
+    setFeaturedCards(data.items?.slice(0, 12) || []);
   };
 const handleSearchWithQuery = async (q: string) => {
   setLoading(true);
@@ -125,10 +124,10 @@ const handleSearchWithQuery = async (q: string) => {
               <img
                 src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl}
                 alt={item.title}
-                style={{ width: "100%", height: "160px", objectFit: "contain", borderRadius: "6px", background: "rgba(255,255,255,0.05)", marginBottom: "10px" }}
+                style={{ width: "100%", height: "220px", objectFit: "contain", borderRadius: "6px", background: "rgba(255,255,255,0.05)", marginBottom: "10px" }}
               />
             ) : (
-              <div style={{ width: "100%", height: "160px", background: "rgba(255,255,255,0.06)", borderRadius: "6px", marginBottom: "10px" }} />
+              <div style={{ width: "100%", height: "220px", background: "rgba(255,255,255,0.06)", borderRadius: "6px", marginBottom: "10px" }} />
             )}
             <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)", marginBottom: "8px", lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.title}</div>
             <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "18px", color: "#f0b429", letterSpacing: "0px" }}>
@@ -160,7 +159,7 @@ const handleSearchWithQuery = async (q: string) => {
       <Nav activePage="prices" />
 
       {/* Hero */}
-      <div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
+      <div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
         <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
           Trading Card Price Tracker
         </div>
@@ -213,7 +212,7 @@ const handleSearchWithQuery = async (q: string) => {
         </div>
 
         {/* Search Bar */}
-        <div style={{ display: "flex", maxWidth: "520px", margin: "0 auto", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px", overflow: "hidden" }}>
+        <div style={{ display: "flex", maxWidth: "720px", margin: "0 auto", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px", overflow: "hidden" }}>
           <input
             type="text"
             placeholder="Search player, set or card..."
@@ -240,7 +239,7 @@ const handleSearchWithQuery = async (q: string) => {
 
       {/* Search Results */}
       {results.length > 0 && (
-        <div style={{ padding: "2rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
+        <div style={{ padding: "2rem 1.25rem", maxWidth: "1200px", margin: "0 auto" }}>
 
           {/* Filters */}
           <div style={{ display: "flex", gap: "8px", marginBottom: "1.25rem", flexWrap: "wrap" as const, alignItems: "center" }}>
@@ -322,42 +321,34 @@ const handleSearchWithQuery = async (q: string) => {
           </div>
         </div>
       )}
-      {/* Trending Section */}
-      <div style={{ padding: "2rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
-        <div style={{ display: "flex", gap: "0", marginBottom: "1.5rem", background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "4px", width: "fit-content" }}>
-          {[['recent', 'Recent Sales'], ['featured', 'Featured Cards']].map(([tab, label]) => (
-            <button key={tab} onClick={() => setActiveTab(tab)} style={{ background: activeTab === tab ? "#f0b429" : "transparent", color: activeTab === tab ? "#080c10" : "rgba(255,255,255,0.5)", fontWeight: 700, fontSize: "13px", padding: "8px 18px", border: "none", borderRadius: "7px", cursor: "pointer", transition: "all 0.2s" }}>
-              {label}
-            </button>
-          ))}
-        </div>
+      {/* Ending Soon & Listings We Like */}
+<div style={{ padding: "2rem 1.25rem", maxWidth: "1300px", margin: "0 auto" }}>
+  
+  {/* Ending Soon */}
+  <div style={{ marginBottom: "2.5rem" }}>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+      <span style={{ fontWeight: 700, fontSize: "17px" }}>Ending Soon</span>
+      <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Live from eBay UK</span>
+    </div>
+    {recentSales.length > 0 ? <CardGrid items={recentSales} /> : (
+      <div style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", padding: "2rem 0" }}>Loading...</div>
+    )}
+  </div>
 
-        {activeTab === 'recent' && (
-          <>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-              <span style={{ fontWeight: 700, fontSize: "17px" }}>Recent Sales</span>
-              <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Live from eBay UK</span>
-            </div>
-            {recentSales.length > 0 ? <CardGrid items={recentSales} /> : (
-              <div style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", padding: "2rem 0" }}>Loading...</div>
-            )}
-          </>
-        )}
+  {/* Listings We Like */}
+  <div>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+      <span style={{ fontWeight: 700, fontSize: "17px" }}>Listings We Like</span>
+      <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Cards we think you'll love</span>
+    </div>
+    {featuredCards.length > 0 ? <CardGrid items={featuredCards} /> : (
+      <div style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", padding: "2rem 0" }}>Loading...</div>
+    )}
+  </div>
 
-        {activeTab === 'featured' && (
-          <>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-              <span style={{ fontWeight: 700, fontSize: "17px" }}>Featured Cards</span>
-              <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Hand picked for you</span>
-            </div>
-            {featuredCards.length > 0 ? <CardGrid items={featuredCards} /> : (
-              <div style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", padding: "2rem 0" }}>Loading...</div>
-            )}
-          </>
-        )}
-      </div>
+</div>
 {/* Trending Players */}
-<div style={{ padding: "2rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
+<div style={{ padding: "2rem 1.25rem", maxWidth: "1300px", margin: "0 auto" }}>
   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
     <span style={{ fontWeight: 700, fontSize: "17px" }}>Trending Players</span>
     <span style={{ background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.2)", color: "#f0b429", padding: "3px 10px", borderRadius: "20px", fontSize: "11px" }}>Updated weekly</span>
