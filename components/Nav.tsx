@@ -68,7 +68,7 @@ export default function Nav({ activePage }: { activePage?: string }) {
           ) : (
             <>
               <Link href="/login" style={{ fontSize: "13px", color: "#888", textDecoration: "none" }}>Log in</Link>
-              <Link href="/signup" style={{ background: "#3aaa35", color: "#fff", fontWeight: 700, fontSize: "13px", padding: "8px 16px", borderRadius: "6px", textDecoration: "none" }}>
+              <Link href="/signup" style={{ background: "#3aaa35", color: "#1a1a1a", fontWeight: 700, fontSize: "13px", padding: "8px 16px", borderRadius: "6px", textDecoration: "none" }}>
                 Sign Up
               </Link>
             </>
@@ -102,7 +102,7 @@ export default function Nav({ activePage }: { activePage?: string }) {
             <>
               <Link href="/login" onClick={() => setMenuOpen(false)} style={{ color: "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Log in</Link>
               <div style={{ paddingTop: "12px" }}>
-                <Link href="/signup" onClick={() => setMenuOpen(false)} style={{ background: "#3aaa35", color: "#fff", fontWeight: 700, fontSize: "14px", padding: "10px 20px", borderRadius: "6px", textDecoration: "none" }}>
+                <Link href="/signup" onClick={() => setMenuOpen(false)} style={{ background: "#3aaa35", color: "#1a1a1a", fontWeight: 700, fontSize: "14px", padding: "10px 20px", borderRadius: "6px", textDecoration: "none" }}>
                   Sign Up Free
                 </Link>
               </div>

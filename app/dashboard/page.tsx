@@ -69,22 +69,22 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <main style={{ background: "#080c10", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "14px" }}>Loading...</div>
+      <main style={{ background: "#faf7f0", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ color: "#888)", fontSize: "14px" }}>Loading...</div>
       </main>
     );
   }
 
   return (
-    <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
+    <main style={{ background: "#faf7f0", minHeight: "100vh", color: "#1a1a1a", fontFamily: "var(--font-dm-sans)" }}>
 
-      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 1.25rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#fff", textDecoration: "none" }}>
-          boxx<span style={{ color: "#f0b429" }}>ond</span>
+      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 1.25rem", borderBottom: "1px solid #f0ede6" }}>
+        <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#1a1a1a", textDecoration: "none" }}>
+          boxx<span style={{ color: "#3aaa35" }}>ond</span>
         </Link>
         <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-          <Link href="/" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>Back to site</Link>
-          <button onClick={handleSignOut} style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.6)", fontSize: "13px", padding: "8px 16px", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "6px", cursor: "pointer" }}>
+          <Link href="/" style={{ fontSize: "14px", color: "#666", textDecoration: "none" }}>Back to site</Link>
+          <button onClick={handleSignOut} style={{ background: "#f0ede6", color: "rgba(255,255,255,0.6)", fontSize: "13px", padding: "8px 16px", border: "1px solid #e0d9cc", borderRadius: "6px", cursor: "pointer" }}>
             Sign Out
           </button>
         </div>
@@ -93,13 +93,13 @@ export default function DashboardPage() {
       <div style={{ padding: "2.5rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
 
         <div style={{ marginBottom: "2.5rem" }}>
-          <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
+          <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#3aaa35", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
             Dashboard
           </div>
           <h1 style={{ fontSize: "28px", fontWeight: 700, margin: "0 0 0.5rem", letterSpacing: "-0.5px" }}>
             Welcome back 👋
           </h1>
-          <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "14px", margin: 0 }}>{user?.email}</p>
+          <p style={{ color: "#888)", fontSize: "14px", margin: 0 }}>{user?.email}</p>
         </div>
 
         {/* Stats */}
@@ -109,10 +109,10 @@ export default function DashboardPage() {
             { label: "Price Alerts", value: alerts.length.toString(), desc: "Active alerts" },
             { label: "Portfolio Value", value: savedCards.length > 0 ? `£${savedCards.reduce((sum: number, c: any) => sum + (c.price || 0), 0).toFixed(2)}` : "£0", desc: "Total value of saved cards" },
           ].map((stat) => (
-            <div key={stat.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1.25rem" }}>
-              <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase" as const, letterSpacing: "0.5px", marginBottom: "0.5rem" }}>{stat.label}</div>
-              <div style={{ fontSize: "28px", fontWeight: 700, color: "#f0b429", marginBottom: "0.25rem" }}>{stat.value}</div>
-              <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.3)" }}>{stat.desc}</div>
+            <div key={stat.label} style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.25rem" }}>
+              <div style={{ fontSize: "11px", color: "#aaa", textTransform: "uppercase" as const, letterSpacing: "0.5px", marginBottom: "0.5rem" }}>{stat.label}</div>
+              <div style={{ fontSize: "28px", fontWeight: 700, color: "#3aaa35", marginBottom: "0.25rem" }}>{stat.value}</div>
+              <div style={{ fontSize: "12px", color: "#aaa" }}>{stat.desc}</div>
             </div>
           ))}
         </div>
@@ -121,35 +121,35 @@ export default function DashboardPage() {
         <div style={{ marginBottom: "2.5rem" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
             <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0, letterSpacing: "-0.3px" }}>Saved Cards</h2>
-            <Link href="/" style={{ fontSize: "13px", color: "#f0b429", textDecoration: "none" }}>+ Add more</Link>
+            <Link href="/" style={{ fontSize: "13px", color: "#3aaa35", textDecoration: "none" }}>+ Add more</Link>
           </div>
 
           {savedCards.length === 0 ? (
-            <div style={{ textAlign: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "3rem" }}>
+            <div style={{ textAlign: "center", background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "3rem" }}>
               <div style={{ fontSize: "32px", marginBottom: "1rem" }}>☆</div>
               <div style={{ fontWeight: 600, fontSize: "16px", marginBottom: "0.5rem" }}>No saved cards yet</div>
-              <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)", marginBottom: "1.5rem" }}>Search for a card and hit Save to add it here</div>
-              <Link href="/" style={{ background: "#f0b429", color: "#080c10", fontWeight: 700, fontSize: "13px", padding: "10px 20px", borderRadius: "6px", textDecoration: "none" }}>
+              <div style={{ fontSize: "13px", color: "#888)", marginBottom: "1.5rem" }}>Search for a card and hit Save to add it here</div>
+              <Link href="/" style={{ background: "#3aaa35", color: "#faf7f0", fontWeight: 700, fontSize: "13px", padding: "10px 20px", borderRadius: "6px", textDecoration: "none" }}>
                 Start Searching
               </Link>
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               {savedCards.map((card: any) => (
-                <div key={card.id} style={{ display: "flex", gap: "1rem", alignItems: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem 1.25rem" }}>
+                <div key={card.id} style={{ display: "flex", gap: "1rem", alignItems: "center", background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1rem 1.25rem" }}>
                   {card.image_url && (
                     <img src={card.image_url} alt={card.title} style={{ width: "60px", height: "60px", objectFit: "contain", borderRadius: "6px", background: "rgba(255,255,255,0.05)", flexShrink: 0 }} />
                   )}
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontWeight: 500, fontSize: "13px", color: "#fff", marginBottom: "4px", lineHeight: 1.4 }}>{card.title}</div>
-                    <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)" }}>Saved {new Date(card.created_at).toLocaleDateString('en-GB')}</div>
+                    <div style={{ fontWeight: 500, fontSize: "13px", color: "#1a1a1a", marginBottom: "4px", lineHeight: 1.4 }}>{card.title}</div>
+                    <div style={{ fontSize: "11px", color: "#aaa" }}>Saved {new Date(card.created_at).toLocaleDateString('en-GB')}</div>
                   </div>
                   <div style={{ textAlign: "right", flexShrink: 0 }}>
-                    <div style={{ fontWeight: 700, fontSize: "18px", color: "#f0b429", marginBottom: "6px" }}>
+                    <div style={{ fontWeight: 700, fontSize: "18px", color: "#3aaa35", marginBottom: "6px" }}>
                       {card.price ? `£${card.price.toFixed(2)}` : 'N/A'}
                     </div>
                     <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
-                      <a href={card.item_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", textDecoration: "none" }}>View →</a>
+                      <a href={card.item_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: "11px", color: "#888)", textDecoration: "none" }}>View →</a>
                       <button onClick={() => handleUnsave(card.item_id)} style={{ fontSize: "11px", color: "rgba(239,68,68,0.6)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Remove</button>
                     </div>
                   </div>
@@ -164,14 +164,14 @@ export default function DashboardPage() {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
             <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0, letterSpacing: "-0.3px" }}>Card Alerts</h2>
           </div>
-          <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)", marginBottom: "1.25rem", marginTop: 0 }}>
+          <p style={{ fontSize: "13px", color: "#888)", marginBottom: "1.25rem", marginTop: 0 }}>
             Get notified when new listings appear for players or teams you're tracking.
           </p>
 
           {/* Alert Type Tabs */}
           <div style={{ display: "flex", gap: "0", marginBottom: "1rem", background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "4px", width: "fit-content" }}>
             {[['player', 'Player / Card'], ['team', 'Team']].map(([tab, label]) => (
-              <button key={tab} onClick={() => { setAlertType(tab); setAlertTerm(''); }} style={{ background: alertType === tab ? "#f0b429" : "transparent", color: alertType === tab ? "#080c10" : "rgba(255,255,255,0.5)", fontWeight: 700, fontSize: "13px", padding: "8px 18px", border: "none", borderRadius: "7px", cursor: "pointer" }}>
+              <button key={tab} onClick={() => { setAlertType(tab); setAlertTerm(''); }} style={{ background: alertType === tab ? "#3aaa35" : "transparent", color: alertType === tab ? "#faf7f0" : "#666", fontWeight: 700, fontSize: "13px", padding: "8px 18px", border: "none", borderRadius: "7px", cursor: "pointer" }}>
                 {label}
               </button>
             ))}
@@ -185,13 +185,13 @@ export default function DashboardPage() {
                 value={alertTerm}
                 onChange={(e) => setAlertTerm(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleAddAlert()}
-                style={{ flex: 1, minWidth: "200px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "10px 14px", color: "#fff", fontSize: "14px", outline: "none" }}
+                style={{ flex: 1, minWidth: "200px", background: "rgba(255,255,255,0.05)", border: "1px solid #e0d9cc", borderRadius: "8px", padding: "10px 14px", color: "#1a1a1a", fontSize: "14px", outline: "none" }}
               />
             ) : (
               <select
                 value={alertTerm}
                 onChange={(e) => setAlertTerm(e.target.value)}
-                style={{ flex: 1, minWidth: "200px", background: "#080c10", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "10px 14px", color: alertTerm ? "#fff" : "rgba(255,255,255,0.4)", fontSize: "14px", outline: "none", cursor: "pointer" }}>
+                style={{ flex: 1, minWidth: "200px", background: "#faf7f0", border: "1px solid #e0d9cc", borderRadius: "8px", padding: "10px 14px", color: alertTerm ? "#fff" : "#888)", fontSize: "14px", outline: "none", cursor: "pointer" }}>
                 <option value="">Select a team...</option>
                 <optgroup label="Premier League">
                   {['Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Burnley', 'Sunderland', 'Liverpool', 'Man City', 'Man United', 'Newcastle', 'Nottm Forest', 'Leeds', 'Spurs', 'West Ham', 'Wolves'].map(team => (
@@ -215,31 +215,31 @@ export default function DashboardPage() {
               placeholder="Max price £ (optional)"
               value={alertMaxPrice}
               onChange={(e) => setAlertMaxPrice(e.target.value)}
-              style={{ width: "180px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "10px 14px", color: "#fff", fontSize: "14px", outline: "none" }}
+              style={{ width: "180px", background: "rgba(255,255,255,0.05)", border: "1px solid #e0d9cc", borderRadius: "8px", padding: "10px 14px", color: "#1a1a1a", fontSize: "14px", outline: "none" }}
             />
             <button
               onClick={handleAddAlert}
-              style={{ background: "#f0b429", color: "#080c10", fontWeight: 700, fontSize: "13px", padding: "10px 20px", border: "none", borderRadius: "8px", cursor: "pointer", whiteSpace: "nowrap" as const }}>
+              style={{ background: "#3aaa35", color: "#faf7f0", fontWeight: 700, fontSize: "13px", padding: "10px 20px", border: "none", borderRadius: "8px", cursor: "pointer", whiteSpace: "nowrap" as const }}>
               Add Alert
             </button>
           </div>
 
           {alerts.length === 0 ? (
-            <div style={{ textAlign: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "2rem" }}>
-              <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.3)" }}>No alerts set up yet — add one above</div>
+            <div style={{ textAlign: "center", background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "2rem" }}>
+              <div style={{ fontSize: "13px", color: "#aaa" }}>No alerts set up yet — add one above</div>
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               {alerts.map((alert: any) => (
-                <div key={alert.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "10px", padding: "1rem 1.25rem" }}>
+                <div key={alert.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "10px", padding: "1rem 1.25rem" }}>
                   <div>
-                    <div style={{ fontWeight: 500, fontSize: "14px", color: "#fff", marginBottom: "3px" }}>{alert.search_term}</div>
-                    <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.3)" }}>
+                    <div style={{ fontWeight: 500, fontSize: "14px", color: "#1a1a1a", marginBottom: "3px" }}>{alert.search_term}</div>
+                    <div style={{ fontSize: "12px", color: "#aaa" }}>
                       {alert.max_price ? `Max price: £${alert.max_price}` : 'Any price'}
                     </div>
                   </div>
                   <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                    <Link href={`/?q=${encodeURIComponent(alert.search_term)}`} style={{ fontSize: "12px", color: "#f0b429", textDecoration: "none" }}>Search now →</Link>
+                    <Link href={`/?q=${encodeURIComponent(alert.search_term)}`} style={{ fontSize: "12px", color: "#3aaa35", textDecoration: "none" }}>Search now →</Link>
                     <button onClick={() => handleDeleteAlert(alert.id)} style={{ fontSize: "11px", color: "rgba(239,68,68,0.6)", background: "none", border: "none", cursor: "pointer" }}>Remove</button>
                   </div>
                 </div>
@@ -247,7 +247,7 @@ export default function DashboardPage() {
             </div>
           )}
 
-          <div style={{ marginTop: "1rem", background: "rgba(240,180,41,0.06)", border: "1px solid rgba(240,180,41,0.15)", borderRadius: "8px", padding: "0.75rem 1rem", fontSize: "12px", color: "rgba(255,255,255,0.4)" }}>
+          <div style={{ marginTop: "1rem", background: "rgba(58,170,53,0.06)", border: "1px solid rgba(58,170,53,0.15)", borderRadius: "8px", padding: "0.75rem 1rem", fontSize: "12px", color: "#888)" }}>
             🔔 Daily email notifications active — new listings delivered to your inbox
           </div>
         </div>

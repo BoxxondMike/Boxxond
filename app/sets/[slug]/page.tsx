@@ -547,13 +547,13 @@ export default async function SetPage({ params }: { params: Promise<{ slug: stri
 
   const difficultyColour: Record<string, string> = {
     'Beginner': 'rgba(34,197,94,0.15)',
-    'Mid Range': 'rgba(240,180,41,0.15)',
+    'Mid Range': 'rgba(58,170,53,0.15)',
     'Premium': 'rgba(239,68,68,0.15)',
   };
 
   const difficultyText: Record<string, string> = {
     'Beginner': '#22c55e',
-    'Mid Range': '#f0b429',
+    'Mid Range': '#3aaa35',
     'Premium': '#ef4444',
   };
 

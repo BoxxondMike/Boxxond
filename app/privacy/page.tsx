@@ -2,17 +2,17 @@ import Nav from '../../components/Nav';
 
 export default function PrivacyPage() {
   return (
-    <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
+    <main style={{ background: "#faf7f0", minHeight: "100vh", color: "#1a1a1a", fontFamily: "var(--font-dm-sans)" }}>
       <Nav />
 
       <div style={{ padding: "3rem 1.25rem", maxWidth: "760px", margin: "0 auto" }}>
 
         <div style={{ marginBottom: "2.5rem" }}>
-          <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
+          <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#3aaa35", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
             Legal
           </div>
           <h1 style={{ fontSize: "clamp(28px, 5vw, 42px)", fontWeight: 800, margin: "0 0 0.5rem", letterSpacing: "-1px" }}>Privacy Policy</h1>
-          <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "14px", margin: 0 }}>Last updated: March 2026</p>
+          <p style={{ color: "#888)", fontSize: "14px", margin: 0 }}>Last updated: March 2026</p>
         </div>
 
         {[
@@ -65,8 +65,8 @@ export default function PrivacyPage() {
             content: "If you have any questions about this privacy policy or how we handle your data please contact us at hello@boxxond.com. We are based in England, United Kingdom."
           },
         ].map((section) => (
-          <div key={section.title} style={{ marginBottom: "2rem", paddingBottom: "2rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-            <h2 style={{ fontSize: "16px", fontWeight: 700, margin: "0 0 0.75rem", color: "#f0b429" }}>{section.title}</h2>
+          <div key={section.title} style={{ marginBottom: "2rem", paddingBottom: "2rem", borderBottom: "1px solid #f0ede6" }}>
+            <h2 style={{ fontSize: "16px", fontWeight: 700, margin: "0 0 0.75rem", color: "#3aaa35" }}>{section.title}</h2>
             <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.6)", lineHeight: 1.8, margin: 0 }}>{section.content}</p>
           </div>
         ))}

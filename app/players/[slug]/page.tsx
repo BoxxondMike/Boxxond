@@ -96,9 +96,9 @@ const itemsPerPage = 25;
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div style={{ background: "#0f1419", border: "1px solid rgba(240,180,41,0.3)", borderRadius: "8px", padding: "8px 12px" }}>
-          <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.5)", marginBottom: "4px" }}>{label}</div>
-          <div style={{ fontSize: "16px", fontWeight: 700, color: "#f0b429" }}>£{payload[0].value.toFixed(2)}</div>
+        <div style={{ background: "#0f1419", border: "1px solid rgba(58,170,53,0.3)", borderRadius: "8px", padding: "8px 12px" }}>
+          <div style={{ fontSize: "11px", color: "#666", marginBottom: "4px" }}>{label}</div>
+          <div style={{ fontSize: "16px", fontWeight: 700, color: "#3aaa35" }}>£{payload[0].value.toFixed(2)}</div>
         </div>
       );
     }
@@ -106,15 +106,15 @@ const itemsPerPage = 25;
   };
 
   return (
-    <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
+    <main style={{ background: "#faf7f0", minHeight: "100vh", color: "#1a1a1a", fontFamily: "var(--font-dm-sans)" }}>
       <Nav />
 {/* Player Profile Header */}
 {(() => {
   const profile = playerProfiles[slug];
   return (
-    <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
+    <div style={{ borderBottom: "1px solid #f0ede6", background: "rgba(255,255,255,0.02)" }}>
       <div style={{ padding: "2rem 1.25rem", maxWidth: "960px", margin: "0 auto", display: "flex", alignItems: "center", gap: "1.5rem" }}>
-        <div style={{ width: "72px", height: "72px", borderRadius: "50%", background: "rgba(240,180,41,0.1)", border: "2px solid rgba(240,180,41,0.3)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: "24px", fontWeight: 800, color: "#f0b429" }}>
+        <div style={{ width: "72px", height: "72px", borderRadius: "50%", background: "rgba(58,170,53,0.1)", border: "2px solid rgba(58,170,53,0.3)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: "24px", fontWeight: 800, color: "#3aaa35" }}>
           {playerName.split(' ').map((n: string) => n.charAt(0)).join('')}
         </div>
         <div style={{ flex: 1 }}>
@@ -122,16 +122,16 @@ const itemsPerPage = 25;
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" as const }}>
             {profile ? (
               <>
-                <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)" }}>🏟 {profile.club}</span>
-                <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)" }}>🌍 {profile.nation}</span>
-                <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)" }}>⚽ {profile.position}</span>
+                <span style={{ fontSize: "12px", color: "#666" }}>🏟 {profile.club}</span>
+                <span style={{ fontSize: "12px", color: "#666" }}>🌍 {profile.nation}</span>
+                <span style={{ fontSize: "12px", color: "#666" }}>⚽ {profile.position}</span>
               </>
             ) : (
-              <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.3)" }}>Trading Card Price Guide</span>
+              <span style={{ fontSize: "12px", color: "#aaa" }}>Trading Card Price Guide</span>
             )}
           </div>
         </div>
-        <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", letterSpacing: "1px", textTransform: "uppercase" as const, flexShrink: 0 }}>
+        <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#3aaa35", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", letterSpacing: "1px", textTransform: "uppercase" as const, flexShrink: 0 }}>
           Player Price Guide
         </div>
       </div>
@@ -140,10 +140,10 @@ const itemsPerPage = 25;
 })()}
       <div style={{ padding: "2.5rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
 
-        <Link href="/" style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", textDecoration: "none", display: "inline-block", marginBottom: "1.5rem" }}>← Back to search</Link>
+        <Link href="/" style={{ color: "#888", fontSize: "13px", textDecoration: "none", display: "inline-block", marginBottom: "1.5rem" }}>← Back to search</Link>
 
         <div style={{ marginBottom: "2rem" }}>
-  <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "14px", margin: 0 }}>
+  <p style={{ color: "#888", fontSize: "14px", margin: 0 }}>
     Live eBay UK prices for {playerName} trading cards
   </p>
 </div>
@@ -157,9 +157,9 @@ const itemsPerPage = 25;
               { label: "Lowest Price", value: `£${formatPrice(lowPrice)}` },
               { label: "Listings Found", value: results.length.toString() },
             ].map((stat) => (
-              <div key={stat.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1.25rem" }}>
-                <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase" as const, letterSpacing: "0.5px", marginBottom: "0.5rem" }}>{stat.label}</div>
-                <div style={{ fontSize: "26px", fontWeight: 700, color: "#f0b429" }}>{stat.value}</div>
+              <div key={stat.label} style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.25rem" }}>
+                <div style={{ fontSize: "11px", color: "#aaa", textTransform: "uppercase" as const, letterSpacing: "0.5px", marginBottom: "0.5rem" }}>{stat.label}</div>
+                <div style={{ fontSize: "26px", fontWeight: 700, color: "#3aaa35" }}>{stat.value}</div>
               </div>
             ))}
           </div>
@@ -167,15 +167,15 @@ const itemsPerPage = 25;
 
         {/* Price History Chart */}
         {priceHistory.length > 1 && (
-          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1.5rem", marginBottom: "2rem" }}>
+          <div style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.5rem", marginBottom: "2rem" }}>
             <h2 style={{ fontSize: "16px", fontWeight: 700, margin: "0 0 1.5rem" }}>Price History</h2>
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={priceHistory}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="date" tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `£${v}`} />
+                <XAxis dataKey="date" tick={{ fill: '#aaa', fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: '#aaa', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `£${v}`} />
                 <Tooltip content={<CustomTooltip />} />
-                <Line type="monotone" dataKey="price" stroke="#f0b429" strokeWidth={2} dot={{ fill: "#f0b429", r: 3 }} activeDot={{ r: 5 }} />
+                <Line type="monotone" dataKey="price" stroke="#3aaa35" strokeWidth={2} dot={{ fill: "#3aaa35", r: 3 }} activeDot={{ r: 5 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -186,15 +186,15 @@ const itemsPerPage = 25;
          <div id="results-section" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem", flexWrap: "wrap" as const, gap: "10px" }}>
   <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0 }}>Current Listings</h2>
             <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-              <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)" }}>Sort:</span>
+              <span style={{ fontSize: "12px", color: "#888" }}>Sort:</span>
               {[['high', 'High to Low'], ['low', 'Low to High']].map(([val, label]) => (
                 <button
                   key={val}
                   onClick={() => setSortOrder(val as 'high' | 'low')}
                   style={{
-                    background: sortOrder === val ? "#f0b429" : "rgba(255,255,255,0.05)",
-                    color: sortOrder === val ? "#080c10" : "rgba(255,255,255,0.5)",
-                    border: `1px solid ${sortOrder === val ? "#f0b429" : "rgba(255,255,255,0.1)"}`,
+                    background: sortOrder === val ? "#3aaa35" : "rgba(255,255,255,0.05)",
+                    color: sortOrder === val ? "#faf7f0" : "#666",
+                    border: `1px solid ${sortOrder === val ? "#3aaa35" : "#e0d9cc"}`,
                     borderRadius: "6px",
                     padding: "5px 12px",
                     fontSize: "12px",
@@ -210,14 +210,14 @@ const itemsPerPage = 25;
     <button
      onClick={() => { setCurrentPage(1); document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' }); }}
       disabled={currentPage === 1}
-      style={{ background: currentPage === 1 ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: currentPage === 1 ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.5)", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: currentPage === 1 ? "default" : "pointer" }}>
+      style={{ background: currentPage === 1 ? "#ffffff" : "rgba(255,255,255,0.05)", border: "1px solid #e0d9cc", color: currentPage === 1 ? "#bbb" : "#666", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: currentPage === 1 ? "default" : "pointer" }}>
       ← Prev
     </button>
-    <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Page {currentPage} of {Math.ceil(sortedResults.length / itemsPerPage)}</span>
+    <span style={{ fontSize: "13px", color: "#888" }}>Page {currentPage} of {Math.ceil(sortedResults.length / itemsPerPage)}</span>
     <button
       onClick={() => { setCurrentPage(2); document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' }); }}
       disabled={currentPage === Math.ceil(sortedResults.length / itemsPerPage)}
-      style={{ background: currentPage === 2 ? "rgba(240,180,41,0.1)" : "rgba(255,255,255,0.05)", border: `1px solid ${currentPage === 2 ? "rgba(240,180,41,0.3)" : "rgba(255,255,255,0.1)"}`, color: currentPage === 2 ? "#f0b429" : "rgba(255,255,255,0.5)", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: currentPage === Math.ceil(sortedResults.length / itemsPerPage) ? "default" : "pointer" }}>
+      style={{ background: currentPage === 2 ? "rgba(58,170,53,0.1)" : "rgba(255,255,255,0.05)", border: `1px solid ${currentPage === 2 ? "rgba(58,170,53,0.3)" : "#e0d9cc"}`, color: currentPage === 2 ? "#3aaa35" : "#666", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: currentPage === Math.ceil(sortedResults.length / itemsPerPage) ? "default" : "pointer" }}>
       Next →
     </button>
   </div>
@@ -225,13 +225,13 @@ const itemsPerPage = 25;
           </div>
 
           {loading ? (
-            <div style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", padding: "3rem 0" }}>Loading {playerName} cards...</div>
+            <div style={{ textAlign: "center", color: "#bbb", padding: "3rem 0" }}>Loading {playerName} cards...</div>
           ) : sortedResults.length === 0 ? (
-            <div style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", padding: "3rem 0" }}>No listings found for {playerName}</div>
+            <div style={{ textAlign: "center", color: "#bbb", padding: "3rem 0" }}>No listings found for {playerName}</div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
               {sortedResults.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item: any) => (
-                <div key={item.itemId} style={{ display: "flex", gap: "1rem", alignItems: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem 1.25rem" }}>
+                <div key={item.itemId} style={{ display: "flex", gap: "1rem", alignItems: "center", background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1rem 1.25rem" }}>
                   {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
                     <img
                       src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl}
@@ -239,17 +239,17 @@ const itemsPerPage = 25;
                       style={{ width: "70px", height: "70px", objectFit: "contain", borderRadius: "6px", background: "rgba(255,255,255,0.05)", flexShrink: 0 }}
                     />
                   ) : (
-                    <div style={{ width: "70px", height: "70px", background: "rgba(255,255,255,0.06)", borderRadius: "6px", flexShrink: 0 }} />
+                    <div style={{ width: "70px", height: "70px", background: "#f0ede6", borderRadius: "6px", flexShrink: 0 }} />
                   )}
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontWeight: 500, fontSize: "14px", color: "#fff", marginBottom: "4px", lineHeight: 1.4 }}>{item.title}</div>
+                    <div style={{ fontWeight: 500, fontSize: "14px", color: "#1a1a1a", marginBottom: "4px", lineHeight: 1.4 }}>{item.title}</div>
                     <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>{item.condition || 'Condition not specified'}</div>
                   </div>
                   <div style={{ textAlign: "right", flexShrink: 0 }}>
-                    <div style={{ fontWeight: 700, fontSize: "20px", color: "#f0b429", marginBottom: "6px" }}>
+                    <div style={{ fontWeight: 700, fontSize: "20px", color: "#3aaa35", marginBottom: "6px" }}>
                       {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${formatPrice(parseFloat(item.price.value))}` : 'N/A'}
                     </div>
-                    <a href={item.itemAffiliateWebUrl || item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>
+                    <a href={item.itemAffiliateWebUrl || item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#888", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>
                   </div>
                 </div>
               ))}
@@ -267,15 +267,15 @@ const itemsPerPage = 25;
         return (
           <Link key={relatedSlug} href={`/players/${relatedSlug}`} style={{ textDecoration: "none" }}>
             <div
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "10px", padding: "1rem", textAlign: "center", cursor: "pointer" }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(240,180,41,0.3)')}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}>
-              <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.2)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 8px", fontSize: "14px", fontWeight: 800, color: "#f0b429" }}>
+              style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "10px", padding: "1rem", textAlign: "center", cursor: "pointer" }}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(58,170,53,0.3)')}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = '#e0d9cc')}>
+              <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.2)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 8px", fontSize: "14px", fontWeight: 800, color: "#3aaa35" }}>
                 {relatedName.split(' ').map((n: string) => n.charAt(0)).join('')}
               </div>
-              <div style={{ fontSize: "12px", fontWeight: 600, color: "#fff", marginBottom: "3px", lineHeight: 1.3 }}>{relatedName}</div>
+              <div style={{ fontSize: "12px", fontWeight: 600, color: "#1a1a1a", marginBottom: "3px", lineHeight: 1.3 }}>{relatedName}</div>
               {relatedProfile && (
-                <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)" }}>{relatedProfile.nation} · {relatedProfile.club}</div>
+                <div style={{ fontSize: "10px", color: "#aaa" }}>{relatedProfile.nation} · {relatedProfile.club}</div>
               )}
             </div>
           </Link>
