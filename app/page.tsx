@@ -19,7 +19,7 @@ function HomeContent() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [recentSales, setRecentSales] = useState([]);
-  const [featuredCards, setFeaturedCards] = useState([]);
+  const [featuredCards, setFeaturedCards] = useState<any[]>([]);
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [user, setUser] = useState<any>(null);
   const [activeSport, setActiveSport] = useState('');
@@ -65,11 +65,35 @@ const router = useRouter();
 };
 
   const fetchFeaturedCards = async () => {
-    const randomQuery = featuredQueries[Math.floor(Math.random() * featuredQueries.length)];
-    const res = await fetch(`/api/search?q=${encodeURIComponent(randomQuery)}&featured=true`);
-    const data = await res.json();
-    setFeaturedCards(data.items?.slice(0, 12) || []);
-  };
+ const queries = [
+  'Jude Bellingham auto refractor',
+  'Cole Palmer Topps Chrome',
+  'Bukayo Saka card',
+  'Lamine Yamal rookie card',
+  'Erling Haaland auto',
+  'Kylian Mbappe Prizm',
+  'Bruno Fernandes Chrome',
+  'LeBron James Prizm',
+  'Stephen Curry auto',
+  'Giannis Antetokounmpo',
+  'Patrick Mahomes auto',
+  'Josh Allen Prizm',
+  'Shohei Ohtani rookie',
+  'Juan Soto Chrome',
+];
+ const shuffled = queries.sort(() => Math.random() - 0.5).slice(0, 4);
+
+const results = await Promise.all(
+  shuffled.map(q =>
+    fetch(`/api/search?q=${encodeURIComponent(q)}&featured=true`)
+      .then(res => res.json())
+      .then(data => data.items?.slice(0, 3) || [])
+  )
+);
+  
+  const combined = results.flat().sort(() => Math.random() - 0.5);
+  setFeaturedCards(combined.slice(0, 12));
+};
 const handleSearchWithQuery = async (q: string) => {
   setLoading(true);
   const searchQuery = activeSport ? `${q} ${activeSport}` : q;
@@ -348,7 +372,7 @@ const handleSearchWithQuery = async (q: string) => {
 
 </div>
 {/* Trending Players */}
-<div style={{ padding: "2rem 1.25rem", maxWidth: "1300px", margin: "0 auto" }}>
+<div style={{ padding: "2rem 1.25rem", maxWidth: "1000px", margin: "0 auto" }}>
   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
     <span style={{ fontWeight: 700, fontSize: "17px" }}>Trending Players</span>
     <span style={{ background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.2)", color: "#f0b429", padding: "3px 10px", borderRadius: "20px", fontSize: "11px" }}>Updated weekly</span>
