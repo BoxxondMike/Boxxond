@@ -141,20 +141,20 @@ const handleSearchWithQuery = async (q: string) => {
     <div style={{ display: "flex", gap: "12px", overflowX: "scroll", paddingBottom: "8px", scrollbarWidth: "thin", scrollbarColor: "rgba(240,180,41,0.3) transparent" }}>
       {items.map((item: any) => (
         <a key={item.itemId} href={item.itemAffiliateWebUrl || item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", flexShrink: 0, width: "200px" }}>
-          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem", cursor: "pointer" }}
+          <div style={{ background: "#fff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1rem", cursor: "pointer" }}
             onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(240,180,41,0.3)')}
-            onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}>
+            onMouseLeave={e => (e.currentTarget.style.borderColor = '#e0d9cc')}>
             {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
               <img
                 src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl}
                 alt={item.title}
-                style={{ width: "100%", height: "220px", objectFit: "contain", borderRadius: "6px", background: "rgba(255,255,255,0.05)", marginBottom: "10px" }}
+                style={{ width: "100%", height: "220px", objectFit: "cover", borderRadius: "6px", marginBottom: "10px" }}
               />
             ) : (
               <div style={{ width: "100%", height: "220px", background: "rgba(255,255,255,0.06)", borderRadius: "6px", marginBottom: "10px" }} />
             )}
-            <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)", marginBottom: "8px", lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.title}</div>
-            <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "18px", color: "#f0b429", letterSpacing: "0px" }}>
+            <div style={{ fontSize: "12px", color: "#444", marginBottom: "8px", lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{item.title}</div>
+            <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "18px", color: "#3aaa35", letterSpacing: "0px" }}>
             {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${formatPrice(parseFloat(item.price.value))}` : 'N/A'}
             </div>
           </div>
@@ -164,14 +164,14 @@ const handleSearchWithQuery = async (q: string) => {
   );
 
   return (
-    <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
+    <main style={{ background: "#faf7f0", minHeight: "100vh", color: "#1a1a1a", fontFamily: "var(--font-dm-sans)" }}>
 
       <style>{`
         .result-card { display: flex; gap: 1.5rem; align-items: center; }
         .result-image { width: 90px; height: 90px; flex-shrink: 0; }
         .result-price { text-align: right; flex-shrink: 0; }
         .stats-bar { display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
-        select option { background: #080c10; color: #fff; }
+        select option { background: #faf7f0; color: #fff; }
         @media (max-width: 640px) {
           .result-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
           .result-image { width: 100% !important; height: 200px !important; }
@@ -184,13 +184,13 @@ const handleSearchWithQuery = async (q: string) => {
 
       {/* Hero */}
       <div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
-        <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
+        <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#3aaa35", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
           Trading Card Price Tracker
         </div>
         <h1 style={{ fontWeight: 800, fontSize: "clamp(36px, 7vw, 68px)", lineHeight: 1.05, margin: "0 0 1.25rem", letterSpacing: "-2px" }}>
-          Know what your<br /><span style={{ color: "#f0b429" }}>cards are worth</span>
+          Know what your<br /><span style={{ color: "#3aaa35" }}>cards are worth</span>
         </h1>
-      <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 1.5rem" }}>
+      <p style={{ color: "#666", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 1.5rem" }}>
   Search live eBay UK listings and get daily alerts when new cards drop for your favourite players and teams.
 </p>
 
@@ -198,12 +198,12 @@ const handleSearchWithQuery = async (q: string) => {
 <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginBottom: "2rem", flexWrap: "wrap" as const }}>
   <button
     onClick={() => document.querySelector('input')?.focus()}
-    style={{ background: "#f0b429", color: "#080c10", fontWeight: 700, fontSize: "14px", padding: "12px 24px", border: "none", borderRadius: "8px", cursor: "pointer" }}>
+    style={{ background: "#3aaa35", color: "#faf7f0", fontWeight: 700, fontSize: "14px", padding: "12px 24px", border: "none", borderRadius: "8px", cursor: "pointer" }}>
     Search Cards
   </button>
   <Link
     href={user ? "/dashboard" : "/signup"}
-    style={{ background: "rgba(255,255,255,0.05)", color: "#fff", fontWeight: 700, fontSize: "14px", padding: "12px 24px", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", textDecoration: "none" }}>
+    style={{ background: "rgba(255,255,255,0.05)", color: "#1a1a1a", fontWeight: 700, fontSize: "14px", padding: "12px 24px", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", textDecoration: "none" }}>
     Set Up Alerts →
   </Link>
 </div>
@@ -221,9 +221,9 @@ const handleSearchWithQuery = async (q: string) => {
               key={sport.label}
               onClick={() => setActiveSport(sport.value)}
               style={{
-                background: activeSport === sport.value ? "#f0b429" : "rgba(255,255,255,0.05)",
-                color: activeSport === sport.value ? "#080c10" : "rgba(255,255,255,0.5)",
-                border: `1px solid ${activeSport === sport.value ? "#f0b429" : "rgba(255,255,255,0.1)"}`,
+                background: activeSport === sport.value ? "#3aaa35" : "rgba(255,255,255,0.05)",
+                color: activeSport === sport.value ? "#faf7f0" : "#666",
+                border: `1px solid ${activeSport === sport.value ? "#3aaa35" : "rgba(255,255,255,0.1)"}`,
                 borderRadius: "20px",
                 padding: "6px 16px",
                 fontSize: "13px",
@@ -236,16 +236,16 @@ const handleSearchWithQuery = async (q: string) => {
         </div>
 
         {/* Search Bar */}
-        <div style={{ display: "flex", maxWidth: "720px", margin: "0 auto", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "10px", overflow: "hidden" }}>
+        <div style={{ display: "flex", maxWidth: "720px", margin: "0 auto", background: "#fff", border: "1px solid #e0d9cc", borderRadius: "10px", overflow: "hidden" }}>
           <input
             type="text"
             placeholder="Search player, set or card..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            style={{ flex: 1, background: "transparent", border: "none", outline: "none", color: "#fff", fontSize: "15px", padding: "14px 16px" }}
+            style={{ flex: 1, background: "transparent", border: "none", outline: "none", color: "#1a1a1a", fontSize: "15px", padding: "14px 16px" }}
           />
-          <button onClick={handleSearch} style={{ background: "#f0b429", border: "none", color: "#080c10", fontWeight: 700, fontSize: "13px", padding: "0 18px", cursor: "pointer", whiteSpace: "nowrap" as const }}>
+          <button onClick={handleSearch} style={{ background: "#3aaa35", border: "none", color: "#faf7f0", fontWeight: 700, fontSize: "13px", padding: "0 18px", cursor: "pointer", whiteSpace: "nowrap" as const }}>
             {loading ? '...' : 'Search'}
           </button>
         </div>
@@ -256,7 +256,7 @@ const handleSearchWithQuery = async (q: string) => {
         {[["eBay UK", "Live Data"], ["Free", "To Use"], ["Trading Cards", "UK Market"], ["Daily", "Updated"]].map(([num, label]) => (
           <div key={label} style={{ textAlign: "center" }}>
             <span style={{ fontWeight: 800, fontSize: "18px", letterSpacing: "-0.5px", display: "block" }}>{num}</span>
-            <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>{label}</span>
+            <span style={{ fontSize: "11px", color: "#888", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>{label}</span>
           </div>
         ))}
       </div>
@@ -270,7 +270,7 @@ const handleSearchWithQuery = async (q: string) => {
             <select
               value={condition}
               onChange={(e) => setCondition(e.target.value)}
-              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "6px 12px", color: "rgba(255,255,255,0.7)", fontSize: "13px", outline: "none", cursor: "pointer" }}>
+              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "6px 12px", color: "#444", fontSize: "13px", outline: "none", cursor: "pointer" }}>
               <option value="">All Conditions</option>
               <option value="New">New</option>
               <option value="Used">Used</option>
@@ -281,34 +281,34 @@ const handleSearchWithQuery = async (q: string) => {
               placeholder="Min £"
               value={minPrice}
               onChange={(e) => setMinPrice(e.target.value)}
-              style={{ width: "80px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "6px 12px", color: "#fff", fontSize: "13px", outline: "none" }}
+              style={{ width: "80px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "6px 12px", color: "#1a1a1a", fontSize: "13px", outline: "none" }}
             />
             <input
               type="number"
               placeholder="Max £"
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
-              style={{ width: "80px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "6px 12px", color: "#fff", fontSize: "13px", outline: "none" }}
+              style={{ width: "80px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "6px 12px", color: "#1a1a1a", fontSize: "13px", outline: "none" }}
             />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "6px 12px", color: "rgba(255,255,255,0.7)", fontSize: "13px", outline: "none", cursor: "pointer" }}>
+              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "6px 12px", color: "#444", fontSize: "13px", outline: "none", cursor: "pointer" }}>
               <option value="">Sort: Default</option>
               <option value="price">Price: High to Low</option>
               <option value="lowPrice">Price: Low to High</option>
             </select>
             <button
               onClick={handleSearch}
-              style={{ background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", borderRadius: "8px", padding: "6px 16px", fontSize: "13px", fontWeight: 600, cursor: "pointer" }}>
+              style={{ background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#3aaa35", borderRadius: "8px", padding: "6px 16px", fontSize: "13px", fontWeight: 600, cursor: "pointer" }}>
               Apply Filters
             </button>
-            <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>{results.length} results</span>
+            <span style={{ fontSize: "13px", color: "#888" }}>{results.length} results</span>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {results.map((item: any) => (
-              <div key={item.itemId} className="result-card" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1rem 1.25rem" }}>
+              <div key={item.itemId} className="result-card" style={{ background: "#1a1a1a", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1rem 1.25rem" }}>
                 <div style={{ flexShrink: 0 }}>
                   {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
                     <img src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl} alt={item.title} className="result-image" style={{ objectFit: "contain", borderRadius: "8px", background: "rgba(255,255,255,0.05)" }} />
@@ -317,25 +317,25 @@ const handleSearchWithQuery = async (q: string) => {
                   )}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 500, fontSize: "14px", color: "#fff", marginBottom: "6px", lineHeight: 1.4 }}>{item.title}</div>
+                  <div style={{ fontWeight: 500, fontSize: "14px", color: "#1a1a1a", marginBottom: "6px", lineHeight: 1.4 }}>{item.title}</div>
                   <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" as const }}>
                     <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>{item.condition || 'Condition not specified'}</span>
                     <Link
                       href={`/players/${query.toLowerCase().trim().split(' ').slice(0, 2).join('-')}`}
-                      style={{ fontSize: "11px", color: "#f0b429", textDecoration: "none", background: "rgba(240,180,41,0.1)", padding: "2px 8px", borderRadius: "4px" }}>
+                      style={{ fontSize: "11px", color: "#3aaa35", textDecoration: "none", background: "rgba(240,180,41,0.1)", padding: "2px 8px", borderRadius: "4px" }}>
                       View Player Page →
                     </Link>
                   </div>
                 </div>
                 <div className="result-price">
-                  <div style={{ fontWeight: 700, fontSize: "22px", color: "#f0b429", marginBottom: "8px" }}>
+                  <div style={{ fontWeight: 700, fontSize: "22px", color: "#3aaa35", marginBottom: "8px" }}>
                    {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${formatPrice(parseFloat(item.price.value))}` : 'N/A'}
                   </div>
                   <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                    <a href={item.itemAffiliateWebUrl || item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>
+                    <a href={item.itemAffiliateWebUrl || item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#888", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>
                     <button
                       onClick={() => handleSave(item)}
-                      style={{ background: savedIds.includes(item.itemId) ? "rgba(240,180,41,0.2)" : "rgba(255,255,255,0.05)", border: `1px solid ${savedIds.includes(item.itemId) ? "rgba(240,180,41,0.5)" : "rgba(255,255,255,0.1)"}`, borderRadius: "6px", padding: "4px 10px", cursor: "pointer", fontSize: "12px", color: savedIds.includes(item.itemId) ? "#f0b429" : "rgba(255,255,255,0.4)" }}>
+                      style={{ background: savedIds.includes(item.itemId) ? "rgba(240,180,41,0.2)" : "rgba(255,255,255,0.05)", border: `1px solid ${savedIds.includes(item.itemId) ? "rgba(240,180,41,0.5)" : "rgba(255,255,255,0.1)"}`, borderRadius: "6px", padding: "4px 10px", cursor: "pointer", fontSize: "12px", color: savedIds.includes(item.itemId) ? "#3aaa35" : "#888" }}>
                       {savedIds.includes(item.itemId) ? '★ Saved' : '☆ Save'}
                     </button>
                   </div>
@@ -352,10 +352,10 @@ const handleSearchWithQuery = async (q: string) => {
   <div style={{ marginBottom: "2.5rem" }}>
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
       <span style={{ fontWeight: 700, fontSize: "17px" }}>Ending Soon</span>
-      <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Live from eBay UK</span>
+      <span style={{ fontSize: "13px", color: "#888" }}>Live from eBay UK</span>
     </div>
     {recentSales.length > 0 ? <CardGrid items={recentSales} /> : (
-      <div style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", padding: "2rem 0" }}>Loading...</div>
+      <div style={{ textAlign: "center", color: "#bbb", padding: "2rem 0" }}>Loading...</div>
     )}
   </div>
 
@@ -363,10 +363,10 @@ const handleSearchWithQuery = async (q: string) => {
   <div>
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
       <span style={{ fontWeight: 700, fontSize: "17px" }}>Listings We Like</span>
-      <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)" }}>Cards we think you'll love</span>
+      <span style={{ fontSize: "13px", color: "#888" }}>Cards we think you'll love</span>
     </div>
     {featuredCards.length > 0 ? <CardGrid items={featuredCards} /> : (
-      <div style={{ textAlign: "center", color: "rgba(255,255,255,0.2)", padding: "2rem 0" }}>Loading...</div>
+      <div style={{ textAlign: "center", color: "#bbb", padding: "2rem 0" }}>Loading...</div>
     )}
   </div>
 
@@ -375,7 +375,7 @@ const handleSearchWithQuery = async (q: string) => {
 <div style={{ padding: "2rem 1.25rem", maxWidth: "1000px", margin: "0 auto" }}>
   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
     <span style={{ fontWeight: 700, fontSize: "17px" }}>Trending Players</span>
-    <span style={{ background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.2)", color: "#f0b429", padding: "3px 10px", borderRadius: "20px", fontSize: "11px" }}>Updated weekly</span>
+    <span style={{ background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.2)", color: "#3aaa35", padding: "3px 10px", borderRadius: "20px", fontSize: "11px" }}>Updated weekly</span>
   </div>
   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "10px" }}>
    {[
@@ -394,14 +394,14 @@ const handleSearchWithQuery = async (q: string) => {
 ].map((player) => (
       <Link key={player.slug} href={`/players/${player.slug}`} style={{ textDecoration: "none" }}>
         <div
-          style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "10px", padding: "1rem", textAlign: "center", cursor: "pointer" }}
+          style={{ background: "#fff", border: "1px solid #e0d9cc", borderRadius: "10px", padding: "1rem", textAlign: "center", cursor: "pointer" }}
           onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(240,180,41,0.3)')}
-          onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}>
+          onMouseLeave={e => (e.currentTarget.style.borderColor = '#e0d9cc')}>
           <div style={{ width: "100%", height: "70px", marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", background: player.sport === 'Soccer' ? 'rgba(240,180,41,0.08)' : player.sport === 'Basketball' ? 'rgba(239,68,68,0.08)' : player.sport === 'Baseball' ? 'rgba(34,197,94,0.08)' : 'rgba(59,130,246,0.08)', borderRadius: "8px", border: `1px solid ${player.sport === 'Soccer' ? 'rgba(240,180,41,0.2)' : player.sport === 'Basketball' ? 'rgba(239,68,68,0.2)' : player.sport === 'Baseball' ? 'rgba(34,197,94,0.2)' : 'rgba(59,130,246,0.2)'}`, fontSize: "32px" }}>
   {player.sport === 'Soccer' ? '⚽' : player.sport === 'Basketball' ? '🏀' : player.sport === 'Baseball' ? '⚾' : '🏈'}
 </div>
-          <div style={{ fontSize: "12px", fontWeight: 600, color: "#fff", marginBottom: "3px", lineHeight: 1.3 }}>{player.name}</div>
-          <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)" }}>{player.sport}</div>
+          <div style={{ fontSize: "12px", fontWeight: 600, color: "#1a1a1a", marginBottom: "3px", lineHeight: 1.3 }}>{player.name}</div>
+          <div style={{ fontSize: "10px", color: "#aaa" }}>{player.sport}</div>
         </div>
       </Link>
     ))}
@@ -413,7 +413,7 @@ const handleSearchWithQuery = async (q: string) => {
 }
 export default function Home() {
   return (
-    <Suspense fallback={<main style={{ background: "#080c10", minHeight: "100vh" }} />}>
+    <Suspense fallback={<main style={{ background: "#faf7f0", minHeight: "100vh" }} />}>
       <HomeContent />
     </Suspense>
   );

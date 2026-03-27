@@ -558,47 +558,47 @@ export default async function SetPage({ params }: { params: Promise<{ slug: stri
   };
 
   return (
-    <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
+    <main style={{ background: "#faf7f0", minHeight: "100vh", color: "#1a1a1a", fontFamily: "var(--font-dm-sans)" }}>
 
       <Nav activePage="sets" />
 
       <div style={{ padding: "2.5rem 2rem", maxWidth: "800px", margin: "0 auto" }}>
 
-        <Link href="/sets" style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", textDecoration: "none", display: "inline-block", marginBottom: "1.5rem" }}>Back to Sets</Link>
+        <Link href="/sets" style={{ color: "#888", fontSize: "13px", textDecoration: "none", display: "inline-block", marginBottom: "1.5rem" }}>← Back to Sets</Link>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "0.75rem", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "0.75rem", flexWrap: "wrap" as const }}>
           <h1 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "clamp(28px, 5vw, 44px)", letterSpacing: "-1px", margin: 0 }}>{set.name}</h1>
           <span style={{ background: difficultyColour[set.difficulty], color: difficultyText[set.difficulty], fontSize: "11px", padding: "3px 10px", borderRadius: "4px", fontWeight: 500 }}>{set.difficulty}</span>
         </div>
-        <div style={{ fontSize: "13px", color: "#f0b429", marginBottom: "2rem" }}>{set.manufacturer} · {set.year}</div>
+        <div style={{ fontSize: "13px", color: "#3aaa35", fontWeight: 600, marginBottom: "2rem" }}>{set.manufacturer} · {set.year}</div>
 
         <section style={{ marginBottom: "2.5rem" }}>
-          <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "16px", marginBottom: "0.75rem", color: "rgba(255,255,255,0.9)" }}>Overview</h2>
-          <p style={{ color: "rgba(255,255,255,0.6)", lineHeight: 1.8, fontSize: "15px", margin: 0 }}>{set.overview}</p>
+          <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "16px", marginBottom: "0.75rem", color: "#1a1a1a" }}>Overview</h2>
+          <p style={{ color: "#555", lineHeight: 1.8, fontSize: "15px", margin: 0 }}>{set.overview}</p>
         </section>
 
         <section style={{ marginBottom: "2.5rem" }}>
-          <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "16px", marginBottom: "0.75rem", color: "rgba(255,255,255,0.9)" }}>What to look for</h2>
-          <p style={{ color: "rgba(255,255,255,0.6)", lineHeight: 1.8, fontSize: "15px", margin: 0 }}>{set.whatToLookFor}</p>
+          <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "16px", marginBottom: "0.75rem", color: "#1a1a1a" }}>What to look for</h2>
+          <p style={{ color: "#555", lineHeight: 1.8, fontSize: "15px", margin: 0 }}>{set.whatToLookFor}</p>
         </section>
 
         <section style={{ marginBottom: "2.5rem" }}>
-          <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "16px", marginBottom: "1rem", color: "rgba(255,255,255,0.9)" }}>Parallels and Print Runs</h2>
-          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "10px", overflow: "hidden" }}>
+          <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "16px", marginBottom: "1rem", color: "#1a1a1a" }}>Parallels and Print Runs</h2>
+          <div style={{ background: "#fff", border: "1px solid #e0d9cc", borderRadius: "10px", overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
               <thead>
                 <tr>
                   {["Parallel", "Print Run", "Colour"].map(h => (
-                    <th key={h} style={{ textAlign: "left", padding: "10px 16px", fontSize: "11px", fontWeight: 500, color: "rgba(255,255,255,0.3)", textTransform: "uppercase" as const, letterSpacing: "0.5px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>{h}</th>
+                    <th key={h} style={{ textAlign: "left", padding: "10px 16px", fontSize: "11px", fontWeight: 500, color: "#aaa", textTransform: "uppercase" as const, letterSpacing: "0.5px", borderBottom: "1px solid #e0d9cc" }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {set.parallels.map((p: any, i: number) => (
-                  <tr key={i}>
-                    <td style={{ padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)", color: "#fff", fontWeight: 500 }}>{p.name}</td>
-                    <td style={{ padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)", color: "#f0b429", fontFamily: "var(--font-dm-sans)", fontWeight: 700 }}>{p.printRun}</td>
-                    <td style={{ padding: "11px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.5)" }}>{p.colour}</td>
+                  <tr key={i} style={{ background: i % 2 === 0 ? "#fff" : "#faf7f0" }}>
+                    <td style={{ padding: "11px 16px", borderBottom: "1px solid #e0d9cc", color: "#1a1a1a", fontWeight: 500 }}>{p.name}</td>
+                    <td style={{ padding: "11px 16px", borderBottom: "1px solid #e0d9cc", color: "#3aaa35", fontFamily: "var(--font-dm-sans)", fontWeight: 700 }}>{p.printRun}</td>
+                    <td style={{ padding: "11px 16px", borderBottom: "1px solid #e0d9cc", color: "#666" }}>{p.colour}</td>
                   </tr>
                 ))}
               </tbody>
@@ -607,27 +607,29 @@ export default async function SetPage({ params }: { params: Promise<{ slug: stri
         </section>
 
         <section style={{ marginBottom: "2.5rem" }}>
-          <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "16px", marginBottom: "1rem", color: "rgba(255,255,255,0.9)" }}>Collector Tips</h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "16px", marginBottom: "1rem", color: "#1a1a1a" }}>Collector Tips</h2>
+          <div style={{ display: "flex", flexDirection: "column" as const, gap: "10px" }}>
             {set.tips.map((tip: string, i: number) => (
-              <div key={i} style={{ display: "flex", gap: "12px", alignItems: "flex-start", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px", padding: "12px 16px" }}>
-                <span style={{ color: "#f0b429", fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "14px", flexShrink: 0 }}>0{i + 1}</span>
-                <span style={{ color: "rgba(255,255,255,0.6)", fontSize: "14px", lineHeight: 1.6 }}>{tip}</span>
+              <div key={i} style={{ display: "flex", gap: "12px", alignItems: "flex-start", background: "#fff", border: "1px solid #e0d9cc", borderRadius: "8px", padding: "12px 16px" }}>
+                <span style={{ color: "#3aaa35", fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "14px", flexShrink: 0 }}>0{i + 1}</span>
+                <span style={{ color: "#555", fontSize: "14px", lineHeight: 1.6 }}>{tip}</span>
               </div>
             ))}
           </div>
         </section>
 
-        <section style={{ background: "rgba(240,180,41,0.06)", border: "1px solid rgba(240,180,41,0.2)", borderRadius: "12px", padding: "1.5rem" }}>
-          <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" as const, letterSpacing: "1px", marginBottom: "0.5rem" }}>Typical Price Range</div>
-          <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "28px", color: "#f0b429", letterSpacing: "-1px" }}>{set.priceRange}</div>
-          <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.3)", marginTop: "0.5rem" }}>Based on recent eBay UK sold prices</div>
+        <section style={{ background: "rgba(58,170,53,0.06)", border: "1px solid rgba(58,170,53,0.2)", borderRadius: "12px", padding: "1.5rem" }}>
+          <div style={{ fontSize: "11px", color: "#888", textTransform: "uppercase" as const, letterSpacing: "1px", marginBottom: "0.5rem" }}>Typical Price Range</div>
+          <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "28px", color: "#3aaa35", letterSpacing: "-1px" }}>{set.priceRange}</div>
+          <div style={{ fontSize: "12px", color: "#aaa", marginTop: "0.5rem" }}>Based on recent eBay UK listing prices</div>
         </section>
-<div style={{ marginTop: "1.5rem", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px", padding: "1rem 1.25rem" }}>
-  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.25)", lineHeight: 1.6 }}>
-    <strong style={{ color: "rgba(255,255,255,0.35)" }}>Disclaimer:</strong> Set information, parallel details and price ranges on this page are provided for guidance only. Print runs, parallels and pricing vary by year and release. Always verify current details with official manufacturer sources before making purchasing decisions. Boxxond is not affiliated with Topps, Panini or any card manufacturer.
-  </div>
-</div>
+
+        <div style={{ marginTop: "1.5rem", background: "#f0ede6", border: "1px solid #e0d9cc", borderRadius: "8px", padding: "1rem 1.25rem" }}>
+          <div style={{ fontSize: "11px", color: "#888", lineHeight: 1.6 }}>
+            <strong style={{ color: "#555" }}>Disclaimer:</strong> Set information, parallel details and price ranges on this page are provided for guidance only. Print runs, parallels and pricing vary by year and release. Always verify current details with official manufacturer sources before making purchasing decisions. Boxxond is not affiliated with Topps, Panini or any card manufacturer.
+          </div>
+        </div>
+
       </div>
     </main>
   );

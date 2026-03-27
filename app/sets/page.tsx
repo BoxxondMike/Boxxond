@@ -235,30 +235,30 @@ const sports = [
 
 const difficultyColour: Record<string, string> = {
   'Beginner': 'rgba(34,197,94,0.15)',
-  'Mid Range': 'rgba(240,180,41,0.15)',
+  'Mid Range': 'rgba(58,170,53,0.15)',
   'Premium': 'rgba(239,68,68,0.15)',
 };
 
 const difficultyText: Record<string, string> = {
   'Beginner': '#22c55e',
-  'Mid Range': '#f0b429',
+  'Mid Range': '#3aaa35',
   'Premium': '#ef4444',
 };
 
 export default function SetsPage() {
   return (
-    <main style={{ background: "#080c10", minHeight: "100vh", color: "#ffffff", fontFamily: "var(--font-dm-sans)" }}>
+    <main style={{ background: "#faf7f0", minHeight: "100vh", color: "#1a1a1a", fontFamily: "var(--font-dm-sans)" }}>
 
      <Nav activePage="sets" />
 
       <div style={{ padding: "3rem 2rem 2rem", maxWidth: "960px", margin: "0 auto" }}>
-        <div style={{ display: "inline-block", background: "rgba(240,180,41,0.1)", border: "1px solid rgba(240,180,41,0.25)", color: "#f0b429", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1rem", letterSpacing: "1px", textTransform: "uppercase" }}>
+        <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#3aaa35", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1rem", letterSpacing: "1px", textTransform: "uppercase" }}>
           Card Set Guide
         </div>
         <h1 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "clamp(32px, 5vw, 52px)", letterSpacing: "-1.5px", margin: "0 0 1rem", lineHeight: 1.05 }}>
-          Know your <span style={{ color: "#f0b429" }}>sets</span>
+          Know your <span style={{ color: "#3aaa35" }}>sets</span>
         </h1>
-        <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "16px", lineHeight: 1.6, maxWidth: "500px", margin: 0 }}>
+        <p style={{ color: "#666", fontSize: "16px", lineHeight: 1.6, maxWidth: "500px", margin: 0 }}>
           From beginner sticker collections to premium chrome refractors — guides covering soccer, basketball, baseball and NFL card sets.
         </p>
       </div>
@@ -267,28 +267,28 @@ export default function SetsPage() {
         <div key={sport.name} style={{ padding: "2rem", maxWidth: "960px", margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
             <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "22px", letterSpacing: "-0.5px", margin: 0 }}>{sport.name}</h2>
-            <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.06)" }}/>
+            <div style={{ flex: 1, height: "1px", background: "#f0ede6" }}/>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "16px" }}>
             {sport.sets.map((set) => (
               <Link key={set.slug} href={`/sets/${set.slug}`} style={{ textDecoration: "none" }}>
                 <div
-                  style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "12px", padding: "1.5rem", height: "100%", cursor: "pointer" }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(240,180,41,0.3)')}
-                  onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)')}>
+                  style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.5rem", height: "100%", cursor: "pointer" }}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(58,170,53,0.3)')}
+                  onMouseLeave={e => (e.currentTarget.style.borderColor = '#e0d9cc')}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
-                    <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "0.5px" }}>{set.manufacturer}</span>
+                    <span style={{ fontSize: "11px", color: "#aaa", textTransform: "uppercase", letterSpacing: "0.5px" }}>{set.manufacturer}</span>
                     <span style={{ background: difficultyColour[set.difficulty], color: difficultyText[set.difficulty], fontSize: "10px", padding: "2px 8px", borderRadius: "4px", fontWeight: 500 }}>{set.difficulty}</span>
                   </div>
-                  <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "18px", color: "#fff", marginBottom: "0.5rem", letterSpacing: "-0.3px" }}>{set.name}</div>
-                  <div style={{ fontSize: "12px", color: "#f0b429", marginBottom: "0.75rem" }}>{set.year}</div>
-                  <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.5)", lineHeight: 1.6, marginBottom: "1rem" }}>{set.description}</div>
+                  <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "18px", color: "#1a1a1a", marginBottom: "0.5rem", letterSpacing: "-0.3px" }}>{set.name}</div>
+                  <div style={{ fontSize: "12px", color: "#3aaa35", marginBottom: "0.75rem" }}>{set.year}</div>
+                  <div style={{ fontSize: "13px", color: "#666", lineHeight: 1.6, marginBottom: "1rem" }}>{set.description}</div>
                   <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
                     {set.tags.map(tag => (
-                      <span key={tag} style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.4)", fontSize: "10px", padding: "3px 8px", borderRadius: "4px" }}>{tag}</span>
+                      <span key={tag} style={{ background: "rgba(255,255,255,0.05)", color: "#888", fontSize: "10px", padding: "3px 8px", borderRadius: "4px" }}>{tag}</span>
                     ))}
                   </div>
-                  <div style={{ marginTop: "1rem", fontSize: "12px", color: "#f0b429" }}>Learn more →</div>
+                  <div style={{ marginTop: "1rem", fontSize: "12px", color: "#3aaa35" }}>Learn more →</div>
                 </div>
               </Link>
             ))}
