@@ -64,36 +64,37 @@ const router = useRouter();
   setRecentSales(data.items?.slice(0, 12) || []);
 };
 
-  const fetchFeaturedCards = async () => {
- const queries = [
-  'Jude Bellingham auto refractor',
-  'Cole Palmer Topps Chrome',
-  'Bukayo Saka card',
-  'Lamine Yamal rookie card',
-  'Erling Haaland auto',
-  'Kylian Mbappe Prizm',
-  'Bruno Fernandes Chrome',
-  'LeBron James Prizm',
-  'Stephen Curry auto',
-  'Giannis Antetokounmpo',
-  'Patrick Mahomes auto',
-  'Josh Allen Prizm',
-  'Shohei Ohtani rookie',
-  'Juan Soto Chrome',
-];
- const shuffled = queries.sort(() => Math.random() - 0.5).slice(0, 4);
+ const fetchFeaturedCards = async () => {
+  const queries = [
+    'Jude Bellingham auto refractor',
+    'Cole Palmer Topps Chrome',
+    'Bukayo Saka card',
+    'Lamine Yamal rookie card',
+    'Erling Haaland auto',
+    'Kylian Mbappe Prizm',
+    'Bruno Fernandes Chrome',
+    'LeBron James Prizm',
+    'Stephen Curry auto',
+    'Giannis Antetokounmpo',
+    'Patrick Mahomes auto',
+    'Josh Allen Prizm',
+    'Shohei Ohtani rookie',
+    'Juan Soto Chrome',
+  ];
 
-const results = await Promise.all(
-  shuffled.map(q =>
-    fetch(`/api/search?q=${encodeURIComponent(q)}&featured=true`)
-      .then(res => res.json())
-      .then(data => data.items?.slice(0, 3) || [])
-  )
-);
-  
-const combined = results.flat().sort(() => Math.random() - 0.5);
-const filtered = combined.filter((item: any) => parseFloat(item.price?.value || 0) >= 5);
-setFeaturedCards(filtered.slice(0, 12));
+  const shuffled = queries.sort(() => Math.random() - 0.5).slice(0, 8);
+
+  const results = await Promise.all(
+    shuffled.map(q =>
+      fetch(`/api/search?q=${encodeURIComponent(q)}&featured=true`)
+        .then(res => res.json())
+        .then(data => data.items?.slice(0, 5) || [])
+    )
+  );
+
+  const combined = results.flat().sort(() => Math.random() - 0.5);
+  const filtered = combined.filter((item: any) => parseFloat(item.price?.value || 0) >= 5);
+  setFeaturedCards(filtered.slice(0, 12));
 };
 const handleSearchWithQuery = async (q: string) => {
   setLoading(true);
