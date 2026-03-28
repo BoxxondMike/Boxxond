@@ -91,8 +91,9 @@ const results = await Promise.all(
   )
 );
   
-  const combined = results.flat().sort(() => Math.random() - 0.5);
-  setFeaturedCards(combined.slice(0, 12));
+const combined = results.flat().sort(() => Math.random() - 0.5);
+const filtered = combined.filter((item: any) => parseFloat(item.price?.value || 0) >= 5);
+setFeaturedCards(filtered.slice(0, 12));
 };
 const handleSearchWithQuery = async (q: string) => {
   setLoading(true);
@@ -183,7 +184,7 @@ const handleSearchWithQuery = async (q: string) => {
       <Nav activePage="prices" />
 
       {/* Hero */}
-      <div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
+      <div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "12git00px", margin: "0 auto", textAlign: "center" }}>
         <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#3aaa35", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
           Trading Card Price Tracker
         </div>
