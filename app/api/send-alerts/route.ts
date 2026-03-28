@@ -44,7 +44,7 @@ export async function GET(request: Request) {
         <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-bottom: 1px solid #1a1a2e;">
           <img src="${item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl || ''}" width="60" height="60" style="border-radius: 6px; object-fit: contain; flex-shrink: 0;" />
           <div style="flex: 1; min-width: 0;">
-            <div style="color: #ffffff; font-size: 13px; margin-bottom: 6px; line-height: 1.4;">${item.title}</div>
+            <div style="color: #1a1a1a; font-size: 13px; margin-bottom: 6px; line-height: 1.4;">${item.title}</div>
             <div style="color: #3aaa35; font-weight: 700; font-size: 16px; margin-bottom: 8px;">
               ${item.price ? `£${parseFloat(item.price.value).toFixed(2)}` : 'N/A'}
             </div>
@@ -66,10 +66,10 @@ export async function GET(request: Request) {
           <body style="background: #faf7f0; font-family: sans-serif; margin: 0; padding: 20px;">
             <div style="max-width: 600px; margin: 0 auto;">
               <div style="text-align: center; padding: 30px 0 20px;">
-                <h1 style="color: #ffffff; font-size: 28px; margin: 0;">boxx<span style="color: #3aaa35;">ond</span></h1>
+                <h1 style="color: #1a1a1a; font-size: 28px; margin: 0;">boxx<span style="color: #3aaa35;">ond</span></h1>
               </div>
               <div style="background: #ffffff; border-radius: 12px; padding: 24px; margin-bottom: 20px;">
-                <h2 style="color: #ffffff; font-size: 18px; margin: 0 0 8px;">New listings for "${alert.search_term}"</h2>
+                <h2 style="color: #1a1a1a; font-size: 18px; margin: 0 0 8px;">New listings for "${alert.search_term}"</h2>
                 <p style="color: #666; font-size: 14px; margin: 0;">
                   We found ${items.length} listings matching your alert${alert.max_price ? ` under £${alert.max_price}` : ''}.
                 </p>
