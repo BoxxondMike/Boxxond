@@ -117,7 +117,7 @@ export default function RootLayout({
 
       <div>
         <div style={{ fontSize: "11px", color: "#aaa", textTransform: "uppercase" as const, letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-dm-sans)", fontWeight: 700 }}>Follow Us</div>
-        <a href="https://instagram.com/boxxhq" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
+        <a href="https://instagram.com/boxx_hq" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
           <div style={{ width: "36px", height: "36px", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3aaa35" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
@@ -125,7 +125,7 @@ export default function RootLayout({
               <circle cx="17.5" cy="6.5" r="1" fill="#3aaa35" stroke="none"/>
             </svg>
           </div>
-          <span style={{ fontSize: "14px", color: "#666" }}>@boxxhq</span>
+          <span style={{ fontSize: "14px", color: "#666" }}>@boxx_hq</span>
         </a>
       </div>
 
