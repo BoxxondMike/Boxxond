@@ -68,22 +68,32 @@ const router = useRouter();
 };
 
  const fetchFeaturedCards = async () => {
-  const queries = [
-    'Jude Bellingham auto refractor',
-    'Cole Palmer Topps Chrome',
-    'Bukayo Saka card',
-    'Lamine Yamal rookie card',
-    'Erling Haaland auto',
-    'Kylian Mbappe Prizm',
-    'Bruno Fernandes Chrome',
-    'LeBron James Prizm',
-    'Stephen Curry auto',
-    'Giannis Antetokounmpo',
-    'Patrick Mahomes auto',
-    'Josh Allen Prizm',
-    'Shohei Ohtani rookie',
-    'Juan Soto Chrome',
-  ];
+const queries = [
+  'Jude Bellingham PSA auto refractor',
+  'Cole Palmer PSA Topps Chrome',
+  'Bukayo Saka PSA card',
+  'Lamine Yamal PSA rookie card',
+  'Erling Haaland PSA auto',
+  'Kylian Mbappe PSA Prizm',
+  'Bruno Fernandes PSA Chrome',
+  'Phil Foden PSA card',
+  'Declan Rice PSA auto',
+  'Marcus Rashford PSA Topps',
+  'Pedri PSA rookie',
+  'Vinicius Junior PSA Prizm',
+  'Rodri PSA card',
+  'Harry Kane PSA auto',
+  'LeBron James PSA Prizm',
+  'Stephen Curry PSA auto',
+  'Giannis Antetokounmpo PSA',
+  'Luka Doncic PSA rookie',
+  'Patrick Mahomes PSA auto',
+  'Josh Allen PSA Prizm',
+  'Justin Jefferson PSA card',
+  'Shohei Ohtani PSA rookie',
+  'Juan Soto PSA Chrome',
+  'Ronald Acuna PSA auto',
+];
 
   const shuffled = queries.sort(() => Math.random() - 0.5).slice(0, 8);
 
