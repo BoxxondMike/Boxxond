@@ -34,7 +34,7 @@ export default function LoginPage() {
       {/* Nav */}
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 1.25rem", borderBottom: "1px solid #f0ede6" }}>
         <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#1a1a1a", textDecoration: "none" }}>
-          boxx<span style={{ color: "#3aaa35" }}>ond</span>
+          boxx<span style={{ color: "#3aaa35" }}>HQ</span>
         </Link>
       </nav>
 
@@ -44,7 +44,7 @@ export default function LoginPage() {
 
           <div style={{ marginBottom: "2rem", textAlign: "center" }}>
             <h1 style={{ fontSize: "28px", fontWeight: 700, margin: "0 0 0.5rem", letterSpacing: "-0.5px" }}>Welcome back</h1>
-            <p style={{ color: "#888)", fontSize: "14px", margin: 0 }}>Log in to your Boxxond account</p>
+            <p style={{ color: "#888)", fontSize: "14px", margin: 0 }}>Log in to your BoxxHQ account</p>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
