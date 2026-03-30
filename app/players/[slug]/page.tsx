@@ -112,7 +112,7 @@ if (soldData) {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div style={{ background: "#0f1419", border: "1px solid rgba(58,170,53,0.3)", borderRadius: "8px", padding: "8px 12px" }}>
+        <div style={{ background: "#ffffff", border: "1px solid rgba(58,170,53,0.3)", borderRadius: "8px", padding: "8px 12px" }}>
           <div style={{ fontSize: "11px", color: "#666", marginBottom: "4px" }}>{label}</div>
           <div style={{ fontSize: "16px", fontWeight: 700, color: "#3aaa35" }}>£{payload[0].value.toFixed(2)}</div>
         </div>
@@ -187,7 +187,7 @@ if (soldData) {
             <h2 style={{ fontSize: "16px", fontWeight: 700, margin: "0 0 1.5rem" }}>Price History</h2>
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={priceHistory}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0ede6" />
                 <XAxis dataKey="date" tick={{ fill: '#aaa', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: '#aaa', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `£${v}`} />
                 <Tooltip content={<CustomTooltip />} />
@@ -259,7 +259,7 @@ if (soldData) {
                   )}
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontWeight: 500, fontSize: "14px", color: "#1a1a1a", marginBottom: "4px", lineHeight: 1.4 }}>{item.title}</div>
-                    <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>{item.condition || 'Condition not specified'}</div>
+                    <div style={{ fontSize: "12px", color: "#888" }}>{item.condition || 'Condition not specified'}</div>
                   </div>
                   <div style={{ textAlign: "right", flexShrink: 0 }}>
                     <div style={{ fontWeight: 700, fontSize: "20px", color: "#3aaa35", marginBottom: "6px" }}>

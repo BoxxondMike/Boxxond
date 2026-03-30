@@ -205,7 +205,7 @@ const handleSearchWithQuery = async (q: string) => {
   </button>
   <Link
     href={user ? "/dashboard" : "/signup"}
-    style={{ background: "rgba(255,255,255,0.05)", color: "#1a1a1a", fontWeight: 700, fontSize: "14px", padding: "12px 24px", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", textDecoration: "none" }}>
+    style={{ background: "rgba(255,255,255,0.05)", color: "#1a1a1a", fontWeight: 700, fontSize: "14px", padding: "12px 24px", border: "1px solid #e0d9cc", borderRadius: "8px", textDecoration: "none" }}>
     Set Up Alerts →
   </Link>
 </div>
@@ -265,7 +265,7 @@ const handleSearchWithQuery = async (q: string) => {
 
       {/* Search Results */}
       {results.length > 0 && (
-        <div style={{ padding: "2rem 1.25rem", maxWidth: "1200px", margin: "0 auto" }}>
+        <div style={{ padding: "2rem 1.25rem", maxWidth: "1000px", margin: "0 auto" }}>
 
           {/* Filters */}
           <div style={{ display: "flex", gap: "8px", marginBottom: "1.25rem", flexWrap: "wrap" as const, alignItems: "center" }}>
@@ -310,7 +310,7 @@ const handleSearchWithQuery = async (q: string) => {
 
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {results.map((item: any) => (
-              <div key={item.itemId} className="result-card" style={{ background: "#1a1a1a", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1rem 1.25rem" }}>
+              <div key={item.itemId} className="result-card" style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1rem 1.25rem" }}>
                 <div style={{ flexShrink: 0 }}>
                   {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
                     <img src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl} alt={item.title} className="result-image" style={{ objectFit: "contain", borderRadius: "8px", background: "rgba(255,255,255,0.05)" }} />
@@ -321,7 +321,7 @@ const handleSearchWithQuery = async (q: string) => {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontWeight: 500, fontSize: "14px", color: "#1a1a1a", marginBottom: "6px", lineHeight: 1.4 }}>{item.title}</div>
                   <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" as const }}>
-                    <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>{item.condition || 'Condition not specified'}</span>
+                    <span style={{ fontSize: "12px", color: "#888" }}>{item.condition || 'Condition not specified'}</span>
                     <Link
                       href={`/players/${query.toLowerCase().trim().split(' ').slice(0, 2).join('-')}`}
                       style={{ fontSize: "11px", color: "#3aaa35", textDecoration: "none", background: "rgba(58,170,53,0.1)", padding: "2px 8px", borderRadius: "4px" }}>
