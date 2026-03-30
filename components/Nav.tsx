@@ -46,7 +46,7 @@ export default function Nav({ activePage }: { activePage?: string }) {
 
         {/* Logo */}
         <Link href="/" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
-          <Image src="/images/boxxhq-logo.png" alt="BoxxHQ" height={160} width={480} style={{ objectFit: "contain" }} />
+          <Image src="/Images/boxxhq-logo.png" alt="BoxxHQ" height={160} width={480} style={{ objectFit: "contain" }} />
           <span style={{ fontSize: "9px", fontWeight: 600, background: "rgba(58,170,53,0.15)", border: "1px solid rgba(58,170,53,0.3)", color: "#3aaa35", padding: "2px 6px", borderRadius: "4px", letterSpacing: "0.5px" }}>BETA</span>
         </Link>
 
