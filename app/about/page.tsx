@@ -9,13 +9,13 @@ export default function AboutPage() {
       {/* Hero */}
       <div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
         <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#3aaa35", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
-          About Boxxond
+          About Boxxhq
         </div>
         <h1 style={{ fontWeight: 800, fontSize: "clamp(32px, 6vw, 56px)", lineHeight: 1.05, margin: "0 0 1.25rem", letterSpacing: "-2px" }}>
           Built by a collector,<br /><span style={{ color: "#3aaa35" }}>for collectors</span>
         </h1>
         <p style={{ color: "#666", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto" }}>
-          Boxxond exists to bring transparency, community and passion back to the trading card hobby.
+          Boxxhq exists to bring transparency, community and passion back to the trading card hobby.
         </p>
       </div>
 

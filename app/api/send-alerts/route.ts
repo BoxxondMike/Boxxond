@@ -56,7 +56,7 @@ export async function GET(request: Request) {
       `).join('');
 
       await resend.emails.send({
-        from: 'Boxxond <alerts@boxxond.com>',
+        from: 'BoxxHQ <alerts@boxxhq.com>',
         to: email,
         subject: `New listings found for "${alert.search_term}"`,
         html: `
@@ -79,11 +79,11 @@ export async function GET(request: Request) {
               </div>
               <div style="text-align: center; padding: 24px 0;">
                 <a href="${process.env.NEXT_PUBLIC_SITE_URL}" style="background: #3aaa35; color: #faf7f0; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 15px;">
-                  View All Results on Boxxond
+                  View All Results on Boxxhq
                 </a>
               </div>
               <p style="color: #bbb; font-size: 12px; text-align: center;">
-                You're receiving this because you set up an alert on Boxxond.
+                You're receiving this because you set up an alert on Boxxhq.
                 <a href="${process.env.NEXT_PUBLIC_SITE_URL}/dashboard" style="color: #888);">Manage alerts</a>
               </p>
             </div>

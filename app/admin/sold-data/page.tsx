@@ -7,7 +7,7 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-const PASSWORD = 'boxxond_admin';
+const PASSWORD = 'Boxxhq_admin';
 
 export default function SoldDataAdmin() {
   const [authed, setAuthed] = useState(false);

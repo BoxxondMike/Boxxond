@@ -45,7 +45,7 @@ export default function Nav({ activePage }: { activePage?: string }) {
 
         {/* Logo */}
         <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#1a1a1a", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px" }}>
-          <span style={{ letterSpacing: "-1px" }}>boxx<span style={{ color: "#3aaa35" }}>ond</span></span>
+          <span style={{ letterSpacing: "-1px" }}>Boxx<span style={{ color: "#3aaa35" }}>HQ</span></span>
           <span style={{ fontSize: "9px", fontWeight: 600, background: "rgba(58,170,53,0.15)", border: "1px solid rgba(58,170,53,0.3)", color: "#3aaa35", padding: "2px 6px", borderRadius: "4px", letterSpacing: "0.5px", verticalAlign: "middle" }}>BETA</span>
         </Link>
 

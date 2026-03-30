@@ -7,18 +7,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const set = sets[slug];
   if (!set) return {};
   return {
-    title: `${set.name} Card Prices, Parallels & Collector Guide | Boxxond`,
+    title: `${set.name} Card Prices, Parallels & Collector Guide | Boxxhq`,
     description: `${set.name} trading card guide. ${set.overview.slice(0, 120)}... Real sold prices from eBay UK, parallel details and collector tips.`,
     openGraph: {
-      title: `${set.name} Card Prices & Guide | Boxxond`,
+      title: `${set.name} Card Prices & Guide | Boxxhq`,
       description: `${set.name} prices, parallels and collector guide. Real eBay UK sold prices.`,
-      url: `https://boxxond.com/sets/${slug}`,
-      siteName: 'Boxxond',
+      url: `https://boxxhq.com/sets/${slug}`,
+      siteName: 'Boxxhq',
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${set.name} Card Prices & Guide | Boxxond`,
+      title: `${set.name} Card Prices & Guide | Boxxhq`,
       description: `${set.name} prices, parallels and collector guide. Real eBay UK sold prices.`,
     },
     keywords: [`${set.name}`, `${set.name} prices`, `${set.name} parallels`, `${set.manufacturer} cards`, 'trading card prices UK', 'eBay card prices'],
@@ -626,7 +626,7 @@ export default async function SetPage({ params }: { params: Promise<{ slug: stri
 
         <div style={{ marginTop: "1.5rem", background: "#f0ede6", border: "1px solid #e0d9cc", borderRadius: "8px", padding: "1rem 1.25rem" }}>
           <div style={{ fontSize: "11px", color: "#888", lineHeight: 1.6 }}>
-            <strong style={{ color: "#555" }}>Disclaimer:</strong> Set information, parallel details and price ranges on this page are provided for guidance only. Print runs, parallels and pricing vary by year and release. Always verify current details with official manufacturer sources before making purchasing decisions. Boxxond is not affiliated with Topps, Panini or any card manufacturer.
+            <strong style={{ color: "#555" }}>Disclaimer:</strong> Set information, parallel details and price ranges on this page are provided for guidance only. Print runs, parallels and pricing vary by year and release. Always verify current details with official manufacturer sources before making purchasing decisions. Boxxhq is not affiliated with Topps, Panini or any card manufacturer.
           </div>
         </div>
 

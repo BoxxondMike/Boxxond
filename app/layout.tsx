@@ -17,21 +17,21 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Boxxond | UK Trading Card Price Tracker",
+  title: "Boxxhq | UK Trading Card Price Tracker",
   description: "Track live market prices and new listings for trading cards on eBay UK. Search any player, set or card and see what it's worth right now.",
   icons: {
     icon: "/logo.png",
   },
   openGraph: {
-    title: "Boxxond | UK Trading Card Price Tracker",
+    title: "Boxxhq | UK Trading Card Price Tracker",
     description: "Track real sold prices for soccer, basketball, baseball and NFL trading cards on eBay UK. Search any player, set or card and see what it's actually worth.",
-    url: "https://boxxond.com",
-    siteName: "Boxxond",
+    url: "https://boxxhq.com",
+    siteName: "Boxxhq",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Boxxond | UK Trading Card Price Tracker",
+    title: "Boxxhq | UK Trading Card Price Tracker",
     description: "Track real sold prices for soccer, basketball, baseball and NFL trading cards on eBay UK.",
   },
   keywords: ["trading card prices", "football card prices UK", "eBay card prices", "Topps Chrome prices", "Panini Prizm prices", "sports card tracker UK"],
@@ -68,7 +68,7 @@ export default function RootLayout({
       
       <div>
         <div style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#1a1a1a", marginBottom: "0.5rem" }}>
-          boxx<span style={{ color: "#3aaa35" }}>ond</span>
+          boxx<span style={{ color: "#3aaa35" }}>HQ</span>
         </div>
         <div style={{ fontSize: "13px", color: "#888", maxWidth: "220px", lineHeight: 1.6 }}>
           Live market prices from eBay UK. The UK's trading card price tracker covering Soccer, Basketball, Baseball and NFL.
@@ -109,6 +109,7 @@ export default function RootLayout({
         <div>
           <div style={{ fontSize: "11px", color: "#aaa", textTransform: "uppercase" as const, letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-dm-sans)", fontWeight: 700 }}>Legal</div>
           <div style={{ display: "flex", flexDirection: "column" as const, gap: "0.6rem" }}>
+            <Link href="/about" style={{ color: "#888", fontSize: "13px", textDecoration: "none" }}>About</Link>
             <Link href="/privacy" style={{ fontSize: "14px", color: "#666", textDecoration: "none" }}>Privacy Policy</Link>
             <Link href="/terms" style={{ fontSize: "14px", color: "#666", textDecoration: "none" }}>Terms of Service</Link>
           </div>
@@ -133,10 +134,10 @@ export default function RootLayout({
 
     <div style={{ borderTop: "1px solid #e0d9cc", paddingTop: "1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" as const, gap: "1rem" }}>
       <div style={{ fontSize: "12px", color: "#aaa" }}>
-        © 2026 Boxxond. All rights reserved.
+        © 2026 Boxxhq. All rights reserved.
       </div>
       <div style={{ fontSize: "12px", color: "#aaa" }}>
-        Price data sourced from eBay UK via the eBay Browse API. Boxxond is an eBay Partner Network affiliate.
+        Price data sourced from eBay UK via the eBay Browse API. Boxxhq is an eBay Partner Network affiliate.
       </div>
     </div>
 
