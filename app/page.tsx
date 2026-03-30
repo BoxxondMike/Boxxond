@@ -23,6 +23,10 @@ function HomeContent() {
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [user, setUser] = useState<any>(null);
   const [activeSport, setActiveSport] = useState('');
+  const [certNumber, setCertNumber] = useState('');
+const [certResult, setCertResult] = useState<any>(null);
+const [certLoading, setCertLoading] = useState(false);
+const [certError, setCertError] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [condition, setCondition] = useState('');
@@ -33,7 +37,6 @@ const router = useRouter();
   const parts = value.toFixed(2).split('.');
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return parts.join('.');
-  
 };
 
  useEffect(() => {
@@ -110,6 +113,25 @@ const handleSearchWithQuery = async (q: string) => {
   setResults(data.items || []);
   setLoading(false);
 };
+const handleCertCheck = async () => {
+  if (!certNumber.trim()) return;
+  setCertLoading(true);
+  setCertResult(null);
+  setCertError('');
+  try {
+    const res = await fetch(`/api/psa/cert?cert=${encodeURIComponent(certNumber.trim())}`);
+    const data = await res.json();
+    if (data.error || !data.PSACert) {
+      setCertError('No card found for that cert number.');
+   } else {
+  console.log('PSA result:', data);
+  setCertResult(data);
+}
+  } catch {
+    setCertError('Something went wrong. Please try again.');
+  }
+  setCertLoading(false);
+};
   const handleSearch = async () => {
   if (!query) return;
   router.push(`/?q=${encodeURIComponent(query)}`);
@@ -121,6 +143,7 @@ const handleSearchWithQuery = async (q: string) => {
       window.location.href = '/signup';
       return;
     }
+    
     const isAlreadySaved = savedIds.includes(item.itemId);
     if (isAlreadySaved) {
       await supabase.from('saved_cards').delete().eq('item_id', item.itemId).eq('user_id', user.id);
@@ -407,6 +430,69 @@ const handleSearchWithQuery = async (q: string) => {
         </div>
       </Link>
     ))}
+  </div>
+</div>
+{/* PSA Cert Checker */}
+<div style={{ padding: "2rem 1.25rem", maxWidth: "1000px", margin: "0 auto" }}>
+  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
+    <span style={{ fontWeight: 700, fontSize: "17px" }}>PSA Cert Checker</span>
+    <span style={{ fontSize: "11px", color: "#aaa", background: "#f0ede6", padding: "4px 10px", borderRadius: "20px" }}>Powered by PSA</span>
+  </div>
+  <p style={{ fontSize: "13px", color: "#888", marginBottom: "1.25rem", marginTop: 0 }}>
+    Verify any PSA graded card by entering the cert number from the label.
+  </p>
+  <div style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.5rem" }}>
+    <div style={{ display: "flex", gap: "10px", marginBottom: "1.25rem", flexWrap: "wrap" as const }}>
+      <input
+        type="text"
+        placeholder="Enter PSA cert number e.g. 12345678"
+        value={certNumber}
+        onChange={e => setCertNumber(e.target.value)}
+        onKeyDown={e => e.key === 'Enter' && handleCertCheck()}
+        style={{ flex: 1, minWidth: "200px", background: "#faf7f0", border: "1px solid #e0d9cc", borderRadius: "8px", padding: "10px 14px", color: "#1a1a1a", fontSize: "14px", outline: "none" }}
+      />
+      <button onClick={handleCertCheck} disabled={certLoading}
+        style={{ background: "#3aaa35", color: "#faf7f0", fontWeight: 700, fontSize: "13px", padding: "10px 20px", border: "none", borderRadius: "8px", cursor: "pointer" }}>
+        {certLoading ? 'Checking...' : 'Verify Cert'}
+      </button>
+    </div>
+    {certError && (
+      <div style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: "8px", padding: "12px", fontSize: "13px", color: "rgba(239,68,68,0.8)", marginBottom: "1rem" }}>
+        {certError}
+      </div>
+    )}
+    {certResult && (
+      <div style={{ background: "#faf7f0", borderRadius: "10px", padding: "1.25rem", border: "1px solid #e0d9cc" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "12px" }}>
+          {[
+            { label: "Card", value: certResult.PSACert?.Subject || 'N/A' },
+            { label: "Year", value: certResult.PSACert?.Year || 'N/A' },
+            { label: "Brand", value: certResult.PSACert?.Brand || 'N/A' },
+            { label: "Grade", value: certResult.PSACert?.CardGrade || 'N/A' },
+            { label: "Cert Number", value: certResult.PSACert?.CertNumber || 'N/A' },
+            { label: "Card Number", value: certResult.PSACert?.CardNumber || 'N/A' },
+            { label: "Variety", value: certResult.PSACert?.Variety || 'N/A' },
+{ label: "Population", value: certResult.PSACert?.TotalPopulation ? `${certResult.PSACert.TotalPopulation} graded` : 'N/A' },
+          ].map(item => (
+            <div key={item.label}>
+              <div style={{ fontSize: "11px", color: "#aaa", textTransform: "uppercase" as const, letterSpacing: "0.5px", marginBottom: "4px" }}>{item.label}</div>
+              <div style={{ fontSize: "15px", fontWeight: 600, color: "#1a1a1a" }}>{item.value}</div>
+            </div>
+          ))}
+        </div>
+        {certResult.PSACert?.CardGrade && (
+  <div style={{ marginTop: "1rem", display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" as const }}>
+    <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.3)", borderRadius: "8px", padding: "8px 16px" }}>
+      <span style={{ fontSize: "13px", color: "#3aaa35", fontWeight: 700 }}>✓ Verified PSA {certResult.PSACert.PSAGrade}</span>
+    </div>
+    <a href={`https://www.psacard.com/cert/${certResult.PSACert.CertNumber}`} target="_blank" rel="noopener noreferrer"
+      style={{ fontSize: "12px", color: "#888", textDecoration: "none" }}>
+      View on PSA →
+    </a>
+  </div>
+)}
+      </div>
+    )}
   </div>
 </div>
 
