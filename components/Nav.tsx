@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useRouter } from 'next/navigation';
@@ -41,23 +42,23 @@ export default function Nav({ activePage }: { activePage?: string }) {
         }
       `}</style>
 
-      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 1.25rem", borderBottom: "1px solid #e0d9cc", background: "#faf7f0", position: "relative" }}>
+      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.75rem 1.25rem", borderBottom: "1px solid #e0d9cc", background: "#faf7f0" }}>
 
         {/* Logo */}
-        <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#1a1a1a", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px" }}>
-          <span style={{ letterSpacing: "-1px" }}>Boxx<span style={{ color: "#3aaa35" }}>HQ</span></span>
-          <span style={{ fontSize: "9px", fontWeight: 600, background: "rgba(58,170,53,0.15)", border: "1px solid rgba(58,170,53,0.3)", color: "#3aaa35", padding: "2px 6px", borderRadius: "4px", letterSpacing: "0.5px", verticalAlign: "middle" }}>BETA</span>
+        <Link href="/" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
+          <Image src="/images/boxxhq-logo.png" alt="BoxxHQ" height={160} width={480} style={{ objectFit: "contain" }} />
+          <span style={{ fontSize: "9px", fontWeight: 600, background: "rgba(58,170,53,0.15)", border: "1px solid rgba(58,170,53,0.3)", color: "#3aaa35", padding: "2px 6px", borderRadius: "4px", letterSpacing: "0.5px" }}>BETA</span>
         </Link>
 
         {/* Desktop Links */}
-        <div className="nav-desktop-links" style={{ fontSize: "15px", fontWeight: 600 }}>
+        <div className="nav-desktop-links" style={{ fontSize: "15px", fontWeight: 600, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
           <Link href="/" style={{ color: activePage === 'prices' ? "#3aaa35" : "#888", textDecoration: "none" }}>Prices</Link>
           <Link href="/sets" style={{ color: activePage === 'sets' ? "#3aaa35" : "#888", textDecoration: "none" }}>Sets</Link>
           <Link href="/breaks" style={{ color: activePage === 'breaks' ? "#3aaa35" : "#888", textDecoration: "none" }}>Breaks</Link>
         </div>
 
         {/* Desktop Auth */}
-        <div className="nav-desktop-links" style={{ gap: "10px", alignItems: "center" }}>
+        <div className="nav-desktop-links" style={{ gap: "10px", alignItems: "center", flexShrink: 0 }}>
           {user ? (
             <>
               <Link href="/dashboard" style={{ fontSize: "15px", fontWeight: 600, color: "#888", textDecoration: "none" }}>Dashboard</Link>
