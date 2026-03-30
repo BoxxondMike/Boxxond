@@ -226,7 +226,7 @@ const handleCertCheck = async () => {
           Know what your<br /><span style={{ color: "#3aaa35" }}>cards are worth</span>
         </h1>
       <p style={{ color: "#666", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 1.5rem" }}>
-  Search live eBay UK listings and get daily alerts when new cards drop for your favourite players and teams.
+  Search live eBay UK listings, get daily alerts when new cards drop, and verify PSA graded cards instantly.
 </p>
 
 {/* CTA Buttons */}
