@@ -199,7 +199,7 @@ const handleCertCheck = async () => {
   );
 
   return (
-    <main style={{ background: "#faf7f0", minHeight: "100vh", color: "#1a1a1a", fontFamily: "var(--font-dm-sans)", overflowX: "hidden" }}>
+    <main style={{ background: "#faf7f0", minHeight: "100vh", color: "#1a1a1a", fontFamily: "var(--font-dm-sans)"}}>
 
       <style>{`
         .result-card { display: flex; gap: 1.5rem; align-items: center; }

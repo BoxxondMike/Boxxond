@@ -58,7 +58,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`${syne.variable} ${dmSans.variable}`} style={{ background: "#faf7f0", color: "#1a1a1a" }}>
+      <body className={`${syne.variable} ${dmSans.variable}`} style={{ background: "#faf7f0", color: "#1a1a1a", overflowX: "hidden" }}>
         {children}
 
         <footer style={{ borderTop: "1px solid #e0d9cc", background: "#faf7f0", padding: "3rem 2rem", marginTop: "4rem" }}>
