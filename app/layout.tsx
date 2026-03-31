@@ -67,7 +67,7 @@ export default function RootLayout({
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap" as const, gap: "2rem", marginBottom: "2.5rem" }}>
       
       <div>
-        <img src="/images/boxxhq-logo.png" alt="BoxxHQ" style={{ width: "120px", height: "120px", objectFit: "contain", marginBottom: "0.5rem", display: "block" }} />
+        <img src="/boxxhq-logo.png" alt="BoxxHQ" style={{ width: "120px", height: "120px", objectFit: "contain", marginBottom: "0.5rem", display: "block" }} />
         <div style={{ fontSize: "13px", color: "#888", maxWidth: "220px", lineHeight: 1.6 }}>
           Live market prices from eBay UK. The UK's trading card price tracker covering Soccer, Basketball, Baseball and NFL.
         </div>

@@ -8,7 +8,7 @@ export default function AboutPage() {
 
      {/* Hero */}
 <div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
-  <img src="/images/boxxhq-logo-green.png" alt="BoxxHQ" style={{ width: "200px", height: "200px", objectFit: "cover", borderRadius: "16px", marginBottom: "1.5rem", display: "block", margin: "0 auto 1.5rem" }} />
+  <img src="/boxxhq-logo-green.png" alt="BoxxHQ" style={{ width: "200px", height: "200px", objectFit: "cover", borderRadius: "16px", marginBottom: "1.5rem", display: "block", margin: "0 auto 1.5rem" }} />
   <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#3aaa35", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
     About BoxxHQ
   </div>
