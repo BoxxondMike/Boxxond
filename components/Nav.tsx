@@ -46,7 +46,7 @@ export default function Nav({ activePage }: { activePage?: string }) {
 
         {/* Logo */}
         <Link href="/" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
-          <Image src="/boxxhq-logo.png" alt="BoxxHQ" height={120} width={480} style={{ objectFit: "contain" }} />
+          <Image src="/boxxhq-logo.png" alt="BoxxHQ" height={120} width={480} style={{ objectFit: "contain", maxWidth: "200px", height: "auto" }} />
         </Link>
 
         {/* Desktop Links */}
