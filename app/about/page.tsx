@@ -6,18 +6,19 @@ export default function AboutPage() {
     <main style={{ background: "#faf7f0", minHeight: "100vh", color: "#1a1a1a", fontFamily: "var(--font-dm-sans)" }}>
       <Nav />
 
-      {/* Hero */}
-      <div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
-        <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#3aaa35", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
-          About Boxxhq
-        </div>
-        <h1 style={{ fontWeight: 800, fontSize: "clamp(32px, 6vw, 56px)", lineHeight: 1.05, margin: "0 0 1.25rem", letterSpacing: "-2px" }}>
-          Built by a collector,<br /><span style={{ color: "#3aaa35" }}>for collectors</span>
-        </h1>
-        <p style={{ color: "#666", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto" }}>
-          Boxxhq exists to bring transparency, community and passion back to the trading card hobby.
-        </p>
-      </div>
+     {/* Hero */}
+<div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
+  <img src="/images/boxxhq-logo-green.png" alt="BoxxHQ" style={{ width: "200px", height: "200px", objectFit: "cover", borderRadius: "16px", marginBottom: "1.5rem", display: "block", margin: "0 auto 1.5rem" }} />
+  <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#3aaa35", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
+    About BoxxHQ
+  </div>
+  <h1 style={{ fontWeight: 800, fontSize: "clamp(32px, 6vw, 56px)", lineHeight: 1.05, margin: "0 0 1.25rem", letterSpacing: "-2px" }}>
+    Built by a collector,<br /><span style={{ color: "#3aaa35" }}>for collectors</span>
+  </h1>
+  <p style={{ color: "#666", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto" }}>
+    BoxxHQ exists to bring transparency, community and passion back to the trading card hobby.
+  </p>
+</div>
 
       <div style={{ padding: "0 1.25rem 4rem", maxWidth: "720px", margin: "0 auto" }}>
 
