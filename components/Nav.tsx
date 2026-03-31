@@ -34,19 +34,20 @@ export default function Nav({ activePage }: { activePage?: string }) {
   return (
     <>
       <style>{`
-        .nav-desktop-links { display: flex; gap: 2rem; }
-        .nav-hamburger { display: none; }
-        @media (max-width: 640px) {
-          .nav-desktop-links { display: none; }
-          .nav-hamburger { display: flex; }
-        }
-      `}</style>
+  .nav-desktop-links { display: flex; gap: 2rem; }
+  .nav-hamburger { display: none; }
+  @media (max-width: 640px) {
+    .nav-desktop-links { display: none; }
+    .nav-hamburger { display: flex; }
+    .nav-logo { margin: 0 auto; }
+  }
+`}</style>
 
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.50rem 1.25rem", borderBottom: "1px solid #e0d9cc", background: "#faf7f0" }}>
 
         {/* Logo */}
-        <Link href="/" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
-          <Image src="/boxxhq-logo.png" alt="BoxxHQ" height={120} width={480} style={{ objectFit: "contain", maxWidth: "200px", height: "auto" }} />
+        <Link href="/" className="nav-logo" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
+          <Image src="/boxxhq-logo.png" alt="BoxxHQ" height={120} width={480} style={{ objectFit: "contain", maxWidth: "150px", height: "auto" }} />
         </Link>
 
         {/* Desktop Links */}
