@@ -34,7 +34,7 @@ export default function LoginPage() {
       {/* Nav */}
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 1.25rem", borderBottom: "1px solid #f0ede6" }}>
         <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#1a1a1a", textDecoration: "none" }}>
-          boxx<span style={{ color: "#3aaa35" }}>HQ</span>
+          <img src="/boxxhq-logo.png" alt="BoxxHQ" style={{ height: "60px", width: "auto" }} />
         </Link>
       </nav>
 
