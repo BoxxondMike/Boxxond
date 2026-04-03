@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabase';
+import Nav from '../../components/Nav';
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
@@ -78,17 +79,7 @@ export default function DashboardPage() {
   return (
     <main style={{ background: "#faf7f0", minHeight: "100vh", color: "#1a1a1a", fontFamily: "var(--font-dm-sans)" }}>
 
-      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 1.25rem", borderBottom: "1px solid #f0ede6" }}>
-        <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#1a1a1a", textDecoration: "none" }}>
-          boxx<span style={{ color: "#3aaa35" }}>ond</span>
-        </Link>
-        <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-          <Link href="/" style={{ fontSize: "14px", color: "#666", textDecoration: "none" }}>Back to site</Link>
-          <button onClick={handleSignOut} style={{ background: "#f0ede6", color: "rgba(255,255,255,0.6)", fontSize: "13px", padding: "8px 16px", border: "1px solid #e0d9cc", borderRadius: "6px", cursor: "pointer" }}>
-            Sign Out
-          </button>
-        </div>
-      </nav>
+      <Nav />
 
       <div style={{ padding: "2.5rem 1.25rem", maxWidth: "960px", margin: "0 auto" }}>
 
