@@ -71,22 +71,15 @@ const sports = [
   tags: ['Sapphire', 'Limited', 'Ultra Premium'],
 },
 {
-  slug: 'topps-ucl',
-  name: 'Topps UEFA Champions League',
-  year: '2018–Present',
+  slug: 'topps-chrome-ucc-2526',
+  name: 'Topps Chrome UCC 2025-26',
+  year: '2025-26',
   manufacturer: 'Topps',
-  description: 'The official UEFA Champions League card set. Covers all competing clubs and players across Europe\'s premier club competition.',
-  difficulty: 'Mid Range',
-  tags: ['Champions League', 'Europe', 'Topps'],
-},
-{
-  slug: 'topps-ucc',
-  name: 'Topps UCC Showcase',
-  year: '2021–Present',
-  manufacturer: 'Topps',
-  description: 'UEFA Club Competitions Showcase. Premium chrome set covering Champions League, Europa League and Conference League players.',
+  description: 'UCC Chrome is back. The premium chrome set covering UEFA Club Competitions including the Champions League, Europa League and Conference League for the 2025-26 season.',
   difficulty: 'Premium',
-  tags: ['Chrome', 'UCL', 'Europa'],
+  tags: ['Chrome', 'UCL', 'Europa', 'New Release'],
+  status: 'new',
+  checklistUrl: 'https://www.topps.com',
 },
 {
   slug: 'topps-finest',
@@ -203,6 +196,17 @@ const sports = [
     name: 'NFL',
     sets: [
       {
+  slug: 'topps-nfl',
+  name: 'Topps NFL',
+  year: '2025',
+  manufacturer: 'Topps',
+  description: 'Topps returns to NFL trading cards for the first time in over a decade. Highly anticipated comeback with chrome refractors and autographs of top NFL stars.',
+  difficulty: 'Premium',
+  tags: ['Chrome', 'Rookies', 'Topps Comeback'],
+  status: 'coming-soon',
+  checklistUrl: 'https://www.topps.com',
+},
+      {
         slug: 'panini-prizm-nfl',
         name: 'Panini Prizm NFL',
         year: '2012–Present',
@@ -262,7 +266,38 @@ export default function SetsPage() {
           From beginner sticker collections to premium chrome refractors — guides covering soccer, basketball, baseball and NFL card sets.
         </p>
       </div>
-
+{/* Featured Sets */}
+<div style={{ padding: "0 2rem 2rem", maxWidth: "960px", margin: "0 auto" }}>
+  <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
+    <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "22px", letterSpacing: "-0.5px", margin: 0 }}>Featured Sets</h2>
+    <div style={{ flex: 1, height: "1px", background: "#f0ede6" }}/>
+  </div>
+  <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", alignItems: "stretch"}}>
+    {[
+      { slug: 'topps-chrome', label: '🔥 Flagship', color: '#3aaa35' },
+      { slug: 'topps-nfl', label: '⚡ Coming Soon', color: '#f59e0b' },
+      { slug: 'panini-prizm-nba', label: '⭐ Most Popular', color: '#3aaa35' },
+      { slug: 'topps-chrome-ucc-2526', label: '🆕 New Release', color: '#3aaa35' },
+    ].map(({ slug, label, color }) => {
+      const set = sports.flatMap(s => s.sets).find(s => s.slug === slug);
+      if (!set) return null;
+      return (
+        <Link key={slug} href={`/sets/${slug}`} style={{ textDecoration: "none" }}>
+          <div
+            style={{ background: "#ffffff", border: `1px solid ${color === '#f59e0b' ? 'rgba(251,191,36,0.3)' : 'rgba(58,170,53,0.3)'}`, borderRadius: "12px", padding: "1.5rem", cursor: "pointer", position: "relative" as const, height: "100%", boxSizing: "border-box" as const }}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = color)}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = color === '#f59e0b' ? 'rgba(251,191,36,0.3)' : 'rgba(58,170,53,0.3)')}>
+            <div style={{ fontSize: "11px", fontWeight: 700, color, marginBottom: "8px", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>{label}</div>
+            <div style={{ fontWeight: 700, fontSize: "17px", color: "#1a1a1a", marginBottom: "4px", letterSpacing: "-0.3px" }}>{set.name}</div>
+            <div style={{ fontSize: "12px", color: "#aaa", marginBottom: "10px" }}>{set.manufacturer} · {set.year}</div>
+            <div style={{ fontSize: "12px", color: "#666", lineHeight: 1.5, marginBottom: "12px" }}>{set.description.slice(0, 80)}...</div>
+            <div style={{ fontSize: "12px", color, fontWeight: 600 }}>View Set →</div>
+          </div>
+        </Link>
+      );
+    })}
+  </div>
+</div>
       {sports.map((sport) => (
         <div key={sport.name} style={{ padding: "2rem", maxWidth: "960px", margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
@@ -277,9 +312,17 @@ export default function SetsPage() {
                   onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(58,170,53,0.3)')}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = '#e0d9cc')}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
-                    <span style={{ fontSize: "11px", color: "#aaa", textTransform: "uppercase", letterSpacing: "0.5px" }}>{set.manufacturer}</span>
-                    <span style={{ background: difficultyColour[set.difficulty], color: difficultyText[set.difficulty], fontSize: "10px", padding: "2px 8px", borderRadius: "4px", fontWeight: 500 }}>{set.difficulty}</span>
-                  </div>
+  <span style={{ fontSize: "11px", color: "#aaa", textTransform: "uppercase", letterSpacing: "0.5px" }}>{set.manufacturer}</span>
+  <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+    {set.status === 'new' && (
+      <span style={{ background: "rgba(58,170,53,0.15)", color: "#3aaa35", fontSize: "10px", padding: "2px 8px", borderRadius: "4px", fontWeight: 700 }}>NEW</span>
+    )}
+    {set.status === 'coming-soon' && (
+      <span style={{ background: "rgba(251,191,36,0.15)", color: "#f59e0b", fontSize: "10px", padding: "2px 8px", borderRadius: "4px", fontWeight: 700 }}>COMING SOON</span>
+    )}
+    <span style={{ background: difficultyColour[set.difficulty], color: difficultyText[set.difficulty], fontSize: "10px", padding: "2px 8px", borderRadius: "4px", fontWeight: 500 }}>{set.difficulty}</span>
+  </div>
+</div>
                   <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "18px", color: "#1a1a1a", marginBottom: "0.5rem", letterSpacing: "-0.3px" }}>{set.name}</div>
                   <div style={{ fontSize: "12px", color: "#3aaa35", marginBottom: "0.75rem" }}>{set.year}</div>
                   <div style={{ fontSize: "13px", color: "#666", lineHeight: 1.6, marginBottom: "1rem" }}>{set.description}</div>
@@ -288,7 +331,13 @@ export default function SetsPage() {
                       <span key={tag} style={{ background: "rgba(255,255,255,0.05)", color: "#888", fontSize: "10px", padding: "3px 8px", borderRadius: "4px" }}>{tag}</span>
                     ))}
                   </div>
-                  <div style={{ marginTop: "1rem", fontSize: "12px", color: "#3aaa35" }}>Learn more →</div>
+                  {set.checklistUrl && (
+  <a href={set.checklistUrl} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()}
+    style={{ display: "inline-block", fontSize: "12px", color: "#888", marginTop: "8px", textDecoration: "none" }}>
+    View Checklist →
+  </a>
+)}
+<div style={{ marginTop: "6px", fontSize: "12px", color: "#3aaa35" }}>Learn more →</div>
                 </div>
               </Link>
             ))}
