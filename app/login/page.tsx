@@ -44,7 +44,7 @@ export default function LoginPage() {
 
           <div style={{ marginBottom: "2rem", textAlign: "center" }}>
             <h1 style={{ fontSize: "28px", fontWeight: 700, margin: "0 0 0.5rem", letterSpacing: "-0.5px" }}>Welcome back</h1>
-            <p style={{ color: "#888)", fontSize: "14px", margin: 0 }}>Log in to your BoxxHQ account</p>
+            <p style={{ color: "#888", fontSize: "14px", margin: 0 }}>Log in to your BoxxHQ account</p>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>

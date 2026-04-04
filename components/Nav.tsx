@@ -53,7 +53,7 @@ export default function Nav({ activePage }: { activePage?: string }) {
         {/* Desktop Links */}
         <div className="nav-desktop-links" style={{ fontSize: "15px", fontWeight: 600, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
           <Link href="/" style={{ color: activePage === 'prices' ? "#3aaa35" : "#888", textDecoration: "none" }}>Prices</Link>
-          <Link href="/sets" style={{ color: activePage === 'sets' ? "#3aaa35" : "#888", textDecoration: "none" }}>Sets</Link>
+          <Link href="/release vault" style={{ color: activePage === 'sets' ? "#3aaa35" : "#888", textDecoration: "none" }}>Release Vault</Link>
           <Link href="/breaks" style={{ color: activePage === 'breaks' ? "#3aaa35" : "#888", textDecoration: "none" }}>Breaks</Link>
           <Link href="/quiz">Quiz</Link>
         </div>
@@ -93,7 +93,7 @@ export default function Nav({ activePage }: { activePage?: string }) {
       {menuOpen && (
         <div style={{ background: "#faf7f0", borderBottom: "1px solid #e0d9cc", padding: "1rem 1.25rem", display: "flex", flexDirection: "column", gap: "0" }}>
           <Link href="/" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'prices' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Prices</Link>
-          <Link href="/sets" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'sets' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Sets</Link>
+          <Link href="/release vault" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'sets' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Release Vault</Link>
           <Link href="/breaks" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'breaks' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Breaks</Link>
           <Link href="/quiz" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'quiz' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Quiz</Link>
           {user ? (
