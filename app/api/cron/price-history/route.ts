@@ -6,10 +6,13 @@ const supabase = createClient(
 );
 
 export async function GET(request: Request) {
-  const authHeader = request.headers.get('authorization');
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return Response.json({ error: 'Unauthorised' }, { status: 401 });
-  }
+ const authHeader = request.headers.get('authorization');
+const { searchParams } = new URL(request.url);
+const secret = searchParams.get('secret');
+
+if (authHeader !== `Bearer ${process.env.CRON_SECRET}` && secret !== process.env.CRON_SECRET) {
+  return Response.json({ error: 'Unauthorised' }, { status: 401 });
+}
 
   try {
     const { data: players } = await supabase.from('players').select('name');
