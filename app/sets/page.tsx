@@ -289,7 +289,7 @@ export default function SetsPage() {
     <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "22px", letterSpacing: "-0.5px", margin: 0 }}>Featured Sets</h2>
     <div style={{ flex: 1, height: "1px", background: "#f0ede6" }}/>
   </div>
-  <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", alignItems: "stretch"}}>
+  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "16px", alignItems: "stretch"}}>
     {[
       { slug: 'topps-chrome', label: '🔥 Flagship', color: '#3aaa35' },
       { slug: 'topps-finest-premier-league-2026', label: '🔥 New Release', color: '#3aaa35' },
@@ -321,7 +321,7 @@ export default function SetsPage() {
             <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "22px", letterSpacing: "-0.5px", margin: 0 }}>{sport.name}</h2>
             <div style={{ flex: 1, height: "1px", background: "#f0ede6" }}/>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "16px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "16px" }}>
             {sport.sets.map((set) => (
               <div key={set.slug} style={{ display: "flex", flexDirection: "column" as const }}>
                 <Link href={`/sets/${set.slug}`} style={{ textDecoration: "none", flex: 1 }}>

@@ -134,68 +134,66 @@ export default function WhoScored() {
     return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   };
 
-  const renderPlayer = (player: any, size: number = 32) => {
-    const scorer = isScorer(player.player_name);
-    const fontSize = size === 32 ? "10px" : "9px";
-    const nameFontSize = size === 32 ? "9px" : "8px";
-    return (
-      <div style={{ textAlign: "center", minWidth: size === 32 ? "60px" : "55px", maxWidth: size === 32 ? "70px" : "65px" }}>
-        <div style={{ width: `${size}px`, height: `${size}px`, borderRadius: "50%", background: scorer && !submitted ? "#e0d9cc" : scorer && submitted ? "rgba(239,68,68,0.15)" : "rgba(58,170,53,0.15)", border: `2px solid ${scorer && !submitted ? "#bbb" : scorer && submitted ? "#ef4444" : "#3aaa35"}`, margin: "0 auto 4px", display: "flex", alignItems: "center", justifyContent: "center", fontSize, fontWeight: 700, color: scorer && !submitted ? "#aaa" : "#3aaa35" }}>
-          {scorer && !submitted ? "?" : player.player_name.split(' ').pop()?.charAt(0)}
-        </div>
-        <div style={{ fontSize: nameFontSize, color: scorer && !submitted ? "#aaa" : "#555", lineHeight: 1.2, wordBreak: "break-word" as const }}>
-          {scorer && !submitted ? "?????" : player.player_name.split(' ').pop()}
-        </div>
+const renderPlayer = (player: any, size: number = 28) => {
+  const scorer = isScorer(player.player_name);
+  const fontSize = size >= 28 ? "10px" : "8px";
+  const nameFontSize = size >= 28 ? "8px" : "7px";
+  return (
+    <div style={{ textAlign: "center", minWidth: size >= 28 ? "44px" : "38px", maxWidth: size >= 28 ? "50px" : "44px" }}>
+      <div style={{ width: `${size}px`, height: `${size}px`, borderRadius: "50%", background: scorer && !submitted ? "#e0d9cc" : scorer && submitted ? "rgba(239,68,68,0.15)" : "rgba(58,170,53,0.15)", border: `2px solid ${scorer && !submitted ? "#bbb" : scorer && submitted ? "#ef4444" : "#3aaa35"}`, margin: "0 auto 4px", display: "flex", alignItems: "center", justifyContent: "center", fontSize, fontWeight: 700, color: scorer && !submitted ? "#aaa" : "#3aaa35" }}>
+        {scorer && !submitted ? "?" : player.player_name.split(' ').pop()?.charAt(0)}
       </div>
-    );
-  };
-
-  const renderFormation = (lineup: any[], teamName: string, isHome: boolean, bench: any[]) => {
-    const hasPositions = lineup.some(p => ['G', 'D', 'M', 'F'].includes(p.position));
-
-    let rows: any[][];
-    if (hasPositions) {
-      rows = POSITION_ORDER.map(pos => lineup.filter(p => p.position === pos));
-    } else {
-      const sorted = [...lineup].slice(0, 11);
-      rows = [
-        sorted.slice(0, 1),
-        sorted.slice(1, 5),
-        sorted.slice(5, 9),
-        sorted.slice(9, 11),
-      ];
-    }
-
-    return (
-  <div style={{ flex: 1 }}>
-    <div style={{ fontSize: "12px", fontWeight: 700, color: "#1a1a1a", textAlign: "center", marginBottom: "8px", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>
-      {teamName}
+      <div style={{ fontSize: nameFontSize, color: scorer && !submitted ? "#aaa" : "#555", lineHeight: 1.2, wordBreak: "break-word" as const }}>
+        {scorer && !submitted ? "?????" : player.player_name.split(' ').pop()}
+      </div>
     </div>
-    {/* Formation only - no bench inside */}
-    <div style={{ background: "rgba(58,170,53,0.06)", border: "1px solid rgba(58,170,53,0.15)", borderRadius: "10px 10px 0 0", padding: "12px 8px", display: "flex", flexDirection: isHome ? "column" : "column-reverse" as const, gap: "10px" }}>
-      {rows.map((row, rowIdx) => (
-        row.length > 0 && (
-          <div key={rowIdx} style={{ display: "flex", justifyContent: "center", gap: "4px", flexWrap: "wrap" as const }}>
-            {row.map((player: any, i: number) => (
-              <div key={i}>{renderPlayer(player, 32)}</div>
+  );
+};
+
+const renderFormation = (lineup: any[], teamName: string, isHome: boolean, bench: any[]) => {
+  const hasPositions = lineup.some(p => ['G', 'D', 'M', 'F'].includes(p.position));
+
+  let rows: any[][];
+  if (hasPositions) {
+    rows = POSITION_ORDER.map(pos => lineup.filter(p => p.position === pos));
+  } else {
+    const sorted = [...lineup].slice(0, 11);
+    rows = [
+      sorted.slice(0, 1),
+      sorted.slice(1, 5),
+      sorted.slice(5, 9),
+      sorted.slice(9, 11),
+    ];
+  }
+
+  return (
+    <div style={{ flex: 1 }}>
+      <div style={{ fontSize: "11px", fontWeight: 700, color: "#1a1a1a", textAlign: "center", marginBottom: "8px", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>
+        {teamName}
+      </div>
+      <div style={{ background: "rgba(58,170,53,0.06)", border: "1px solid rgba(58,170,53,0.15)", borderRadius: "10px 10px 0 0", padding: "10px 4px", display: "flex", flexDirection: isHome ? "column" : "column-reverse" as const, gap: "8px" }}>
+        {rows.map((row, rowIdx) => (
+          row.length > 0 && (
+            <div key={rowIdx} style={{ display: "flex", justifyContent: "center", gap: "2px", flexWrap: "wrap" as const }}>
+              {row.map((player: any, i: number) => (
+                <div key={i}>{renderPlayer(player, 28)}</div>
+              ))}
+            </div>
+          )
+        ))}
+      </div>
+      {bench.length > 0 && (
+        <div style={{ background: "rgba(58,170,53,0.03)", border: "1px solid rgba(58,170,53,0.15)", borderTop: "none", borderRadius: "0 0 10px 10px", padding: "6px 4px" }}>
+          <div style={{ fontSize: "8px", color: "#aaa", textAlign: "center", marginBottom: "4px", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>Bench</div>
+          <div style={{ display: "flex", justifyContent: "center", gap: "2px", flexWrap: "wrap" as const }}>
+            {bench.map((player: any, i: number) => (
+              <div key={i}>{renderPlayer(player, 22)}</div>
             ))}
           </div>
-        )
-      ))}
-    </div>
-    {/* Bench always at bottom */}
-    {bench.length > 0 && (
-      <div style={{ background: "rgba(58,170,53,0.03)", border: "1px solid rgba(58,170,53,0.15)", borderTop: "none", borderRadius: "0 0 10px 10px", padding: "8px" }}>
-        <div style={{ fontSize: "9px", color: "#aaa", textAlign: "center", marginBottom: "6px", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>Bench</div>
-        <div style={{ display: "flex", justifyContent: "center", gap: "4px", flexWrap: "wrap" as const }}>
-          {bench.map((player: any, i: number) => (
-            <div key={i}>{renderPlayer(player, 26)}</div>
-          ))}
         </div>
-      </div>
-    )}
-  </div>
-);
+      )}
+    </div>
+  );
 };
 
   const homeGoals = goals.filter(g => g.team === match?.home_team);
