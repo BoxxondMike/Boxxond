@@ -116,6 +116,52 @@ const sports: Sport[] = [
       },
     ],
   },
+   {
+    name: 'NFL',
+    sets: [
+      {
+        slug: 'panini-prizm-nfl',
+        name: 'Panini Prizm NFL',
+        year: '2012–Present',
+        manufacturer: 'Panini',
+        description: 'The most popular NFL card set. Rookie Prizms of top draft picks are among the most valuable cards in the hobby.',
+        difficulty: 'Premium',
+        tags: ['Prizms', 'Rookies', 'NFL'],
+        checklistUrl: 'https://www.beckett.com/news/panini-prizm-football/',
+      },
+      {
+        slug: 'topps-chrome-nfl',
+        name: 'Topps Cosmic Chrome NFL',
+        year: '1996–Present',
+        manufacturer: 'Topps',
+        description: 'A classic chromium NFL set with strong collector demand. Rookie cards of star quarterbacks are particularly valuable.',
+        difficulty: 'Mid Range',
+        tags: ['Chrome', 'Rookies', 'QBs'],
+        checklistUrl: 'https://cdn.shopify.com/s/files/1/0662/9749/5709/files/NFL2405-2024ToppsCosmicChromeChecklist_V2.pdf?v=1744134769',
+      },
+      {
+        slug: 'panini-select-nfl',
+        name: 'Panini Select NFL',
+        year: '2018–Present',
+        manufacturer: 'Panini',
+        description: 'Three tier design with bold colourful parallels. One of the most visually striking NFL sets available.',
+        difficulty: 'Mid Range',
+        tags: ['Tiered', 'Parallels', 'Bold'],
+        checklistUrl: 'https://www.beckett.com/news/panini-select-football/',
+      },
+      {
+        slug: 'topps-nfl',
+        name: 'Topps NFL',
+        year: '2025',
+        manufacturer: 'Topps',
+        description: 'Topps returns to NFL trading cards for the first time in over a decade. Highly anticipated comeback with chrome refractors and autographs of top NFL stars.',
+        difficulty: 'Premium',
+        tags: ['Chrome', 'Rookies', 'Topps Comeback'],
+        status: 'coming-soon',
+        checklistUrl: 'https://www.checklistinsider.com/2024-topps-chrome-football',
+      },
+    ],
+  },
   {
     name: 'Basketball',
     sets: [
@@ -186,52 +232,6 @@ const sports: Sport[] = [
       },
     ],
   },
-  {
-    name: 'NFL',
-    sets: [
-      {
-        slug: 'panini-prizm-nfl',
-        name: 'Panini Prizm NFL',
-        year: '2012–Present',
-        manufacturer: 'Panini',
-        description: 'The most popular NFL card set. Rookie Prizms of top draft picks are among the most valuable cards in the hobby.',
-        difficulty: 'Premium',
-        tags: ['Prizms', 'Rookies', 'NFL'],
-        checklistUrl: 'https://www.beckett.com/news/panini-prizm-football/',
-      },
-      {
-        slug: 'topps-chrome-nfl',
-        name: 'Topps Cosmic Chrome NFL',
-        year: '1996–Present',
-        manufacturer: 'Topps',
-        description: 'A classic chromium NFL set with strong collector demand. Rookie cards of star quarterbacks are particularly valuable.',
-        difficulty: 'Mid Range',
-        tags: ['Chrome', 'Rookies', 'QBs'],
-        checklistUrl: 'https://cdn.shopify.com/s/files/1/0662/9749/5709/files/NFL2405-2024ToppsCosmicChromeChecklist_V2.pdf?v=1744134769',
-      },
-      {
-        slug: 'panini-select-nfl',
-        name: 'Panini Select NFL',
-        year: '2018–Present',
-        manufacturer: 'Panini',
-        description: 'Three tier design with bold colourful parallels. One of the most visually striking NFL sets available.',
-        difficulty: 'Mid Range',
-        tags: ['Tiered', 'Parallels', 'Bold'],
-        checklistUrl: 'https://www.beckett.com/news/panini-select-football/',
-      },
-      {
-        slug: 'topps-nfl',
-        name: 'Topps NFL',
-        year: '2025',
-        manufacturer: 'Topps',
-        description: 'Topps returns to NFL trading cards for the first time in over a decade. Highly anticipated comeback with chrome refractors and autographs of top NFL stars.',
-        difficulty: 'Premium',
-        tags: ['Chrome', 'Rookies', 'Topps Comeback'],
-        status: 'coming-soon',
-        checklistUrl: 'https://www.checklistinsider.com/2024-topps-chrome-football',
-      },
-    ],
-  },
 ];
 
 const difficultyColour: Record<string, string> = {
@@ -264,12 +264,12 @@ export default function SetsPage() {
         </p>
       </div>
 {/* Featured Sets */}
-<div style={{ padding: "0 2rem 2rem", maxWidth: "960px", margin: "0 auto" }}>
+<div style={{ padding: "0 2rem 2rem", maxWidth: "1200px", margin: "0 auto" }}>
   <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
     <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "22px", letterSpacing: "-0.5px", margin: 0 }}>Featured Sets</h2>
     <div style={{ flex: 1, height: "1px", background: "#f0ede6" }}/>
   </div>
-  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "16px", alignItems: "stretch"}}>
+  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "16px", alignItems: "stretch"}}>
     {[
       { slug: 'topps-chrome', label: '🔥 Flagship', color: '#3aaa35' },
       { slug: 'topps-finest-premier-league-2026', label: '🔥 New Release', color: '#3aaa35' },
@@ -296,7 +296,7 @@ export default function SetsPage() {
   </div>
 </div>
      {sports.map((sport) => (
-        <div key={sport.name} style={{ padding: "2rem", maxWidth: "960px", margin: "0 auto" }}>
+        <div key={sport.name} style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
             <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "22px", letterSpacing: "-0.5px", margin: 0 }}>{sport.name}</h2>
             <div style={{ flex: 1, height: "1px", background: "#f0ede6" }}/>
