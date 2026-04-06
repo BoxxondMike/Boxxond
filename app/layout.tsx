@@ -88,9 +88,9 @@ export default function RootLayout({
           <div style={{ fontSize: "11px", color: "#aaa", textTransform: "uppercase" as const, letterSpacing: "1px", marginBottom: "1rem", fontFamily: "var(--font-dm-sans)", fontWeight: 700 }}>Soccer</div>
           <div style={{ display: "flex", flexDirection: "column" as const, gap: "0.6rem" }}>
             <Link href="/sets/topps-chrome" style={{ fontSize: "14px", color: "#666", textDecoration: "none" }}>Topps Chrome</Link>
+            <Link href="/sets/topps-chrome-ucc-2526" style={{ fontSize: "14px", color: "#666", textDecoration: "none" }}>Topps UCC 25-26</Link>
+            <Link href="/sets/topps-now" style={{ fontSize: "14px", color: "#666", textDecoration: "none" }}>Topps Now</Link>
             <Link href="/sets/panini-prizm-epl" style={{ fontSize: "14px", color: "#666", textDecoration: "none" }}>Panini Prizm EPL</Link>
-            <Link href="/sets/topps-match-attax" style={{ fontSize: "14px", color: "#666", textDecoration: "none" }}>Match Attax</Link>
-            <Link href="/sets/merlin" style={{ fontSize: "14px", color: "#666", textDecoration: "none" }}>Merlin</Link>
           </div>
         </div>
 
