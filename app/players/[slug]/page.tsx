@@ -54,17 +54,13 @@ const itemsPerPage = 25;
         setHighPrice(Math.max(...prices));
         setLowPrice(Math.min(...prices));
 
-        await supabase.from('price_history').insert({
-          search_term: playerName.toLowerCase(),
-          avg_price: parseFloat(avg.toFixed(2)),
-          listing_count: items.length,
-        });
+       
       }
 
       const { data: historyData } = await supabase
         .from('price_history')
         .select('*')
-        .eq('search_term', playerName.toLowerCase())
+        .eq('search_term', playerName.toLowerCase().replace(/-/g, ' '))
         .order('recorded_at', { ascending: true })
         .limit(30);
 
