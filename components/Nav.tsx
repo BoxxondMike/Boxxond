@@ -55,7 +55,7 @@ export default function Nav({ activePage }: { activePage?: string }) {
           <Link href="/" style={{ color: activePage === 'prices' ? "#3aaa35" : "#888", textDecoration: "none" }}>Prices</Link>
           <Link href="/sets" style={{ color: activePage === 'sets' ? "#3aaa35" : "#888", textDecoration: "none" }}>Release Vault</Link>
           <Link href="/breaks" style={{ color: activePage === 'breaks' ? "#3aaa35" : "#888", textDecoration: "none" }}>Breaks</Link>
-          <Link href="/quiz">Quiz</Link>
+          <Link href="/quiz">Games</Link>
         </div>
 
         {/* Desktop Auth */}
@@ -95,7 +95,7 @@ export default function Nav({ activePage }: { activePage?: string }) {
           <Link href="/" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'prices' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Prices</Link>
           <Link href="/sets" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'sets' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Release Vault</Link>
           <Link href="/breaks" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'breaks' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Breaks</Link>
-          <Link href="/quiz" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'quiz' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Quiz</Link>
+          <Link href="/quiz" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'games' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Games</Link>
           {user ? (
             <>
               <Link href="/dashboard" onClick={() => setMenuOpen(false)} style={{ color: "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Dashboard</Link>
