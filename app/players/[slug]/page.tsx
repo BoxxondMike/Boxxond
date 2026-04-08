@@ -33,7 +33,6 @@ const itemsPerPage = 25;
   const [avgPrice, setAvgPrice] = useState(0);
   const [highPrice, setHighPrice] = useState(0);
   const [lowPrice, setLowPrice] = useState(0);
-  const [priceHistory, setPriceHistory] = useState<any[]>([]);
   const [sortOrder, setSortOrder] = useState<'high' | 'low'>('high');
   const [soldHistory, setSoldHistory] = useState<any[]>([]);
 
@@ -55,20 +54,6 @@ const itemsPerPage = 25;
         setLowPrice(Math.min(...prices));
 
        
-      }
-
-      const { data: historyData } = await supabase
-        .from('price_history')
-        .select('*')
-        .eq('search_term', playerName.toLowerCase().replace(/-/g, ' '))
-        .order('recorded_at', { ascending: true })
-        .limit(30);
-
-      if (historyData) {
-        setPriceHistory(historyData.map((h: any) => ({
-          date: new Date(h.recorded_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }),
-          price: parseFloat(h.avg_price),
-        })));
       }
 const { data: soldData } = await supabase
   .from('card_sold_data')
@@ -176,22 +161,11 @@ if (soldData) {
             ))}
           </div>
         )}
-
-        {/* Price History Chart */}
-        {priceHistory.length > 1 && (
-          <div style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.5rem", marginBottom: "2rem" }}>
-            <h2 style={{ fontSize: "16px", fontWeight: 700, margin: "0 0 1.5rem" }}>Price History</h2>
-            <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={priceHistory}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0ede6" />
-                <XAxis dataKey="date" tick={{ fill: '#aaa', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: '#aaa', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `£${v}`} />
-                <Tooltip content={<CustomTooltip />} />
-                <Line type="monotone" dataKey="price" stroke="#3aaa35" strokeWidth={2} dot={{ fill: "#3aaa35", r: 3 }} activeDot={{ r: 5 }} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        )}
+        {!loading && results.length > 0 && (
+  <p style={{ fontSize: "12px", color: "#aaa", marginBottom: "1.5rem", marginTop: "-1rem" }}>
+    * Average based on the top {results.length} listings sorted by price — high to low. Prices are live eBay UK listings.
+  </p>
+)}
 
         {/* Results */}
         <div>

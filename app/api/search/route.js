@@ -31,7 +31,7 @@ if (sortParam === 'newlyListed') sort = 'newlyListed';
   const categoryFilter = isPlayerSearch ? '&category_ids=261328' : '';
 
   const response = await fetch(
-    `https://api.ebay.com/buy/browse/v1/item_summary/search?q=${encodeURIComponent(query)}${categoryFilter}&filter=${filters}&sort=${sort}&limit=${featured ? '12' : '50'}`,
+    `https://api.ebay.com/buy/browse/v1/item_summary/search?q=${encodeURIComponent(query)}${categoryFilter}&filter=${filters}&sort=${sort}&limit=${featured ? '12' : '100'}`,
     {
       headers: {
         'Authorization': `Bearer ${token}`,

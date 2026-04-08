@@ -308,14 +308,12 @@ const handleCertCheck = async () => {
       </div>
 
       {/* Stats */}
-      <div className="stats-bar" style={{ padding: "1.25rem", borderTop: "1px solid #f0ede6", borderBottom: "1px solid #f0ede6" }}>
-        {[["eBay UK", "Live Data"], ["Free", "To Use"], ["Trading Cards", "UK Market"], ["Daily", "Updated"]].map(([num, label]) => (
-          <div key={label} style={{ textAlign: "center" }}>
-            <span style={{ fontWeight: 800, fontSize: "18px", letterSpacing: "-0.5px", display: "block" }}>{num}</span>
-            <span style={{ fontSize: "11px", color: "#888", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>{label}</span>
-          </div>
-        ))}
-      </div>
+   <div style={{ textAlign: "center", padding: "0.5rem 0 1.5rem" }}>
+  <a href="https://instagram.com/boxx_hq" target="_blank" rel="noopener noreferrer"
+    style={{ display: "inline-flex", alignItems: "center", gap: "10px", background: "#3aaa35", borderRadius: "30px", padding: "12px 28px", textDecoration: "none", fontSize: "16px", fontWeight: 700, color: "#faf7f0" }}>
+    📸 Follow <strong style={{ color: "#faf7f0", textDecoration: "underline" }}>@boxx_hq</strong> on Instagram for updates
+  </a>
+</div>
 
       {/* Search Results */}
       {results.length > 0 && (
@@ -427,44 +425,9 @@ const handleCertCheck = async () => {
   </div>
 
 </div>
-{/* Trending Players */}
-<div style={{ padding: "2rem 1.25rem", maxWidth: "1000px", margin: "0 auto" }}>
-  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-    <span style={{ fontWeight: 700, fontSize: "17px" }}>Trending Players</span>
-    <span style={{ background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.2)", color: "#3aaa35", padding: "3px 10px", borderRadius: "20px", fontSize: "11px" }}>Updated weekly</span>
-  </div>
-  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: "10px" }}>
-   {[
-  { name: "Jude Bellingham", slug: "jude-bellingham", sport: "Soccer" },
-  { name: "Cole Palmer", slug: "cole-palmer", sport: "Soccer" },
-  { name: "Bukayo Saka", slug: "bukayo-saka", sport: "Soccer" },
-  { name: "Lamine Yamal", slug: "lamine-yamal", sport: "Soccer" },
-  { name: "Erling Haaland", slug: "erling-haaland", sport: "Soccer" },
-  { name: "Kylian Mbappe", slug: "kylian-mbappe", sport: "Soccer" },
-  { name: "LeBron James", slug: "lebron-james", sport: "Basketball" },
-  { name: "Stephen Curry", slug: "stephen-curry", sport: "Basketball" },
-  { name: "Patrick Mahomes", slug: "patrick-mahomes", sport: "NFL" },
-  { name: "Josh Allen", slug: "josh-allen", sport: "NFL" },
-  { name: "Shohei Ohtani", slug: "shohei-ohtani", sport: "Baseball" },
-  { name: "Juan Soto", slug: "juan-soto", sport: "Baseball" },
-].map((player) => (
-      <Link key={player.slug} href={`/players/${player.slug}`} style={{ textDecoration: "none" }}>
-        <div
-          style={{ background: "#fff", border: "1px solid #e0d9cc", borderRadius: "10px", padding: "1rem", textAlign: "center", cursor: "pointer" }}
-          onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(58,170,53,0.3)')}
-          onMouseLeave={e => (e.currentTarget.style.borderColor = '#e0d9cc')}>
-          <div style={{ width: "100%", height: "70px", marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", background: player.sport === 'Soccer' ? 'rgba(58,170,53,0.08)' : player.sport === 'Basketball' ? 'rgba(239,68,68,0.08)' : player.sport === 'Baseball' ? 'rgba(34,197,94,0.08)' : 'rgba(59,130,246,0.08)', borderRadius: "8px", border: `1px solid ${player.sport === 'Soccer' ? 'rgba(58,170,53,0.2)' : player.sport === 'Basketball' ? 'rgba(239,68,68,0.2)' : player.sport === 'Baseball' ? 'rgba(34,197,94,0.2)' : 'rgba(59,130,246,0.2)'}`, fontSize: "32px" }}>
-  {player.sport === 'Soccer' ? '⚽' : player.sport === 'Basketball' ? '🏀' : player.sport === 'Baseball' ? '⚾' : '🏈'}
-</div>
-          <div style={{ fontSize: "12px", fontWeight: 600, color: "#1a1a1a", marginBottom: "3px", lineHeight: 1.3 }}>{player.name}</div>
-          <div style={{ fontSize: "10px", color: "#aaa" }}>{player.sport}</div>
-        </div>
-      </Link>
-    ))}
-  </div>
-</div>
+
 {/* PSA Cert Checker */}
-<div style={{ padding: "2rem 1.25rem", maxWidth: "1000px", margin: "0 auto" }}>
+<div style={{ padding: "2rem 1.25rem", maxWidth: "1100px", margin: "0 auto" }}>
   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
     <span style={{ fontWeight: 700, fontSize: "17px" }}>PSA Cert Checker</span>
     <span style={{ fontSize: "11px", color: "#aaa", background: "#f0ede6", padding: "4px 10px", borderRadius: "20px" }}>Powered by PSA</span>
@@ -525,6 +488,54 @@ const handleCertCheck = async () => {
       </div>
     )}
   </div>
+</div>
+{/* Trending Players */}
+<div style={{ padding: "2rem 1.25rem", maxWidth: "1200px", margin: "0 auto" }}>
+  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+    <span style={{ fontWeight: 700, fontSize: "17px" }}>Trending Players</span>
+    <span style={{ background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.2)", color: "#3aaa35", padding: "3px 10px", borderRadius: "20px", fontSize: "11px" }}>Updated weekly</span>
+  </div>
+  <div style={{ position: "relative" as const }}>
+  <button onClick={() => {
+    const el = document.getElementById('trending-scroll');
+    if (el) el.scrollLeft -= 300;
+  }} style={{ position: "absolute" as const, left: "-12px", top: "50%", transform: "translateY(-50%)", background: "#fff", border: "1px solid #e0d9cc", borderRadius: "50%", width: "32px", height: "32px", cursor: "pointer", zIndex: 1, fontSize: "14px" }}>‹</button>
+  
+  <div id="trending-scroll" style={{ display: "flex", gap: "12px", overflowX: "scroll", paddingBottom: "8px", scrollbarWidth: "thin", scrollbarColor: "rgba(58,170,53,0.3) transparent" }}>
+    {[
+      { name: "Jude Bellingham", slug: "jude-bellingham", sport: "Soccer" },
+      { name: "Cole Palmer", slug: "cole-palmer", sport: "Soccer" },
+      { name: "Bukayo Saka", slug: "bukayo-saka", sport: "Soccer" },
+      { name: "Lamine Yamal", slug: "lamine-yamal", sport: "Soccer" },
+      { name: "Erling Haaland", slug: "erling-haaland", sport: "Soccer" },
+      { name: "Kylian Mbappe", slug: "kylian-mbappe", sport: "Soccer" },
+      { name: "LeBron James", slug: "lebron-james", sport: "Basketball" },
+      { name: "Stephen Curry", slug: "stephen-curry", sport: "Basketball" },
+      { name: "Patrick Mahomes", slug: "patrick-mahomes", sport: "NFL" },
+      { name: "Josh Allen", slug: "josh-allen", sport: "NFL" },
+      { name: "Shohei Ohtani", slug: "shohei-ohtani", sport: "Baseball" },
+      { name: "Juan Soto", slug: "juan-soto", sport: "Baseball" },
+    ].map((player) => (
+      <Link key={player.slug} href={`/players/${player.slug}`} style={{ textDecoration: "none", flexShrink: 0 }}>
+        <div
+          style={{ background: "#fff", border: "1px solid #e0d9cc", borderRadius: "10px", padding: "1rem", textAlign: "center", cursor: "pointer", width: "140px" }}
+          onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(58,170,53,0.3)')}
+          onMouseLeave={e => (e.currentTarget.style.borderColor = '#e0d9cc')}>
+          <div style={{ width: "100%", height: "70px", marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", background: player.sport === 'Soccer' ? 'rgba(58,170,53,0.08)' : player.sport === 'Basketball' ? 'rgba(239,68,68,0.08)' : player.sport === 'Baseball' ? 'rgba(34,197,94,0.08)' : 'rgba(59,130,246,0.08)', borderRadius: "8px", border: `1px solid ${player.sport === 'Soccer' ? 'rgba(58,170,53,0.2)' : player.sport === 'Basketball' ? 'rgba(239,68,68,0.2)' : player.sport === 'Baseball' ? 'rgba(34,197,94,0.2)' : 'rgba(59,130,246,0.2)'}`, fontSize: "32px" }}>
+            {player.sport === 'Soccer' ? '⚽' : player.sport === 'Basketball' ? '🏀' : player.sport === 'Baseball' ? '⚾' : '🏈'}
+          </div>
+          <div style={{ fontSize: "12px", fontWeight: 600, color: "#1a1a1a", marginBottom: "3px", lineHeight: 1.3 }}>{player.name}</div>
+          <div style={{ fontSize: "10px", color: "#aaa" }}>{player.sport}</div>
+        </div>
+      </Link>
+    ))}
+  </div>
+
+  <button onClick={() => {
+    const el = document.getElementById('trending-scroll');
+    if (el) el.scrollLeft += 300;
+  }} style={{ position: "absolute" as const, right: "-12px", top: "50%", transform: "translateY(-50%)", background: "#fff", border: "1px solid #e0d9cc", borderRadius: "50%", width: "32px", height: "32px", cursor: "pointer", zIndex: 1, fontSize: "14px" }}>›</button>
+</div>
 </div>
 
     </main>
