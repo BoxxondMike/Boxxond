@@ -217,6 +217,27 @@ const handleCertCheck = async () => {
 
       <Nav activePage="prices" />
 
+    {/* Banners */}
+<div style={{ display: "flex" }}>
+  <div style={{ flex: 1, background: "#3aaa35", padding: "10px 1.25rem", textAlign: "center" }}>
+    <span style={{ color: "#faf7f0", fontSize: "13px", fontWeight: 600 }}>
+      🎯 Are you a UK card breaker?{" "}
+      <a href="https://instagram.com/boxx_hq" target="_blank" rel="noopener noreferrer"
+        style={{ color: "#faf7f0", textDecoration: "underline", fontWeight: 700 }}>
+        DM us on Instagram
+      </a>
+    </span>
+  </div>
+  <div style={{ flex: 1, background: "#faf7f0 ", padding: "10px 1.25rem", textAlign: "center" }}>
+    <span style={{ color: "#1a1a1a", fontSize: "13px", fontWeight: 600 }}>
+      🎰  Think you know your footballers?{" "}
+      <a href="/quiz" style={{ color: "#3aaa35", textDecoration: "underline", fontWeight: 700 }}>
+        Play Player Roulette →
+      </a>
+    </span>
+  </div>
+</div>
+
       {/* Hero */}
       <div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "12git00px", margin: "0 auto", textAlign: "center" }}>
         <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#3aaa35", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
