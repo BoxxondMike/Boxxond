@@ -34,7 +34,6 @@ const itemsPerPage = 25;
   const [highPrice, setHighPrice] = useState(0);
   const [lowPrice, setLowPrice] = useState(0);
   const [sortOrder, setSortOrder] = useState<'high' | 'low'>('high');
-  const [soldHistory, setSoldHistory] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -55,20 +54,6 @@ const itemsPerPage = 25;
 
        
       }
-const { data: soldData } = await supabase
-  .from('card_sold_data')
-  .select('*')
-  .eq('player_name', playerName)
-  .order('date_to', { ascending: true });
-
-if (soldData) {
-  setSoldHistory(soldData.map((h: any) => ({
-    date: new Date(h.date_to).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }),
-    avg: parseFloat((h.avg_price * 0.79).toFixed(2)),
-    min: parseFloat((h.min_price * 0.79).toFixed(2)),
-    max: parseFloat((h.max_price * 0.79).toFixed(2)),
-  })));
-}
       setLoading(false);
     };
     fetchCards();
@@ -152,7 +137,7 @@ if (soldData) {
               { label: "Average Price", value: `£${formatPrice(avgPrice)}` },
               { label: "Highest Price", value: `£${formatPrice(highPrice)}` },
               { label: "Lowest Price", value: `£${formatPrice(lowPrice)}` },
-              { label: "Listings Found", value: results.length.toString() },
+              { label: "Listings Shown", value: results.length.toString() },
             ].map((stat) => (
               <div key={stat.label} style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.25rem" }}>
                 <div style={{ fontSize: "11px", color: "#aaa", textTransform: "uppercase" as const, letterSpacing: "0.5px", marginBottom: "0.5rem" }}>{stat.label}</div>
@@ -239,37 +224,7 @@ if (soldData) {
                   </div>
                 </div>
               ))}
-              {soldHistory.length > 0 && (
-  <div style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.5rem", marginBottom: "2rem" }}>
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem" }}>
-      <h2 style={{ fontSize: "16px", fontWeight: 700, margin: 0 }}>Sold Price History</h2>
-      <span style={{ fontSize: "11px", color: "#aaa", background: "#f0ede6", padding: "4px 10px", borderRadius: "20px" }}>eBay Sold · USD→GBP</span>
-    </div>
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", marginBottom: "1.5rem" }}>
-      {soldHistory.length > 0 && [
-        { label: "Avg Sold", value: `£${soldHistory[soldHistory.length - 1].avg}` },
-        { label: "Low Sold", value: `£${soldHistory[soldHistory.length - 1].min}` },
-        { label: "High Sold", value: `£${soldHistory[soldHistory.length - 1].max}` },
-      ].map(stat => (
-        <div key={stat.label} style={{ background: "#faf7f0", borderRadius: "8px", padding: "1rem", textAlign: "center" }}>
-          <div style={{ fontSize: "11px", color: "#aaa", textTransform: "uppercase" as const, letterSpacing: "0.5px", marginBottom: "4px" }}>{stat.label}</div>
-          <div style={{ fontSize: "20px", fontWeight: 700, color: "#3aaa35" }}>{stat.value}</div>
-        </div>
-      ))}
-    </div>
-    <ResponsiveContainer width="100%" height={200}>
-      <LineChart data={soldHistory}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#f0ede6" />
-        <XAxis dataKey="date" tick={{ fill: '#aaa', fontSize: 11 }} axisLine={false} tickLine={false} />
-        <YAxis tick={{ fill: '#aaa', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `£${v}`} />
-        <Tooltip content={<CustomTooltip />} />
-        <Line type="monotone" dataKey="avg" stroke="#3aaa35" strokeWidth={2} dot={{ fill: "#3aaa35", r: 3 }} activeDot={{ r: 5 }} name="Avg" />
-        <Line type="monotone" dataKey="min" stroke="#aaa" strokeWidth={1} strokeDasharray="4 4" dot={false} name="Min" />
-        <Line type="monotone" dataKey="max" stroke="#1a1a1a" strokeWidth={1} strokeDasharray="4 4" dot={false} name="Max" />
-      </LineChart>
-    </ResponsiveContainer>
-  </div>
-)}
+
             </div>
           )}
         </div>
