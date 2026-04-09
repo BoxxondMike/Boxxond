@@ -292,7 +292,7 @@ const handleCertCheck = async () => {
         </div>
 
         {/* Search Bar */}
-        <div style={{ display: "flex", maxWidth: "720px", margin: "0 auto", background: "#fff", border: "1px solid #e0d9cc", borderRadius: "10px", overflow: "hidden" }}>
+        <div style={{ display: "flex", maxWidth: "820px", margin: "0 auto", background: "#fff", border: "1px solid #e0d9cc", borderRadius: "10px", overflow: "hidden" }}>
           <input
             type="text"
             placeholder="Search player, set or card..."
@@ -309,9 +309,9 @@ const handleCertCheck = async () => {
 
       {/* Stats */}
    <div style={{ textAlign: "center", padding: "0.5rem 0 1.5rem" }}>
-  <a href="https://instagram.com/boxx_hq" target="_blank" rel="noopener noreferrer"
+  <a href="https://www.topps.com/pages/topps-finest-premier-league" target="_blank" rel="noopener noreferrer"
     style={{ display: "inline-flex", alignItems: "center", gap: "10px", background: "#3aaa35", borderRadius: "30px", padding: "12px 28px", textDecoration: "none", fontSize: "16px", fontWeight: 700, color: "#faf7f0" }}>
-    📸 Follow <strong style={{ color: "#faf7f0", textDecoration: "underline" }}>@boxx_hq</strong> on Instagram for updates
+    📸 Look For New Releases <strong style={{ color: "#faf7f0", textDecoration: "underline" }}>Topps® Finest Premier League 2026 Coming 23/04</strong> 
   </a>
 </div>
 
