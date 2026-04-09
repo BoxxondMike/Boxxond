@@ -194,18 +194,18 @@ if (soldData) {
             {sortedResults.length > itemsPerPage && (
   <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "1.5rem", alignItems: "center" }}>
     <button
-     onClick={() => { setCurrentPage(1); document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' }); }}
-      disabled={currentPage === 1}
-      style={{ background: currentPage === 1 ? "#ffffff" : "rgba(255,255,255,0.05)", border: "1px solid #e0d9cc", color: currentPage === 1 ? "#bbb" : "#666", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: currentPage === 1 ? "default" : "pointer" }}>
-      ← Prev
-    </button>
-    <span style={{ fontSize: "13px", color: "#888" }}>Page {currentPage} of {Math.ceil(sortedResults.length / itemsPerPage)}</span>
-    <button
-      onClick={() => { setCurrentPage(2); document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' }); }}
-      disabled={currentPage === Math.ceil(sortedResults.length / itemsPerPage)}
-      style={{ background: currentPage === 2 ? "rgba(58,170,53,0.1)" : "rgba(255,255,255,0.05)", border: `1px solid ${currentPage === 2 ? "rgba(58,170,53,0.3)" : "#e0d9cc"}`, color: currentPage === 2 ? "#3aaa35" : "#666", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: currentPage === Math.ceil(sortedResults.length / itemsPerPage) ? "default" : "pointer" }}>
-      Next →
-    </button>
+  onClick={() => { setCurrentPage(p => p - 1); }}
+  disabled={currentPage === 1}
+  style={{ background: currentPage === 1 ? "#ffffff" : "rgba(255,255,255,0.05)", border: "1px solid #e0d9cc", color: currentPage === 1 ? "#bbb" : "#666", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: currentPage === 1 ? "default" : "pointer" }}>
+  ← Prev
+</button>
+<span style={{ fontSize: "13px", color: "#888" }}>Page {currentPage} of {Math.ceil(sortedResults.length / itemsPerPage)}</span>
+<button
+  onClick={() => { setCurrentPage(p => p + 1); }}
+  disabled={currentPage === Math.ceil(sortedResults.length / itemsPerPage)}
+  style={{ background: currentPage === Math.ceil(sortedResults.length / itemsPerPage) ? "#ffffff" : "rgba(255,255,255,0.05)", border: `1px solid ${currentPage === Math.ceil(sortedResults.length / itemsPerPage) ? "#e0d9cc" : "rgba(58,170,53,0.3)"}`, color: currentPage === Math.ceil(sortedResults.length / itemsPerPage) ? "#bbb" : "#3aaa35", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: currentPage === Math.ceil(sortedResults.length / itemsPerPage) ? "default" : "pointer" }}>
+  Next →
+</button>
   </div>
 )}
           </div>
