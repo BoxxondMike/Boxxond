@@ -5,7 +5,6 @@ import Link from 'next/link';
 type CardSet = {
   slug: string;
   name: string;
-  year: string;
   manufacturer: string;
   description: string;
   difficulty: string;
@@ -25,7 +24,6 @@ const sports: Sport[] = [
       {
         slug: 'topps-chrome',
         name: 'Topps Chrome',
-        year: '2019–Present',
         manufacturer: 'Topps',
         description: 'The most prestigious football card set in the hobby. Known for its iconic chromium finish and highly sought after autographs and refractors.',
         difficulty: 'Premium',
@@ -35,7 +33,6 @@ const sports: Sport[] = [
       {
   slug: 'topps-finest-premier-league-2026',
   name: 'Topps Finest Premier League 2026',
-  year: '2026',
   manufacturer: 'Topps',
   description: 'Topps Finest comes to the Premier League. Premium refractor based set featuring the biggest names in English football with stunning atomic refractors and on card autographs.',
   difficulty: 'Premium',
@@ -46,7 +43,6 @@ const sports: Sport[] = [
       {
         slug: 'panini-prizm-epl',
         name: 'Panini Prizm EPL',
-        year: '2019–Present',
         manufacturer: 'Panini',
         description: 'Panini\'s flagship Premier League set. Famous for its Silver Prizm parallels and coloured refractors.',
         difficulty: 'Premium',
@@ -56,7 +52,6 @@ const sports: Sport[] = [
        {
         slug: 'topps-chrome-ucc-2526',
         name: 'Topps Chrome UCC 2025-26',
-        year: '2025-26',
         manufacturer: 'Topps',
         description: 'UCC Chrome is back. The premium chrome set covering UEFA Club Competitions including the Champions League, Europa League and Conference League for the 2025-26 season.',
         difficulty: 'Premium',
@@ -67,7 +62,6 @@ const sports: Sport[] = [
       {
         slug: 'topps-stadium-club',
         name: 'Topps Stadium Club',
-        year: '2021–Present',
         manufacturer: 'Topps',
         description: 'Known for its stunning photography and clean design. A favourite among collectors who appreciate artistry.',
         difficulty: 'Mid Range',
@@ -77,7 +71,6 @@ const sports: Sport[] = [
       {
         slug: 'panini-select',
         name: 'Panini Select',
-        year: '2020–Present',
         manufacturer: 'Panini',
         description: 'Three tier design featuring Concourse, Premier and Courtside levels with bold colourful parallels.',
         difficulty: 'Mid Range',
@@ -87,7 +80,6 @@ const sports: Sport[] = [
       {
         slug: 'topps-chrome-sapphire',
         name: 'Topps Chrome Sapphire',
-        year: '2018–Present',
         manufacturer: 'Topps',
         description: 'The ultra premium edition of Topps Chrome. Limited print run with stunning sapphire blue refractor finish. One of the most sought after sets in the hobby.',
         difficulty: 'Premium',
@@ -97,7 +89,6 @@ const sports: Sport[] = [
       {
         slug: 'topps-now',
         name: 'Topps NOW',
-        year: '2017–Present',
         manufacturer: 'Topps',
         description: 'Limited edition cards released within 24-48 hours of major football moments. Print to order with very limited windows making them genuinely rare.',
         difficulty: 'Mid Range',
@@ -107,7 +98,6 @@ const sports: Sport[] = [
       {
         slug: 'topps-inception',
         name: 'Topps Inception',
-        year: '2019–Present',
         manufacturer: 'Topps',
         description: 'Premium on card autograph focused set with stunning acetate cards. Every box guaranteed to contain autographs from top players.',
         difficulty: 'Premium',
@@ -122,7 +112,6 @@ const sports: Sport[] = [
       {
         slug: 'panini-prizm-nfl',
         name: 'Panini Prizm NFL',
-        year: '2012–Present',
         manufacturer: 'Panini',
         description: 'The most popular NFL card set. Rookie Prizms of top draft picks are among the most valuable cards in the hobby.',
         difficulty: 'Premium',
@@ -132,7 +121,6 @@ const sports: Sport[] = [
       {
         slug: 'topps-chrome-nfl',
         name: 'Topps Cosmic Chrome NFL',
-        year: '1996–Present',
         manufacturer: 'Topps',
         description: 'A classic chromium NFL set with strong collector demand. Rookie cards of star quarterbacks are particularly valuable.',
         difficulty: 'Mid Range',
@@ -142,7 +130,6 @@ const sports: Sport[] = [
       {
         slug: 'panini-select-nfl',
         name: 'Panini Select NFL',
-        year: '2018–Present',
         manufacturer: 'Panini',
         description: 'Three tier design with bold colourful parallels. One of the most visually striking NFL sets available.',
         difficulty: 'Mid Range',
@@ -152,7 +139,6 @@ const sports: Sport[] = [
       {
         slug: 'topps-nfl',
         name: 'Topps NFL',
-        year: '2025',
         manufacturer: 'Topps',
         description: 'Topps returns to NFL trading cards for the first time in over a decade. Highly anticipated comeback with chrome refractors and autographs of top NFL stars.',
         difficulty: 'Premium',
@@ -168,7 +154,6 @@ const sports: Sport[] = [
       {
         slug: 'panini-prizm-nba',
         name: 'Panini Prizm NBA',
-        year: '2012–2025',
         manufacturer: 'Panini',
         description: 'The gold standard of basketball cards. Silver Prizms of top NBA players are among the most traded cards in the hobby worldwide.',
         difficulty: 'Premium',
@@ -178,7 +163,6 @@ const sports: Sport[] = [
       {
         slug: 'topps-chrome-nba',
         name: 'Topps Chrome® Basketball',
-        year: '1996–Present',
         manufacturer: 'Topps',
         description: 'A classic chromium basketball set with a long history. Rookie cards from this set are highly collectible.',
         difficulty: 'Mid Range',
@@ -188,7 +172,6 @@ const sports: Sport[] = [
       {
         slug: 'panini-select-nba',
         name: 'Panini Select NBA',
-        year: '2014–2025',
         manufacturer: 'Panini',
         description: 'Three tier design with Concourse, Premier and Courtside levels. Die cut Courtside cards are the most sought after.',
         difficulty: 'Mid Range',
@@ -203,7 +186,6 @@ const sports: Sport[] = [
       {
         slug: 'topps-chrome-baseball',
         name: 'Topps Chrome Baseball',
-        year: '1996–Present',
         manufacturer: 'Topps',
         description: 'The original Chrome set and still one of the most popular. Rookie cards of MLB stars are the most valuable.',
         difficulty: 'Premium',
@@ -213,7 +195,6 @@ const sports: Sport[] = [
       {
         slug: 'topps-baseball',
         name: 'Topps Heritage Baseball',
-        year: '1952–Present',
         manufacturer: 'Topps',
         description: 'The most iconic baseball card set in history. Heritage Topps cards from 1977 set design are among the most valuable sports cards ever.',
         difficulty: 'Beginner',
@@ -223,7 +204,6 @@ const sports: Sport[] = [
       {
         slug: 'bowman-baseball',
         name: 'Bowman Baseball',
-        year: '1948–Present',
         manufacturer: 'Topps',
         description: 'The go-to set for prospect collectors. First Bowman cards of players who make the major leagues can be extremely valuable.',
         difficulty: 'Mid Range',
@@ -286,7 +266,7 @@ export default function SetsPage() {
             onMouseLeave={e => (e.currentTarget.style.borderColor = color === '#f59e0b' ? 'rgba(251,191,36,0.3)' : 'rgba(58,170,53,0.3)')}>
             <div style={{ fontSize: "11px", fontWeight: 700, color, marginBottom: "8px", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>{label}</div>
             <div style={{ fontWeight: 700, fontSize: "17px", color: "#1a1a1a", marginBottom: "4px", letterSpacing: "-0.3px" }}>{set.name}</div>
-            <div style={{ fontSize: "12px", color: "#aaa", marginBottom: "10px" }}>{set.manufacturer} · {set.year}</div>
+            <div style={{ fontSize: "12px", color: "#aaa", marginBottom: "10px" }}>{set.manufacturer} ·</div>
             <div style={{ fontSize: "12px", color: "#666", lineHeight: 1.5, marginBottom: "12px" }}>{set.description.slice(0, 80)}...</div>
             <div style={{ fontSize: "12px", color, fontWeight: 600 }}>View Set →</div>
           </div>
@@ -322,7 +302,7 @@ export default function SetsPage() {
                       </div>
                     </div>
                     <div style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "18px", color: "#1a1a1a", marginBottom: "0.5rem", letterSpacing: "-0.3px" }}>{set.name}</div>
-                    <div style={{ fontSize: "12px", color: "#3aaa35", marginBottom: "0.75rem" }}>{set.year}</div>
+                    <div style={{ fontSize: "12px", color: "#3aaa35", marginBottom: "0.75rem" }}></div>
                     <div style={{ fontSize: "13px", color: "#666", lineHeight: 1.6, marginBottom: "1rem" }}>{set.description}</div>
                     <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" as const, marginBottom: "0.75rem" }}>
                       {set.tags.map(tag => (
