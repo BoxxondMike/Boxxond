@@ -120,7 +120,7 @@ const sets: Record<string, any> = {
   },'panini-prizm-nba': {
     name: 'Panini Prizm NBA',
     manufacturer: 'Panini',
-    year: '2012-Present',
+    year: '2012-2025',
     difficulty: 'Premium',
     overview: 'Panini Prizm NBA is the gold standard of basketball cards. Launched in 2012, it quickly became the most popular and traded basketball card set in the world. Silver Prizms of top NBA players are instantly recognisable and form the backbone of the modern basketball card market.',
     whatToLookFor: 'Silver Prizms of star players and top rookies are the most liquid cards in the hobby. Rookie Prizms of first round draft picks can be extremely valuable especially if the player has a breakout season. Look for numbered parallels and on-card autographs for maximum value.',
@@ -166,7 +166,7 @@ const sets: Record<string, any> = {
   'panini-select-nba': {
     name: 'Panini Select NBA',
     manufacturer: 'Panini',
-    year: '2014-Present',
+    year: '2014-2025',
     difficulty: 'Mid Range',
     overview: 'Panini Select NBA features the distinctive three tier design of Concourse, Premier and Courtside levels. The die cut Courtside cards are the standout feature of this set and have become one of the most recognisable card designs in the hobby.',
     whatToLookFor: 'Courtside die cut cards are the must have cards from this set. Tri-Colour parallels are visually striking and popular with collectors. Rookie cards of top draft picks in the Courtside design are particularly valuable.',
@@ -211,7 +211,7 @@ const sets: Record<string, any> = {
     priceRange: 'From £3 to £20,000+',
   },
   'topps-baseball': {
-    name: 'Topps Baseball',
+    name: 'Topps Heritage Baseball',
     manufacturer: 'Topps',
     year: '1952-Present',
     difficulty: 'Beginner',
@@ -278,7 +278,7 @@ const sets: Record<string, any> = {
     priceRange: 'From £3 to £15,000+',
   },
   'topps-chrome-nfl': {
-    name: 'Topps Chrome NFL',
+    name: 'Topps Cosmic Chrome NFL',
     manufacturer: 'Topps',
     year: '1996-Present',
     difficulty: 'Mid Range',
@@ -344,50 +344,6 @@ const sets: Record<string, any> = {
       'Compare prices carefully - Sapphire premiums can be 5-10x standard Chrome prices',
     ],
     priceRange: 'From £20 to £5,000+',
-  },
-  'topps-finest': {
-    name: 'Topps Finest',
-    manufacturer: 'Topps',
-    year: '2020-Present',
-    difficulty: 'Premium',
-    overview: 'Topps Finest is one of the most visually stunning sets in the football card hobby. Known for its atomic refractor parallels and premium on card autographs, Finest targets the serious collector who wants something special. The set features top European players and is released in limited quantities making it genuinely scarce.',
-    whatToLookFor: 'Atomic refractor parallels are the signature cards of this set and the most visually striking. On card autographs are guaranteed in hobby boxes and are the main chase. Superfractors at 1/1 are among the rarest cards produced by Topps.',
-    parallels: [
-      { name: 'Base Refractor', printRun: 'Unlimited', colour: 'Silver' },
-      { name: 'Atomic Refractor', printRun: 'Limited', colour: 'Rainbow' },
-      { name: 'Blue Refractor', printRun: '/150', colour: 'Blue' },
-      { name: 'Gold Refractor', printRun: '/50', colour: 'Gold' },
-      { name: 'Red Refractor', printRun: '/5', colour: 'Red' },
-      { name: 'SuperFractor', printRun: '1/1', colour: 'Gold' },
-    ],
-    tips: [
-      'Atomic refractors are the most eye catching cards in the set - very popular with collectors',
-      'On card autos are worth significantly more than sticker autos',
-      'Finest has a loyal collector base making cards relatively easy to buy and sell',
-      'Limited print runs mean genuine scarcity - prices hold well over time',
-    ],
-    priceRange: 'From £5 to £3,000+',
-  },
-  'topps-gold-label': {
-    name: 'Topps Gold Label',
-    manufacturer: 'Topps',
-    year: '2016-Present',
-    difficulty: 'Premium',
-    overview: 'Topps Gold Label is one of the most unique products in the football card market. Each pack contains just one card across three classes - Class 1, Class 2 and Class 3 - each with different photography and very short print runs. The stunning design and genuine scarcity make Gold Label a favourite among serious collectors.',
-    whatToLookFor: 'Class 3 cards have the shortest print runs and are the most valuable. Framed autograph versions are extremely rare. Look for cards of top Premier League and European stars as demand is strongest for recognisable names.',
-    parallels: [
-      { name: 'Class 1', printRun: 'Limited', colour: 'Gold' },
-      { name: 'Class 2', printRun: 'Very Limited', colour: 'Gold' },
-      { name: 'Class 3', printRun: 'Ultra Limited', colour: 'Gold' },
-      { name: 'Framed Auto', printRun: 'Ultra Limited', colour: 'Gold' },
-    ],
-    tips: [
-      'Class 3 cards are the rarest and most valuable - worth paying a premium for',
-      'The one card per pack format makes Gold Label feel genuinely premium',
-      'Stunning photography makes even lower class cards beautiful display pieces',
-      'Strong demand from UK collectors who appreciate the premium format',
-    ],
-    priceRange: 'From £10 to £5,000+',
   },
   'topps-now': {
     name: 'Topps NOW',
@@ -529,7 +485,7 @@ export default async function SetPage({ params }: { params: Promise<{ slug: stri
 
       <div style={{ padding: "2.5rem 2rem", maxWidth: "800px", margin: "0 auto" }}>
 
-        <Link href="/sets" style={{ color: "#888", fontSize: "13px", textDecoration: "none", display: "inline-block", marginBottom: "1.5rem" }}>← Back to Sets</Link>
+        <Link href="/sets" style={{ color: "#888", fontSize: "13px", textDecoration: "none", display: "inline-block", marginBottom: "1.5rem" }}>← Back to Release Vault</Link>
 
         <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "0.75rem", flexWrap: "wrap" as const }}>
           <h1 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "clamp(28px, 5vw, 44px)", letterSpacing: "-1px", margin: 0 }}>{set.name}</h1>

@@ -239,8 +239,9 @@ export default function SetsPage() {
         <h1 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "clamp(32px, 5vw, 52px)", letterSpacing: "-1.5px", margin: "0 0 1rem", lineHeight: 1.05 }}>
   Release <span style={{ color: "#3aaa35" }}>Vault</span>
 </h1>
-        <p style={{ color: "#666", fontSize: "16px", lineHeight: 1.6, maxWidth: "500px", margin: 0 }}>
-          From beginner collections to premium chrome refractors — guides covering soccer, basketball, baseball and NFL card sets.
+        <p style={{ color: "#666", fontSize: "16px", lineHeight: 1.6, maxWidth: "850px", margin: 0 }}>
+          From beginner collections to premium chrome refractors.  Set information covering the main soccer, basketball, baseball and NFL card sets. 
+          Plus information on new releases with checklists.
         </p>
       </div>
 {/* Featured Sets */}
@@ -266,7 +267,6 @@ export default function SetsPage() {
             onMouseLeave={e => (e.currentTarget.style.borderColor = color === '#f59e0b' ? 'rgba(251,191,36,0.3)' : 'rgba(58,170,53,0.3)')}>
             <div style={{ fontSize: "11px", fontWeight: 700, color, marginBottom: "8px", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>{label}</div>
             <div style={{ fontWeight: 700, fontSize: "17px", color: "#1a1a1a", marginBottom: "4px", letterSpacing: "-0.3px" }}>{set.name}</div>
-            <div style={{ fontSize: "12px", color: "#aaa", marginBottom: "10px" }}>{set.manufacturer} ·</div>
             <div style={{ fontSize: "12px", color: "#666", lineHeight: 1.5, marginBottom: "12px" }}>{set.description.slice(0, 80)}...</div>
             <div style={{ fontSize: "12px", color, fontWeight: 600 }}>View Set →</div>
           </div>

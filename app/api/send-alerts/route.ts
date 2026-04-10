@@ -66,7 +66,7 @@ export async function GET(request: Request) {
           <body style="background: #faf7f0; font-family: sans-serif; margin: 0; padding: 20px;">
             <div style="max-width: 600px; margin: 0 auto;">
               <div style="text-align: center; padding: 30px 0 20px;">
-                <img src="https://www.boxxhq.com/boxxhq-logo-green.png" alt="BoxxHQ" style="height: 60px; width: auto;" />
+                <img src="https://www.boxxhq.com/boxxhq-logo.png" alt="BoxxHQ" style="height: 80px; width: auto;" />
               </div>
               <div style="background: #ffffff; border-radius: 12px; padding: 24px; margin-bottom: 20px;">
                 <h2 style="color: #1a1a1a; font-size: 18px; margin: 0 0 8px;">New listings for "${alert.search_term}"</h2>
