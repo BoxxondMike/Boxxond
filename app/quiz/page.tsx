@@ -92,8 +92,8 @@ export default function GamesHub() {
     if (!rouletteGuess.trim()) return;
     setRouletteSubmitted(true);
     setRoulettePlayed(p => p + 1);
-    const isCorrect = rouletteGuess.toLowerCase().trim() === player.player_name.toLowerCase() ||
-      player.player_name.toLowerCase().includes(rouletteGuess.toLowerCase().trim());
+    const isCorrect = rouletteGuess.toLowerCase().trim() === player.player_name.toLowerCase().replace(/&apos;/g, "'") ||
+  player.player_name.toLowerCase().replace(/&apos;/g, "'").includes(rouletteGuess.toLowerCase().trim());
     setRouletteCorrect(isCorrect);
     if (isCorrect) setRouletteScore(s => s + 1);
   };
@@ -372,7 +372,7 @@ setNationalityMap(nationalityMap);
                       {rouletteCorrect ? "🎉 Correct!" : "❌ Wrong!"}
                     </div>
                     <div style={{ fontSize: "15px", color: "#666" }}>
-                      The answer was <strong style={{ color: "#1a1a1a" }}>{player.player_name}</strong>
+                      The answer was <strong style={{ color: "#1a1a1a" }}>{player.player_name.replace(/&apos;/g, "'")}</strong>
                     </div>
                   </div>
                   <button onClick={fetchRandomPlayer}
