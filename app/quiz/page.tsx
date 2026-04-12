@@ -338,7 +338,11 @@ setNationalityMap(nationalityMap);
                       <div style={{ fontSize: "13px", color: "#888", fontStyle: "italic" }}>
                         {club.seasons?.length > 0 ? `${Math.min(...club.seasons)}–${Math.max(...club.seasons) + 1}` : '—'}
                       </div>
-                      <div style={{ fontSize: "13px", fontWeight: 600, color: "#1a1a1a" }}>{club.name}</div>
+                      <div style={{ fontSize: "13px", fontWeight: 600, color: "#1a1a1a" }}>
+  {club.isLoan && <span style={{ color: "#888", fontWeight: 400, marginRight: "4px" }}>→</span>}
+  {club.name}
+  {club.isLoan && <span style={{ color: "#aaa", fontWeight: 400, fontSize: "11px", marginLeft: "4px" }}>(loan)</span>}
+</div>
                       <div style={{ fontSize: "13px", color: "#555" }}>{club.totalApps}</div>
                       <div style={{ fontSize: "13px", color: "#555" }}>{club.totalGoals}</div>
                     </div>
