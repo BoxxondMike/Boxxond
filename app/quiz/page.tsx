@@ -31,6 +31,8 @@ export default function GamesHub() {
   const [roulettePlayed, setRoulettePlayed] = useState(0);
   const [rouletteLoading, setRouletteLoading] = useState(true);
   const [nationalityMap, setNationalityMap] = useState<Record<string, string>>({});
+  const [allPlayers, setAllPlayers] = useState<string[]>([]);
+const [suggestions, setSuggestions] = useState<string[]>([]);
 
   // ─── KNOW YOUR XI STATE ───
   const [selectedMatch, setSelectedMatch] = useState<any>(null);
@@ -99,8 +101,23 @@ export default function GamesHub() {
   };
 
   useEffect(() => {
-    fetchRandomPlayer();
-  }, []);
+  fetchRandomPlayer();
+}, []);
+
+useEffect(() => {
+  const fetchNames = async () => {
+    const { data } = await supabase.from('player_careers').select('player_name');
+    if (data) setAllPlayers(data.map((p: any) => p.player_name));
+  };
+  fetchNames();
+}, []);
+
+useEffect(() => {
+  if (activeGame === 'knowyourxi' && !selectedMatch) {
+    const random = FEATURED_MATCHES[Math.floor(Math.random() * FEATURED_MATCHES.length)];
+    loadMatch(random);
+  }
+}, [activeGame]);
 
   useEffect(() => {
   if (activeGame === 'knowyourxi' && !selectedMatch) {
@@ -351,19 +368,46 @@ setNationalityMap(nationalityMap);
               </div>
 
               {!rouletteSubmitted ? (
-                <div>
-                  <button onClick={fetchRandomPlayer}
-                    style={{ width: "100%", background: "transparent", color: "#aaa", padding: "10px", borderRadius: "10px", border: "1px solid #e0d9cc", fontWeight: 600, fontSize: "14px", cursor: "pointer", marginBottom: "12px" }}>
-                    Skip →
-                  </button>
-                  <input
-                    type="text"
-                    placeholder="Type player name..."
-                    value={rouletteGuess}
-                    onChange={e => setRouletteGuess(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && handleRouletteSubmit()}
-                    style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #e0d9cc", fontSize: "15px", background: "#faf7f0", color: "#1a1a1a", outline: "none", marginBottom: "12px", boxSizing: "border-box" as const }}
-                  />
+  <div>
+    <button onClick={fetchRandomPlayer}
+      style={{ width: "100%", background: "transparent", color: "#aaa", padding: "10px", borderRadius: "10px", border: "1px solid #e0d9cc", fontWeight: 600, fontSize: "14px", cursor: "pointer", marginBottom: "12px" }}>
+      Skip →
+    </button>
+    <button onClick={() => { setRouletteSubmitted(true); setRouletteCorrect(false); setRoulettePlayed(p => p + 1); }}
+      style={{ width: "100%", background: "transparent", color: "#ef4444", padding: "10px", borderRadius: "10px", border: "1px solid #ef4444", fontWeight: 600, fontSize: "14px", cursor: "pointer", marginBottom: "12px" }}>
+      Reveal Answer
+    </button>
+    <div style={{ position: "relative" as const, marginBottom: "12px" }}>
+  <input
+    type="text"
+    placeholder="Type player name..."
+    value={rouletteGuess}
+    onChange={e => {
+      setRouletteGuess(e.target.value);
+      if (e.target.value.length > 1) {
+        setSuggestions(allPlayers.filter(p => 
+          p.toLowerCase().includes(e.target.value.toLowerCase())
+        ).slice(0, 6));
+      } else {
+        setSuggestions([]);
+      }
+    }}
+    onKeyDown={e => e.key === 'Enter' && handleRouletteSubmit()}
+    style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #e0d9cc", fontSize: "15px", background: "#faf7f0", color: "#1a1a1a", outline: "none", boxSizing: "border-box" as const }}
+  />
+  {suggestions.length > 0 && (
+    <div style={{ position: "absolute" as const, top: "100%", left: 0, right: 0, background: "#fff", border: "1px solid #e0d9cc", borderRadius: "8px", zIndex: 10, overflow: "hidden", marginTop: "4px" }}>
+      {suggestions.map((s, i) => (
+        <div key={i} onClick={() => { setRouletteGuess(s); setSuggestions([]); }}
+          style={{ padding: "10px 14px", fontSize: "14px", color: "#1a1a1a", cursor: "pointer", borderBottom: i < suggestions.length - 1 ? "1px solid #f0ede6" : "none" }}
+          onMouseEnter={e => (e.currentTarget.style.background = '#faf7f0')}
+          onMouseLeave={e => (e.currentTarget.style.background = '#fff')}>
+          {s}
+        </div>
+      ))}
+    </div>
+  )}
+</div>
                   <button onClick={handleRouletteSubmit} disabled={!rouletteGuess.trim()}
                     style={{ width: "100%", background: "#3aaa35", color: "#faf7f0", padding: "14px", borderRadius: "10px", border: "none", fontWeight: 700, fontSize: "16px", cursor: "pointer", opacity: !rouletteGuess.trim() ? 0.5 : 1 }}>
                     Submit Answer
