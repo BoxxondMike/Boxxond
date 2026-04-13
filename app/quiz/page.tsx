@@ -90,15 +90,29 @@ const [suggestions, setSuggestions] = useState<string[]>([]);
     setRouletteLoading(false);
   };
 
-  const handleRouletteSubmit = () => {
-    if (!rouletteGuess.trim()) return;
-    setRouletteSubmitted(true);
-    setRoulettePlayed(p => p + 1);
-    const isCorrect = rouletteGuess.toLowerCase().trim() === player.player_name.toLowerCase().replace(/&apos;/g, "'") ||
-  player.player_name.toLowerCase().replace(/&apos;/g, "'").includes(rouletteGuess.toLowerCase().trim());
-    setRouletteCorrect(isCorrect);
-    if (isCorrect) setRouletteScore(s => s + 1);
-  };
+ const handleRouletteSubmit = () => {
+  if (!rouletteGuess.trim()) return;
+  setRouletteSubmitted(true);
+  setRoulettePlayed(p => p + 1);
+
+  const normalise = (str: string) => str.toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/&apos;/g, "'")
+    .trim();
+
+  const cleanName = normalise(player.player_name);
+  const surname = cleanName.split('. ')[1] || cleanName;
+  const guess = normalise(rouletteGuess);
+
+  const isCorrect = guess === cleanName ||
+    cleanName.includes(guess) ||
+    surname.includes(guess) ||
+    guess.includes(surname);
+
+  setRouletteCorrect(isCorrect);
+  if (isCorrect) setRouletteScore(s => s + 1);
+};
 
   useEffect(() => {
   fetchRandomPlayer();
@@ -350,7 +364,9 @@ setNationalityMap(nationalityMap);
                       <div key={h} style={{ fontSize: "11px", fontWeight: 700, color: "#888", textTransform: "uppercase" as const }}>{h}</div>
                     ))}
                   </div>
-                  {player.clubs.map((club: any, i: number) => (
+                  {player.clubs
+  .filter((club: any) => !club.name.match(/U\d+|Youth|Reserve|II\s|II$/i))
+  .map((club: any, i: number) => (
                     <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 2fr 1fr 1fr", padding: "10px 14px", borderBottom: i < player.clubs.length - 1 ? "1px solid #e0d9cc" : "none", background: i % 2 === 0 ? "#ffffff" : "#faf7f0" }}>
                       <div style={{ fontSize: "13px", color: "#888", fontStyle: "italic" }}>
                         {club.seasons?.length > 0 ? `${Math.min(...club.seasons)}–${Math.max(...club.seasons) + 1}` : '—'}
