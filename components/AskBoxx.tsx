@@ -30,6 +30,8 @@ export default function AskBoxx({ isOpen, onClose, isPro }: AskBoxxProps) {
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [messageCount, setMessageCount] = useState(0);
+const MAX_MESSAGES = 5;
 
   useEffect(() => {
     if (isOpen && isPro) {
@@ -42,8 +44,10 @@ export default function AskBoxx({ isOpen, onClose, isPro }: AskBoxxProps) {
   }, [messages]);
 
   const sendMessage = async (text?: string) => {
-    const userMessage = text || input.trim();
-    if (!userMessage || loading) return;
+  const userMessage = text || input.trim();
+  if (!userMessage || loading) return;
+  
+  if (messageCount >= MAX_MESSAGES) return;
 
     setInput('');
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
@@ -58,10 +62,11 @@ export default function AskBoxx({ isOpen, onClose, isPro }: AskBoxxProps) {
 
       const data = await res.json();
       setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: data.reply || 'Sorry, something went wrong. Try again.',
-        suggestions: data.suggestions || []
-      }]);
+  role: 'assistant',
+  content: data.reply || 'Sorry, something went wrong. Try again.',
+  suggestions: data.suggestions || []
+}]);
+setMessageCount(prev => prev + 1);
     } catch {
       setMessages(prev => [...prev, {
         role: 'assistant',
@@ -314,61 +319,74 @@ export default function AskBoxx({ isOpen, onClose, isPro }: AskBoxxProps) {
             </div>
 
             {/* Input */}
-            <div style={{
-              padding: '16px 20px',
-              borderTop: '1px solid #e0d9cc',
-              background: '#fff',
-              flexShrink: 0,
-            }}>
-              <div style={{
-                display: 'flex',
-                gap: '8px',
-                alignItems: 'center',
-                background: '#faf7f0',
-                border: '1px solid #e0d9cc',
-                borderRadius: '12px',
-                padding: '8px 8px 8px 16px',
-              }}>
-                <input
-                  ref={inputRef}
-                  value={input}
-                  onChange={e => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Ask about any card or player..."
-                  style={{
-                    flex: 1,
-                    background: 'none',
-                    border: 'none',
-                    outline: 'none',
-                    fontSize: '14px',
-                    color: '#1a1a1a',
-                    fontFamily: 'inherit',
-                  }}
-                />
-                <button
-                  onClick={() => sendMessage()}
-                  disabled={!input.trim() || loading}
-                  style={{
-                    background: input.trim() && !loading ? '#3aaa35' : '#e0d9cc',
-                    border: 'none',
-                    borderRadius: '8px',
-                    width: '36px',
-                    height: '36px',
-                    cursor: input.trim() && !loading ? 'pointer' : 'default',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '16px',
-                    transition: 'background 0.15s',
-                    flexShrink: 0,
-                  }}>
-                  ↑
-                </button>
-              </div>
-              <div style={{ fontSize: '11px', color: '#ccc', textAlign: 'center', marginTop: '8px' }}>
-                Powered by BoxxHQ · Prices from eBay UK
-              </div>
-            </div>
+<div style={{
+  padding: '16px 20px',
+  borderTop: '1px solid #e0d9cc',
+  background: '#fff',
+  flexShrink: 0,
+}}>
+  {messageCount >= MAX_MESSAGES ? (
+    <div style={{
+      background: '#faf7f0',
+      border: '1px solid #e0d9cc',
+      borderRadius: '12px',
+      padding: '16px',
+      textAlign: 'center',
+    }}>
+      <div style={{ fontSize: '14px', fontWeight: 600, color: '#1a1a1a', marginBottom: '4px' }}>Beta limit reached</div>
+      <div style={{ fontSize: '13px', color: '#888' }}>You've used your 5 free messages. Full access coming soon.</div>
+    </div>
+  ) : (
+    <div style={{
+      display: 'flex',
+      gap: '8px',
+      alignItems: 'center',
+      background: '#faf7f0',
+      border: '1px solid #e0d9cc',
+      borderRadius: '12px',
+      padding: '8px 8px 8px 16px',
+    }}>
+      <input
+        ref={inputRef}
+        value={input}
+        onChange={e => setInput(e.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder="Ask about any card or player..."
+        style={{
+          flex: 1,
+          background: 'none',
+          border: 'none',
+          outline: 'none',
+          fontSize: '14px',
+          color: '#1a1a1a',
+          fontFamily: 'inherit',
+        }}
+      />
+      <button
+        onClick={() => sendMessage()}
+        disabled={!input.trim() || loading}
+        style={{
+          background: input.trim() && !loading ? '#3aaa35' : '#e0d9cc',
+          border: 'none',
+          borderRadius: '8px',
+          width: '36px',
+          height: '36px',
+          cursor: input.trim() && !loading ? 'pointer' : 'default',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '16px',
+          transition: 'background 0.15s',
+          flexShrink: 0,
+        }}>
+        ↑
+      </button>
+    </div>
+  )}
+  <div style={{ fontSize: '11px', color: '#ccc', textAlign: 'center', marginTop: '8px' }}>
+    Powered by BoxxHQ · Prices from eBay UK
+  </div>
+</div>
           </>
         )}
       </div>
