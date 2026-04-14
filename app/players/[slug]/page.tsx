@@ -34,12 +34,28 @@ const itemsPerPage = 25;
   const [highPrice, setHighPrice] = useState(0);
   const [lowPrice, setLowPrice] = useState(0);
   const [sortOrder, setSortOrder] = useState<'high' | 'low'>('high');
+  const [priceHistory, setPriceHistory] = useState<any[]>([]);
+  const [playerProfile, setPlayerProfile] = useState<any>(null);
+  const [boxxIQ, setBoxxIQ] = useState<any[]>([]);
 
-  useEffect(() => {
+useEffect(() => {
     const fetchCards = async () => {
       const res = await fetch(`/api/search?q=${encodeURIComponent(playerName)}&sort=${sortOrder === 'high' ? 'price' : 'endingSoonest'}&playerSearch=true`);
       const data = await res.json();
       const items = data.items || [];
+      // Fetch player profile from Supabase if not in hardcoded list
+if (!playerProfiles[slug]) {
+  const { data: profileData } = await supabase
+    .from('players')
+    .select('name, team, nationality, sport')
+    .ilike('name', playerName)
+    .single();
+  console.log('Profile data:', profileData);
+console.log('Player name searched:', playerName);
+  if (profileData) {
+    setPlayerProfile(profileData);
+  }
+}
       setResults(items);
 
       const prices = items
@@ -51,15 +67,45 @@ const itemsPerPage = 25;
         setAvgPrice(avg);
         setHighPrice(Math.max(...prices));
         setLowPrice(Math.min(...prices));
-
-       
       }
+
+      const { data: historyData } = await supabase
+        .from('price_history')
+        .select('*')
+        .eq('search_term', playerName.toLowerCase().replace(/-/g, ' '))
+        .gte('recorded_at', '2026-04-10')
+        .order('recorded_at', { ascending: true })
+        .limit(30);
+        // Fetch Boxx IQ variant data
+const { data: iqData } = await supabase
+  .from('price_history')
+  .select('variant_label, avg_price, recorded_at')
+  .ilike('search_term', `${playerName.toLowerCase()}%`)
+  .neq('variant_label', 'All')
+  .order('recorded_at', { ascending: false })
+  .limit(12);
+
+if (iqData) {
+  // Get latest record per variant
+  const latestByVariant = iqData.reduce((acc: any, row: any) => {
+    if (!acc[row.variant_label]) acc[row.variant_label] = row;
+    return acc;
+  }, {});
+  setBoxxIQ(Object.values(latestByVariant));
+}
+
+      if (historyData) {
+        console.log('History data:', historyData);
+        setPriceHistory(historyData.map((h: any) => ({
+          date: new Date(h.recorded_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }),
+          price: parseFloat(h.avg_price),
+        })));
+      }
+
       setLoading(false);
     };
     fetchCards();
   }, [slug, sortOrder]);
-
-  
 
  useEffect(() => {
     const sorted = [...results].sort((a: any, b: any) => {
@@ -92,7 +138,12 @@ const itemsPerPage = 25;
       <Nav />
 {/* Player Profile Header */}
 {(() => {
-  const profile = playerProfiles[slug];
+  const profile = playerProfiles[slug] || (playerProfile ? {
+  club: playerProfile.team,
+  nation: playerProfile.nationality,
+  position: playerProfile.sport,
+  sport: playerProfile.sport,
+} : null);
   return (
     <div style={{ borderBottom: "1px solid #f0ede6", background: "rgba(255,255,255,0.02)" }}>
       <div style={{ padding: "2rem 1.25rem", maxWidth: "960px", margin: "0 auto", display: "flex", alignItems: "center", gap: "1.5rem" }}>
@@ -126,30 +177,62 @@ const itemsPerPage = 25;
 
         <div style={{ marginBottom: "2rem" }}>
   <p style={{ color: "#888", fontSize: "14px", margin: 0 }}>
-    Live eBay UK prices for {playerName} trading cards
+    Live eBay UK prices for {playerName} trading cards 
   </p>
 </div>
 
+
         {/* Price Stats */}
         {!loading && results.length > 0 && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "12px", marginBottom: "2rem" }}>
-            {[
-              { label: "Average Price", value: `£${formatPrice(avgPrice)}` },
-              { label: "Highest Price", value: `£${formatPrice(highPrice)}` },
-              { label: "Lowest Price", value: `£${formatPrice(lowPrice)}` },
-              { label: "Listings Shown", value: results.length.toString() },
-            ].map((stat) => (
-              <div key={stat.label} style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.25rem" }}>
-                <div style={{ fontSize: "11px", color: "#aaa", textTransform: "uppercase" as const, letterSpacing: "0.5px", marginBottom: "0.5rem" }}>{stat.label}</div>
-                <div style={{ fontSize: "26px", fontWeight: 700, color: "#3aaa35" }}>{stat.value}</div>
-              </div>
-            ))}
-          </div>
-        )}
-        {!loading && results.length > 0 && (
   <p style={{ fontSize: "12px", color: "#aaa", marginBottom: "1.5rem", marginTop: "-1rem" }}>
-    * Average based on the top {results.length} listings sorted by price — high to low. Prices are live eBay UK listings.
+    Listings sorted by price — high to low.
   </p>
+)}
+{/* Boxx IQ */}
+{boxxIQ.length > 0 && (
+  <div style={{ background: "#fff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.5rem", marginBottom: "2rem" }}>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem", flexWrap: "wrap", gap: "8px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <div style={{ background: "#3aaa35", color: "#fff", fontSize: "11px", fontWeight: 700, padding: "3px 10px", borderRadius: "20px", letterSpacing: "0.05em" }}>BOXX IQ</div>
+<div style={{ background: "rgba(58,170,53,0.1)", color: "#3aaa35", fontSize: "10px", fontWeight: 600, padding: "3px 8px", borderRadius: "20px", letterSpacing: "0.05em" }}>BETA</div>
+        <span style={{ fontSize: "13px", color: "#888" }}>Variant price tracker</span>
+      </div>
+      <span style={{ fontSize: "11px", color: "#aaa" }}>Updated daily · eBay UK</span>
+    </div>
+
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "10px", marginBottom: "1rem" }}>
+  {boxxIQ
+    .sort((a: any, b: any) => {
+      const order = ['Auto', 'PSA 10', 'Prizm', 'Numbered Parallel', 'Short Print', 'World Cup'];
+      return order.indexOf(a.variant_label) - order.indexOf(b.variant_label);
+    })
+    .map((variant: any) => (
+      <div key={variant.variant_label} style={{
+  background: "#faf7f0",
+  border: "1px solid #e0d9cc",
+  borderRadius: "10px",
+  padding: "16px",
+  textAlign: "center",
+}}>
+  <div style={{ fontSize: "11px", color: "#888", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600 }}>{variant.variant_label}</div>
+  <div style={{ fontSize: "24px", fontWeight: 800, color: "#3aaa35" }}>£{parseFloat(variant.avg_price).toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+  <div style={{ fontSize: "11px", color: "#aaa", marginTop: "4px" }}>avg price</div>
+</div>
+    ))}
+</div>
+
+    <div style={{ borderTop: "1px solid #f0ede6", paddingTop: "12px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <span style={{ fontSize: "13px", color: "#888" }}>Want to know what this means for your cards?</span>
+      <button
+        onClick={() => {
+          const event = new CustomEvent('openBoxxIntel');
+          window.dispatchEvent(event);
+        }}
+        style={{ background: "#3aaa35", color: "#fff", border: "none", borderRadius: "6px", padding: "7px 16px", fontSize: "13px", fontWeight: 600, cursor: "pointer" }}>
+        Chat to Boxx Intel →
+      </button>
+    </div>
+  </div>
 )}
 
         {/* Results */}

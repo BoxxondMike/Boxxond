@@ -5,10 +5,13 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useRouter } from 'next/navigation';
+import AskBoxx from './AskBoxx';
 
 export default function Nav({ activePage }: { activePage?: string }) {
   const [user, setUser] = useState<any>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [askBoxxOpen, setAskBoxxOpen] = useState(false);
+  const [isPro, setIsPro] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -23,6 +26,12 @@ export default function Nav({ activePage }: { activePage?: string }) {
     });
 
     return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const handleOpenBoxxIntel = () => setAskBoxxOpen(true);
+    window.addEventListener('openBoxxIntel', handleOpenBoxxIntel);
+    return () => window.removeEventListener('openBoxxIntel', handleOpenBoxxIntel);
   }, []);
 
   const handleSignOut = async () => {
@@ -55,13 +64,31 @@ export default function Nav({ activePage }: { activePage?: string }) {
           <Link href="/" style={{ color: activePage === 'prices' ? "#3aaa35" : "#888", textDecoration: "none" }}>Prices</Link>
           <Link href="/sets" style={{ color: activePage === 'sets' ? "#3aaa35" : "#888", textDecoration: "none" }}>Release Vault</Link>
           <Link href="/breaks" style={{ color: activePage === 'breaks' ? "#3aaa35" : "#888", textDecoration: "none" }}>Breaks</Link>
-          <Link href="/quiz">Games</Link>
+          <Link href="/quiz" style={{ color: activePage === 'games' ? "#3aaa35" : "#888", textDecoration: "none" }}>Games</Link>
         </div>
 
         {/* Desktop Auth */}
         <div className="nav-desktop-links" style={{ gap: "10px", alignItems: "center", flexShrink: 0 }}>
           {user ? (
             <>
+              {/* Boxx Intel Button */}
+              <button
+                onClick={() => setAskBoxxOpen(true)}
+                style={{
+                  background: '#3aaa35',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}>
+                Boxx Intel
+              </button>
               <Link href="/dashboard" style={{ fontSize: "15px", fontWeight: 600, color: "#888", textDecoration: "none" }}>Dashboard</Link>
               <button onClick={handleSignOut} style={{ background: "#fff", color: "#888", fontSize: "13px", padding: "8px 16px", border: "1px solid #e0d9cc", borderRadius: "6px", cursor: "pointer" }}>
                 Sign Out
@@ -98,6 +125,22 @@ export default function Nav({ activePage }: { activePage?: string }) {
           <Link href="/quiz" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'games' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Games</Link>
           {user ? (
             <>
+              {/* Mobile Boxx Intel*/}
+              <button
+                onClick={() => { setMenuOpen(false); setAskBoxxOpen(true); }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#3aaa35',
+                  fontWeight: 700,
+                  fontSize: '15px',
+                  padding: '12px 0',
+                  borderBottom: '1px solid #e0d9cc',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                }}>
+                🃏 Boxx Intel
+              </button>
               <Link href="/dashboard" onClick={() => setMenuOpen(false)} style={{ color: "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Dashboard</Link>
               <button onClick={handleSignOut} style={{ background: "none", border: "none", color: "#e84040", fontSize: "15px", padding: "12px 0", textAlign: "left", cursor: "pointer" }}>Sign Out</button>
             </>
@@ -113,6 +156,13 @@ export default function Nav({ activePage }: { activePage?: string }) {
           )}
         </div>
       )}
+
+      {/* Boxx Intel Panel */}
+      <AskBoxx
+        isOpen={askBoxxOpen}
+        onClose={() => setAskBoxxOpen(false)}
+        isPro={isPro}
+      />
     </>
   );
 }
