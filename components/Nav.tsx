@@ -120,7 +120,7 @@ export default function Nav({ activePage }: { activePage?: string }) {
       {menuOpen && (
         <div style={{ background: "#faf7f0", borderBottom: "1px solid #e0d9cc", padding: "1rem 1.25rem", display: "flex", flexDirection: "column", gap: "0" }}>
           <Link href="/" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'prices' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Prices</Link>
-          <Link href="/sets" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'sets' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Release Vault</Link>
+          <Link href="/sets" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'sets' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Sets & Releases</Link>
           <Link href="/breaks" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'breaks' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Breaks</Link>
           <Link href="/quiz" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'games' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Games</Link>
           {user ? (
