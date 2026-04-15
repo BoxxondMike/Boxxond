@@ -37,6 +37,12 @@ const itemsPerPage = 25;
   const [priceHistory, setPriceHistory] = useState<any[]>([]);
   const [playerProfile, setPlayerProfile] = useState<any>(null);
   const [boxxIQ, setBoxxIQ] = useState<any[]>([]);
+  const [showAddCard, setShowAddCard] = useState(false);
+const [addingCard, setAddingCard] = useState(false);
+const [selectedVariant, setSelectedVariant] = useState('');
+const [purchasePrice, setPurchasePrice] = useState('');
+const [cardAdded, setCardAdded] = useState(false);
+const [user, setUser] = useState<any>(null);
 
 useEffect(() => {
     const fetchCards = async () => {
@@ -127,6 +133,42 @@ if (iqData) {
   const formatPrice = (price: number) => {
     return price.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
+
+  useEffect(() => {
+  const getUser = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    setUser(session?.user || null);
+  };
+  getUser();
+}, []);
+
+const addToCollection = async () => {
+  if (!user || !selectedVariant || !purchasePrice) return;
+  setAddingCard(true);
+
+  const { data: playerData } = await supabase
+    .from('players')
+    .select('id')
+    .ilike('name', playerName)
+    .single();
+
+  if (!playerData) {
+    setAddingCard(false);
+    return;
+  }
+
+  await supabase.from('user_cards').insert({
+    user_id: user.id,
+    player_id: playerData.id,
+    variant_label: selectedVariant,
+    purchase_price: parseFloat(purchasePrice),
+  });
+
+  setAddingCard(false);
+  setCardAdded(true);
+  setShowAddCard(false);
+  setTimeout(() => setCardAdded(false), 3000);
+};
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
@@ -239,6 +281,62 @@ if (iqData) {
         Chat to Boxx Intel →
       </button>
     </div>
+</div>
+)}
+
+{/* Add to Collection */}
+{boxxIQ.length > 0 && (
+  <div style={{ marginBottom: '2rem' }}>
+    {cardAdded && (
+      <div style={{ background: 'rgba(58,170,53,0.1)', border: '1px solid rgba(58,170,53,0.3)', borderRadius: '8px', padding: '10px 16px', marginBottom: '12px', fontSize: '14px', color: '#3aaa35', fontWeight: 500 }}>
+        ✓ Added to your collection
+      </div>
+    )}
+    {!showAddCard ? (
+      <button
+        onClick={() => user ? setShowAddCard(true) : window.location.href = '/login'}
+        style={{ background: 'none', border: '1px solid #e0d9cc', borderRadius: '8px', padding: '10px 20px', fontSize: '13px', fontWeight: 600, color: '#888', cursor: 'pointer' }}>
+        + Add to My Collection
+      </button>
+    ) : (
+      <div style={{ background: '#fff', border: '1px solid #e0d9cc', borderRadius: '12px', padding: '20px', display: 'flex', gap: '12px', alignItems: 'flex-end', flexWrap: 'wrap' as const }}>
+        <div>
+          <div style={{ fontSize: '12px', color: '#888', marginBottom: '6px' }}>Variant</div>
+          <select
+            value={selectedVariant}
+            onChange={e => setSelectedVariant(e.target.value)}
+            style={{ background: '#faf7f0', border: '1px solid #e0d9cc', borderRadius: '8px', padding: '8px 12px', fontSize: '14px', outline: 'none', fontFamily: 'inherit' }}>
+            <option value=''>Select variant</option>
+            {boxxIQ.map((v: any) => (
+              <option key={v.variant_label} value={v.variant_label}>{v.variant_label}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <div style={{ fontSize: '12px', color: '#888', marginBottom: '6px' }}>What did you pay? (£)</div>
+          <input
+            type='number'
+            placeholder='0.00'
+            value={purchasePrice}
+            onChange={e => setPurchasePrice(e.target.value)}
+            style={{ background: '#faf7f0', border: '1px solid #e0d9cc', borderRadius: '8px', padding: '8px 12px', fontSize: '14px', outline: 'none', width: '120px', fontFamily: 'inherit' }}
+          />
+        </div>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button
+            onClick={addToCollection}
+            disabled={!selectedVariant || !purchasePrice || addingCard}
+            style={{ background: selectedVariant && purchasePrice ? '#3aaa35' : '#e0d9cc', color: '#fff', border: 'none', borderRadius: '8px', padding: '8px 20px', fontSize: '14px', fontWeight: 600, cursor: selectedVariant && purchasePrice ? 'pointer' : 'default', fontFamily: 'inherit' }}>
+            {addingCard ? 'Adding...' : 'Add Card'}
+          </button>
+          <button
+            onClick={() => setShowAddCard(false)}
+            style={{ background: 'none', border: '1px solid #e0d9cc', borderRadius: '8px', padding: '8px 16px', fontSize: '14px', color: '#888', cursor: 'pointer', fontFamily: 'inherit' }}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    )}
   </div>
 )}
 

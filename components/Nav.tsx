@@ -62,7 +62,7 @@ export default function Nav({ activePage }: { activePage?: string }) {
         {/* Desktop Links */}
         <div className="nav-desktop-links" style={{ fontSize: "15px", fontWeight: 600, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
           <Link href="/" style={{ color: activePage === 'prices' ? "#3aaa35" : "#888", textDecoration: "none" }}>Prices</Link>
-          <Link href="/sets" style={{ color: activePage === 'sets' ? "#3aaa35" : "#888", textDecoration: "none" }}>Release Vault</Link>
+          <Link href="/sets" style={{ color: activePage === 'sets' ? "#3aaa35" : "#888", textDecoration: "none" }}>Sets & Releases</Link>
           <Link href="/breaks" style={{ color: activePage === 'breaks' ? "#3aaa35" : "#888", textDecoration: "none" }}>Breaks</Link>
           <Link href="/quiz" style={{ color: activePage === 'games' ? "#3aaa35" : "#888", textDecoration: "none" }}>Games</Link>
         </div>

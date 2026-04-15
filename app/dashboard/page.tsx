@@ -96,7 +96,7 @@ export default function DashboardPage() {
         {/* Stats */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "12px", marginBottom: "2.5rem" }}>
           {[
-            { label: "Saved Cards", value: savedCards.length.toString(), desc: "Cards in your watchlist" },
+            { label: "Wishlist", value: savedCards.length.toString(), desc: "Cards being watched" },
             { label: "Price Alerts", value: alerts.length.toString(), desc: "Active alerts" },
             { label: "Portfolio Value", value: savedCards.length > 0 ? `£${savedCards.reduce((sum: number, c: any) => sum + (c.price || 0), 0).toFixed(2)}` : "£0", desc: "Total value of saved cards" },
           ].map((stat) => (
@@ -107,51 +107,8 @@ export default function DashboardPage() {
             </div>
           ))}
         </div>
-
-        {/* Saved Cards */}
+                {/* Card Alerts */}
         <div style={{ marginBottom: "2.5rem" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-            <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0, letterSpacing: "-0.3px" }}>Saved Cards</h2>
-            <Link href="/" style={{ fontSize: "13px", color: "#3aaa35", textDecoration: "none" }}>+ Add more</Link>
-          </div>
-
-          {savedCards.length === 0 ? (
-            <div style={{ textAlign: "center", background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "3rem" }}>
-              <div style={{ fontSize: "32px", marginBottom: "1rem" }}>☆</div>
-              <div style={{ fontWeight: 600, fontSize: "16px", marginBottom: "0.5rem" }}>No saved cards yet</div>
-              <div style={{ fontSize: "13px", color: "#888)", marginBottom: "1.5rem" }}>Search for a card and hit Save to add it here</div>
-              <Link href="/" style={{ background: "#3aaa35", color: "#faf7f0", fontWeight: 700, fontSize: "13px", padding: "10px 20px", borderRadius: "6px", textDecoration: "none" }}>
-                Start Searching
-              </Link>
-            </div>
-          ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-              {savedCards.map((card: any) => (
-                <div key={card.id} style={{ display: "flex", gap: "1rem", alignItems: "center", background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1rem 1.25rem" }}>
-                  {card.image_url && (
-                    <img src={card.image_url} alt={card.title} style={{ width: "60px", height: "60px", objectFit: "contain", borderRadius: "6px", background: "rgba(255,255,255,0.05)", flexShrink: 0 }} />
-                  )}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontWeight: 500, fontSize: "13px", color: "#1a1a1a", marginBottom: "4px", lineHeight: 1.4 }}>{card.title}</div>
-                    <div style={{ fontSize: "11px", color: "#aaa" }}>Saved {new Date(card.created_at).toLocaleDateString('en-GB')}</div>
-                  </div>
-                  <div style={{ textAlign: "right", flexShrink: 0 }}>
-                    <div style={{ fontWeight: 700, fontSize: "18px", color: "#3aaa35", marginBottom: "6px" }}>
-                      {card.price ? `£${card.price.toFixed(2)}` : 'N/A'}
-                    </div>
-                    <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
-                      <a href={card.item_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: "11px", color: "#888)", textDecoration: "none" }}>View →</a>
-                      <button onClick={() => handleUnsave(card.item_id)} style={{ fontSize: "11px", color: "rgba(239,68,68,0.6)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Remove</button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Card Alerts */}
-        <div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
             <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0, letterSpacing: "-0.3px" }}>Card Alerts</h2>
           </div>
@@ -243,6 +200,63 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* Wishlist */}
+        <div style={{ marginBottom: "2.5rem" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+            <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0, letterSpacing: "-0.3px" }}>Wishlist</h2>
+            <Link href="/" style={{ fontSize: "13px", color: "#3aaa35", textDecoration: "none" }}>+ Add more</Link>
+          </div>
+
+          {savedCards.length === 0 ? (
+            <div style={{ textAlign: "center", background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "3rem" }}>
+              <div style={{ fontSize: "32px", marginBottom: "1rem" }}>☆</div>
+              <div style={{ fontWeight: 600, fontSize: "16px", marginBottom: "0.5rem" }}>No saved cards yet</div>
+              <div style={{ fontSize: "13px", color: "#888)", marginBottom: "1.5rem" }}>Search for a card and save it to your Wishlist</div>
+              <Link href="/" style={{ background: "#3aaa35", color: "#faf7f0", fontWeight: 700, fontSize: "13px", padding: "10px 20px", borderRadius: "6px", textDecoration: "none" }}>
+                Start Searching
+              </Link>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {savedCards.map((card: any) => (
+                <div key={card.id} style={{ display: "flex", gap: "1rem", alignItems: "center", background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1rem 1.25rem" }}>
+                  {card.image_url && (
+                    <img src={card.image_url} alt={card.title} style={{ width: "60px", height: "60px", objectFit: "contain", borderRadius: "6px", background: "rgba(255,255,255,0.05)", flexShrink: 0 }} />
+                  )}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 500, fontSize: "13px", color: "#1a1a1a", marginBottom: "4px", lineHeight: 1.4 }}>{card.title}</div>
+                    <div style={{ fontSize: "11px", color: "#aaa" }}>Saved {new Date(card.created_at).toLocaleDateString('en-GB')}</div>
+                  </div>
+                  <div style={{ textAlign: "right", flexShrink: 0 }}>
+                    <div style={{ fontWeight: 700, fontSize: "18px", color: "#3aaa35", marginBottom: "6px" }}>
+                      {card.price ? `£${card.price.toFixed(2)}` : 'N/A'}
+                    </div>
+                    <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+                      <a href={card.item_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: "11px", color: "#888)", textDecoration: "none" }}>View →</a>
+                      <button onClick={() => handleUnsave(card.item_id)} style={{ fontSize: "11px", color: "rgba(239,68,68,0.6)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Remove</button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        {/* My Vault */}
+<div style={{ marginTop: "2.5rem" }}>
+  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+    <div>
+      <h2 style={{ fontSize: "18px", fontWeight: 700, margin: "0 0 4px", letterSpacing: "-0.3px" }}>My Vault</h2>
+      <p style={{ fontSize: "13px", color: "#888", margin: 0 }}>Track your card collection against live Boxx IQ prices</p>
+    </div>
+    <Link href="/collection" style={{ background: "#3aaa35", color: "#fff", fontWeight: 700, fontSize: "13px", padding: "10px 20px", borderRadius: "8px", textDecoration: "none" }}>
+      Open My Vault →
+    </Link>
+  </div>
+  <div style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "2rem", textAlign: "center" }}>
+    <div style={{ fontSize: "13px", color: "#888", marginBottom: "12px" }}>Add cards from any player page to start tracking your collection value</div>
+    <Link href="/" style={{ fontSize: "13px", color: "#3aaa35", textDecoration: "none", fontWeight: 600 }}>Browse Players →</Link>
+  </div>
+      </div>
       </div>
     </main>
   );
