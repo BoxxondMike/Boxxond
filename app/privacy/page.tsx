@@ -18,7 +18,7 @@ export default function PrivacyPage() {
         {[
           {
             title: "Who we are",
-            content: "Boxxond is a UK-based trading card price tracker operated as a sole trader business based in England. Our website is located at boxxond.com. For any privacy related queries please contact us at hello@boxxond.com."
+            content: "BoxxHQ is a UK-based trading card price tracker operated as a sole trader business based in England. Our website is located at BoxxHQ.com. For any privacy related queries please contact us at Boxx_hq on instagram."
           },
           {
             title: "What data we collect",
@@ -30,11 +30,11 @@ export default function PrivacyPage() {
           },
           {
             title: "Email alerts",
-            content: "If you set up card alerts on Boxxond, you will receive daily emails containing eBay UK listings matching your alert terms. These emails contain affiliate links to eBay via the eBay Partner Network. You can delete your alerts at any time from your dashboard to stop receiving these emails."
+            content: "If you set up card alerts on BoxxHQ, you will receive daily emails containing eBay UK listings matching your alert terms. These emails contain affiliate links to eBay via the eBay Partner Network. You can delete your alerts at any time from your dashboard to stop receiving these emails."
           },
           {
             title: "eBay affiliate links",
-            content: "Boxxond participates in the eBay Partner Network affiliate programme. When you click a link to eBay from our site and make a purchase, we may earn a small commission. This does not affect the price you pay. All eBay listings shown on Boxxond are sourced via the eBay Browse API."
+            content: "BoxxHQ participates in the eBay Partner Network affiliate programme. When you click a link to eBay from our site and make a purchase, we may earn a small commission. This does not affect the price you pay. All eBay listings shown on BoxxHQ are sourced via the eBay Browse API."
           },
           {
             title: "Cookies and analytics",
@@ -46,7 +46,7 @@ export default function PrivacyPage() {
           },
           {
             title: "Your rights",
-            content: "Under UK GDPR you have the right to access the personal data we hold about you, request correction of inaccurate data, request deletion of your data, and withdraw consent at any time. To exercise any of these rights please contact us at hello@boxxond.com and we will respond within 30 days."
+            content: "Under UK GDPR you have the right to access the personal data we hold about you, request correction of inaccurate data, request deletion of your data, and withdraw consent at any time. To exercise any of these rights please contact us at hello@BoxxHQ.com and we will respond within 30 days."
           },
           {
             title: "Data retention",
@@ -54,7 +54,7 @@ export default function PrivacyPage() {
           },
           {
             title: "Third party services",
-            content: "Boxxond uses the following third party services: Supabase (database and authentication), Google Analytics (anonymised usage analytics), Resend (email delivery), eBay Browse API (listing data), eBay Partner Network (affiliate programme). Each of these services has their own privacy policy."
+            content: "BoxxHQ uses the following third party services: Supabase (database and authentication), Google Analytics (anonymised usage analytics), Resend (email delivery), eBay Browse API (listing data), eBay Partner Network (affiliate programme). Each of these services has their own privacy policy."
           },
           {
             title: "Changes to this policy",
@@ -62,12 +62,12 @@ export default function PrivacyPage() {
           },
           {
             title: "Contact us",
-            content: "If you have any questions about this privacy policy or how we handle your data please contact us at hello@boxxond.com. We are based in England, United Kingdom."
+            content: "If you have any questions about this privacy policy or how we handle your data please contact us at boxx_hq on Instagram. We are based in England, United Kingdom."
           },
         ].map((section) => (
           <div key={section.title} style={{ marginBottom: "2rem", paddingBottom: "2rem", borderBottom: "1px solid #f0ede6" }}>
             <h2 style={{ fontSize: "16px", fontWeight: 700, margin: "0 0 0.75rem", color: "#3aaa35" }}>{section.title}</h2>
-            <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.6)", lineHeight: 1.8, margin: 0 }}>{section.content}</p>
+            <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.8, margin: 0 }}>{section.content}</p>
           </div>
         ))}
 

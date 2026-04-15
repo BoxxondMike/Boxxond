@@ -392,11 +392,11 @@ function HomeContent() {
               <select
                 value={condition}
                 onChange={(e) => setCondition(e.target.value)}
-                style={{ background: "rgba(255,255,255,0.05)", border: "1px solid #e0d9cc", borderRadius: "8px", padding: "6px 12px", color: "#444", fontSize: "13px", outline: "none", cursor: "pointer" }}>
-                <option value="">All Conditions</option>
-                <option value="New">New</option>
-                <option value="Used">Used</option>
-                <option value="Graded">Graded</option>
+                style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "8px", padding: "6px 12px", color: "#444", fontSize: "13px", outline: "none", cursor: "pointer" }}>
+               <option value="" style={{ color: "#1a1a1a" }}>All Conditions</option>
+<option value="New" style={{ color: "#1a1a1a" }}>New</option>
+<option value="Used" style={{ color: "#1a1a1a" }}>Used</option>
+<option value="Graded" style={{ color: "#1a1a1a" }}>Graded</option>
               </select>
               <input
                 type="number"
@@ -416,9 +416,9 @@ function HomeContent() {
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
                 style={{ background: "rgba(255,255,255,0.05)", border: "1px solid #e0d9cc", borderRadius: "8px", padding: "6px 12px", color: "#444", fontSize: "13px", outline: "none", cursor: "pointer" }}>
-                <option value="">Sort: Default</option>
-                <option value="price">Price: High to Low</option>
-                <option value="lowPrice">Price: Low to High</option>
+                <option value="" style={{ color: "#1a1a1a" }}>Sort: Default</option>
+<option value="price" style={{ color: "#1a1a1a" }}>Price: High to Low</option>
+<option value="lowPrice" style={{ color: "#1a1a1a" }}>Price: Low to High</option>
               </select>
               <button
                 onClick={handleSearch}

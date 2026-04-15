@@ -18,15 +18,15 @@ export default function TermsPage() {
         {[
           {
             title: "Acceptance of terms",
-            content: "By accessing or using Boxxond (boxxond.com) you agree to be bound by these Terms of Service. If you do not agree to these terms please do not use our service. We reserve the right to update these terms at any time and will notify registered users of significant changes."
+            content: "By accessing or using BoxxHQ (BoxxHQ.com) you agree to be bound by these Terms of Service. If you do not agree to these terms please do not use our service. We reserve the right to update these terms at any time and will notify registered users of significant changes."
           },
           {
-            title: "About Boxxond",
-            content: "Boxxond is a UK-based trading card price tracker that displays live eBay UK listing data to help collectors research card values. We are not a marketplace and do not facilitate the buying or selling of trading cards directly. All purchases are made through eBay."
+            title: "About BoxxHQ",
+            content: "BoxxHQ is a UK-based trading card price tracker that displays live eBay UK listing data to help collectors research card values. We are not a marketplace and do not facilitate the buying or selling of trading cards directly. All purchases are made through eBay."
           },
           {
             title: "Use of the service",
-            content: "You may use Boxxond for personal, non-commercial purposes only. You must not use Boxxond to scrape, copy or redistribute our data. You must not attempt to gain unauthorised access to any part of our service. You must be at least 13 years old to create an account."
+            content: "You may use BoxxHQ for personal, non-commercial purposes only. You must not use BoxxHQ to scrape, copy or redistribute our data. You must not attempt to gain unauthorised access to any part of our service. You must be at least 13 years old to create an account."
           },
           {
             title: "Accounts",
@@ -34,44 +34,44 @@ export default function TermsPage() {
           },
           {
             title: "Price data accuracy",
-            content: "All price data displayed on Boxxond is sourced from eBay UK via the eBay Browse API and reflects live listings at the time of retrieval. Prices are indicative only and may not reflect actual sold prices. Boxxond makes no guarantees about the accuracy, completeness or timeliness of price data. Do not rely solely on Boxxond data when making purchasing decisions."
+            content: "All price data displayed on BoxxHQ is sourced from eBay UK via the eBay Browse API and reflects live listings at the time of retrieval. Prices are indicative only and may not reflect actual sold prices. BoxxHQ makes no guarantees about the accuracy, completeness or timeliness of price data. Do not rely solely on BoxxHQ data when making purchasing decisions."
           },
           {
             title: "eBay affiliate links",
-            content: "Boxxond participates in the eBay Partner Network. Links to eBay listings on our site are affiliate links and we may earn a commission if you make a purchase after clicking through. This does not affect the price you pay on eBay. We only link to legitimate eBay listings and do not endorse any specific seller."
+            content: "BoxxHQ participates in the eBay Partner Network. Links to eBay listings on our site are affiliate links and we may earn a commission if you make a purchase after clicking through. This does not affect the price you pay on eBay. We only link to legitimate eBay listings and do not endorse any specific seller."
           },
           {
             title: "Card alerts and email notifications",
-            content: "By setting up card alerts you consent to receiving daily email notifications from Boxxond. These emails contain eBay listing data and affiliate links. You can unsubscribe at any time by removing your alerts from your dashboard. We will not send promotional emails unrelated to your alerts without your explicit consent."
+            content: "By setting up card alerts you consent to receiving daily email notifications from BoxxHQ. These emails contain eBay listing data and affiliate links. You can unsubscribe at any time by removing your alerts from your dashboard. We will not send promotional emails unrelated to your alerts without your explicit consent."
           },
           {
             title: "Intellectual property",
-            content: "All content on Boxxond including text, design, logos and code is the property of Boxxond unless otherwise stated. Card images displayed on Boxxond are sourced from eBay listings and remain the property of their respective owners. You may not reproduce or redistribute Boxxond content without permission."
+            content: "All content on BoxxHQ including text, design, logos and code is the property of BoxxHQ unless otherwise stated. Card images displayed on BoxxHQ are sourced from eBay listings and remain the property of their respective owners. You may not reproduce or redistribute BoxxHQ content without permission."
           },
           {
             title: "Disclaimer of warranties",
-            content: "Boxxond is provided on an as-is basis without warranties of any kind. We do not guarantee that the service will be uninterrupted, error-free or that defects will be corrected. We are not responsible for any losses arising from your use of or inability to use the service."
+            content: "BoxxHQ is provided on an as-is basis without warranties of any kind. We do not guarantee that the service will be uninterrupted, error-free or that defects will be corrected. We are not responsible for any losses arising from your use of or inability to use the service."
           },
           {
             title: "Limitation of liability",
-            content: "To the maximum extent permitted by law, Boxxond shall not be liable for any indirect, incidental, special or consequential damages arising from your use of the service. Our total liability to you shall not exceed the amount you have paid us in the past 12 months, if any."
+            content: "To the maximum extent permitted by law, BoxxHQ shall not be liable for any indirect, incidental, special or consequential damages arising from your use of the service. Our total liability to you shall not exceed the amount you have paid us in the past 12 months, if any."
           },
           {
             title: "Third party services",
-            content: "Boxxond uses third party services including eBay, Supabase, Google Analytics and Resend. Your use of these services is subject to their own terms and privacy policies. We are not responsible for the practices of these third party services."
+            content: "BoxxHQ uses third party services including eBay, Supabase, Google Analytics and Resend. Your use of these services is subject to their own terms and privacy policies. We are not responsible for the practices of these third party services."
           },
           {
             title: "Governing law",
-            content: "These terms are governed by the laws of England and Wales. Any disputes arising from these terms or your use of Boxxond shall be subject to the exclusive jurisdiction of the courts of England and Wales."
+            content: "These terms are governed by the laws of England and Wales. Any disputes arising from these terms or your use of BoxxHQ shall be subject to the exclusive jurisdiction of the courts of England and Wales."
           },
           {
             title: "Contact us",
-            content: "If you have any questions about these Terms of Service please contact us at hello@boxxond.com."
+            content: "If you have any questions about these Terms of Service please contact us at boxx_hq on Instagram."
           },
         ].map((section) => (
           <div key={section.title} style={{ marginBottom: "2rem", paddingBottom: "2rem", borderBottom: "1px solid #f0ede6" }}>
             <h2 style={{ fontSize: "16px", fontWeight: 700, margin: "0 0 0.75rem", color: "#3aaa35" }}>{section.title}</h2>
-            <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.6)", lineHeight: 1.8, margin: 0 }}>{section.content}</p>
+            <p style={{ fontSize: "14px", color: "#1a1a1a)", lineHeight: 1.8, margin: 0 }}>{section.content}</p>
           </div>
         ))}
 
