@@ -144,7 +144,7 @@ const sports: Sport[] = [
         difficulty: 'Premium',
         tags: ['Chrome', 'Rookies', 'Topps Comeback'],
         status: 'coming-soon',
-        checklistUrl: 'https://www.checklistinsider.com/2024-topps-chrome-football',
+        checklistUrl: 'https://cdn.shopify.com/s/files/1/0662/9749/5709/files/2025_Chrome_Football_Checklist_040826.pdf?v=1775678965',
       },
     ],
   },
@@ -233,11 +233,9 @@ export default function SetsPage() {
      <Nav activePage="sets" />
 
       <div style={{ padding: "3rem 2rem 2rem", maxWidth: "960px", margin: "0 auto" }}>
-        <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#3aaa35", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1rem", letterSpacing: "1px", textTransform: "uppercase" }}>
-          Checklists & New Releases
-        </div>
+      
         <h1 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "clamp(32px, 5vw, 52px)", letterSpacing: "-1.5px", margin: "0 0 1rem", lineHeight: 1.05 }}>
-  Release <span style={{ color: "#3aaa35" }}>Vault</span>
+  Checklists &<span style={{ color: "#3aaa35" }}> New releases</span>
 </h1>
         <p style={{ color: "#666", fontSize: "16px", lineHeight: 1.6, maxWidth: "850px", margin: 0 }}>
           From beginner collections to premium chrome refractors.  Set information covering the main soccer, basketball, baseball and NFL card sets. 
@@ -253,9 +251,9 @@ export default function SetsPage() {
   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "16px", alignItems: "stretch"}}>
     {[
       { slug: 'topps-chrome', label: '🔥 Flagship', color: '#3aaa35' },
-      { slug: 'topps-finest-premier-league-2026', label: '🔥 New Release', color: '#3aaa35' },
+      { slug: 'topps-finest-premier-league-2026', label: '🔥 Coming Soon', color: '#3aaa35' },
       { slug: 'topps-chrome-ucc-2526', label: '🆕 New Release', color: '#3aaa35' },
-      { slug: 'topps-nfl', label: '⚡ Coming Soon', color: '#f59e0b' },
+      { slug: 'topps-nfl', label: '⚡ Just Released', color: '#f59e0b' },
     ].map(({ slug, label, color }) => {
       const set = sports.flatMap(s => s.sets).find(s => s.slug === slug);
       if (!set) return null;
@@ -268,7 +266,16 @@ export default function SetsPage() {
             <div style={{ fontSize: "11px", fontWeight: 700, color, marginBottom: "8px", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>{label}</div>
             <div style={{ fontWeight: 700, fontSize: "17px", color: "#1a1a1a", marginBottom: "4px", letterSpacing: "-0.3px" }}>{set.name}</div>
             <div style={{ fontSize: "12px", color: "#666", lineHeight: 1.5, marginBottom: "12px" }}>{set.description.slice(0, 80)}...</div>
-            <div style={{ fontSize: "12px", color, fontWeight: 600 }}>View Set →</div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" }}>
+  <div style={{ fontSize: "12px", color, fontWeight: 600 }}>View Set →</div>
+  {set.checklistUrl && (
+    <a href={set.checklistUrl} target="_blank" rel="noopener noreferrer"
+      onClick={e => e.stopPropagation()}
+      style={{ fontSize: "12px", color: "#888", fontWeight: 600, textDecoration: "none", background: "#faf7f0", padding: "4px 10px", borderRadius: "6px", border: "1px solid #e0d9cc" }}>
+      Checklist →
+    </a>
+  )}
+</div>
           </div>
         </Link>
       );
