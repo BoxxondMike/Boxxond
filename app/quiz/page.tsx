@@ -47,6 +47,9 @@ const [suggestions, setSuggestions] = useState<string[]>([]);
   const [xiTeam, setXiTeam] = useState<'home' | 'away'>('home');
   const [currentGuess, setCurrentGuess] = useState('');
   const [isMobile, setIsMobile] = useState(false);
+  const [teamLogos, setTeamLogos] = useState<Record<string, string>>({});
+  const [playerClubLogos, setPlayerClubLogos] = useState<Record<string, string>>({});
+  const [xiSuggestions, setXiSuggestions] = useState<string[]>([]);
 
   const POSITION_ORDER = ['G', 'D', 'M', 'F'];
 
@@ -140,57 +143,77 @@ useEffect(() => {
   }
 }, [activeGame]);
   // ─── KNOW YOUR XI ───
-  const loadMatch = async (match: any) => {
-    setXiLoading(true);
-    setXiSubmitted(false);
-    setXiGuesses([]);
-    setXiCorrect(0);
-    setCurrentGuess('');
-    setXiTeam('home');
-    setSelectedMatch(match);
+ const loadMatch = async (match: any) => {
+  setXiLoading(true);
+  setXiSubmitted(false);
+  setXiGuesses([]);
+  setXiCorrect(0);
+  setCurrentGuess('');
+  setXiTeam('home');
+  setSelectedMatch(match);
 
-    console.log('Nationality map:', nationalityMap);
+  const { data: lineupData } = await supabase
+    .from('football_lineups')
+    .select('*')
+    .eq('fixture_id', match.fixture_id)
+    .eq('is_substitute', false);
 
-    const { data: lineupData } = await supabase
-      .from('football_lineups')
-      .select('*')
+  if (lineupData) {
+    setHomeLineup(lineupData.filter((p: any) => p.team === match.home));
+    setAwayLineup(lineupData.filter((p: any) => p.team === match.away));
+
+    const playerNames = lineupData.map((p: any) => p.player_name);
+
+    // Fetch career data for nationality and club logos
+    const { data: careerData } = await supabase
+      .from('player_careers')
+      .select('player_name, nationality, clubs');
+
+    const { data: logoData } = await supabase
+      .from('team_logos')
+      .select('team_name, logo_url');
+
+    const logoMap: Record<string, string> = {};
+    if (logoData) logoData.forEach((l: any) => { logoMap[l.team_name] = l.logo_url; });
+
+    const nationalityMap: Record<string, string> = {};
+    const playerClubLogos: Record<string, string> = {};
+
+    // Get match season
+    const { data: matchData } = await supabase
+      .from('football_matches')
+      .select('season')
       .eq('fixture_id', match.fixture_id)
-      .eq('is_substitute', false);
+      .single();
 
-if (lineupData) {
-  setHomeLineup(lineupData.filter((p: any) => p.team === match.home));
-  setAwayLineup(lineupData.filter((p: any) => p.team === match.away));
+    const season = matchData?.season;
 
-  const playerNames = lineupData.map((p: any) => p.player_name);
-  const { data: careerData } = await supabase
-    .from('player_careers')
-    .select('player_name, nationality');
+    if (careerData) {
+      for (const name of playerNames) {
+        const found = careerData.find((c: any) => {
+          const surname = c.player_name.split('. ')[1] || c.player_name;
+          return name.toLowerCase().includes(surname.toLowerCase()) ||
+            surname.toLowerCase().includes(name.toLowerCase());
+        });
 
-const { data: nationalityData } = await supabase
-  .from('player_careers')
-  .select('player_name, nationality');
+        if (found) {
+          nationalityMap[name] = found.nationality;
+          if (season) {
+            const club = found.clubs?.find((cl: any) => cl.seasons?.includes(parseInt(season)));
+            if (club && logoMap[club.name]) {
+              playerClubLogos[name] = logoMap[club.name];
+            }
+          }
+        }
+      }
+    }
 
-console.log('Player names from lineup:', playerNames);
-console.log('Career data count:', nationalityData?.length);
-console.log('First career entry:', nationalityData?.[0]);
+    setNationalityMap(nationalityMap);
+    setPlayerClubLogos(playerClubLogos);
+  }
 
-const nationalityMap: Record<string, string> = {};
-if (nationalityData) {
- for (const name of playerNames) {
-  console.log('Trying to match:', name);
-  const found = nationalityData.find((c: any) => {
-    const surname = c.player_name.split('. ')[1] || c.player_name;
-    return name.toLowerCase().includes(surname.toLowerCase()) ||
-      surname.toLowerCase().includes(name.toLowerCase());
-  });
-  console.log('Found:', found?.player_name, found?.nationality);
-  if (found) nationalityMap[name] = found.nationality;
-}
-}
-setNationalityMap(nationalityMap);
-}
-    setXiLoading(false);
-  };
+  setXiLoading(false);
+};
 
   
   const currentLineup = xiTeam === 'home' ? homeLineup : awayLineup;
@@ -267,13 +290,17 @@ setNationalityMap(nationalityMap);
                     <div style={{ width: `${size}px`, height: `${size}px`, borderRadius: "50%", background: isGuessed ? "rgba(58,170,53,0.15)" : "#e0d9cc", border: `2px solid ${isGuessed ? "#3aaa35" : "#bbb"}`, margin: "0 auto 4px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: isMobile ? "9px" : "13px", fontWeight: 700, color: isGuessed ? "#3aaa35" : "#aaa" }}>
                       {isGuessed 
   ? player.player_name.split(' ').pop()?.charAt(0)
-  : nationalityMap[player.player_name] && getCountryCode(nationalityMap[player.player_name])
-    ? <img src={`https://flagcdn.com/w40/${getCountryCode(nationalityMap[player.player_name])}.png`} style={{ width: "20px", height: "14px", objectFit: "cover", borderRadius: "2px" }} />
-    : "?"
+  : selectedMatch.competition === 'World Cup' || selectedMatch.competition === 'Euros'
+    ? playerClubLogos[player.player_name]
+      ? <img src={playerClubLogos[player.player_name]} style={{ width: "20px", height: "20px", objectFit: "contain" }} />
+      : "?"
+    : nationalityMap[player.player_name] && getCountryCode(nationalityMap[player.player_name])
+      ? <img src={`https://flagcdn.com/w40/${getCountryCode(nationalityMap[player.player_name])}.png`} style={{ width: "20px", height: "14px", objectFit: "cover", borderRadius: "2px" }} />
+      : "?"
 }
                     </div>
                     <div style={{ fontSize: isMobile ? "8px" : "11px", color: isGuessed ? "#555" : "#bbb", lineHeight: 1.2 }}>
-                      {isGuessed ? player.player_name.split(' ').pop() : "?????"}
+                  
                     </div>
                   </div>
                 );
@@ -290,29 +317,17 @@ setNationalityMap(nationalityMap);
       <Nav />
 
       <div style={{ padding: "2rem 1.25rem 1rem", maxWidth: "800px", margin: "0 auto", textAlign: "center" }}>
-        <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#3aaa35", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
-          Football Quiz
-        </div>
 
         {/* Game switcher */}
-        <div style={{ display: "flex", justifyContent: "center", gap: "8px", marginBottom: "1.5rem" }}>
-          <button onClick={() => setActiveGame('roulette')}
-            style={{ background: activeGame === 'roulette' ? "#3aaa35" : "#fff", color: activeGame === 'roulette' ? "#faf7f0" : "#888", border: `1px solid ${activeGame === 'roulette' ? "#3aaa35" : "#e0d9cc"}`, borderRadius: "20px", padding: "8px 20px", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
-            🎰 Player Roulette
-          </button>
-          <button onClick={() => setActiveGame('knowyourxi')}
-            style={{ background: activeGame === 'knowyourxi' ? "#3aaa35" : "#fff", color: activeGame === 'knowyourxi' ? "#faf7f0" : "#888", border: `1px solid ${activeGame === 'knowyourxi' ? "#3aaa35" : "#e0d9cc"}`, borderRadius: "20px", padding: "8px 20px", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
-            📋 Know Your XI
-          </button>
-        </div>
+       
 
         {/* ─── PLAYER ROULETTE HEADER ─── */}
         {activeGame === 'roulette' && (
           <>
-            <h1 style={{ fontWeight: 800, fontSize: "clamp(28px, 5vw, 44px)", lineHeight: 1.05, margin: "0 0 0.5rem", letterSpacing: "-2px" }}>
+            <h1 style={{ fontWeight: 800, fontSize: "clamp(36px, 6vw, 60px)", lineHeight: 1.05, margin: "0 0 0.5rem", letterSpacing: "-2px" }}>
               Player <span style={{ color: "#3aaa35" }}>Roulette</span>
             </h1>
-            <p style={{ color: "#666", fontSize: "14px", margin: "0 0 1.5rem" }}>Guess the player from their Premier League career</p>
+            <p style={{ color: "#666", fontSize: "14px", margin: "0 0 1.5rem" }}>Guess the player from their career</p>
             <div style={{ display: "inline-flex", gap: "1.5rem", background: "#fff", border: "1px solid #e0d9cc", borderRadius: "20px", padding: "6px 20px", marginBottom: "1.5rem" }}>
               <span style={{ fontSize: "13px", color: "#888" }}>Score: <strong style={{ color: "#3aaa35" }}>{rouletteScore}</strong></span>
               <span style={{ fontSize: "13px", color: "#888" }}>Played: <strong>{roulettePlayed}</strong></span>
@@ -385,10 +400,6 @@ setNationalityMap(nationalityMap);
 
               {!rouletteSubmitted ? (
   <div>
-    <button onClick={fetchRandomPlayer}
-      style={{ width: "100%", background: "transparent", color: "#aaa", padding: "10px", borderRadius: "10px", border: "1px solid #e0d9cc", fontWeight: 600, fontSize: "14px", cursor: "pointer", marginBottom: "12px" }}>
-      Skip →
-    </button>
     <button onClick={() => { setRouletteSubmitted(true); setRouletteCorrect(false); setRoulettePlayed(p => p + 1); }}
       style={{ width: "100%", background: "transparent", color: "#ef4444", padding: "10px", borderRadius: "10px", border: "1px solid #ef4444", fontWeight: 600, fontSize: "14px", cursor: "pointer", marginBottom: "12px" }}>
       Reveal Answer
@@ -496,14 +507,38 @@ setNationalityMap(nationalityMap);
                     Type a player's surname to reveal them
                   </div>
                   <div style={{ display: "flex", gap: "8px", marginBottom: "1rem" }}>
-                    <input
-                      type="text"
-                      placeholder="Type a player surname..."
-                      value={currentGuess}
-                      onChange={e => setCurrentGuess(e.target.value)}
-                      onKeyDown={e => e.key === 'Enter' && handleXiGuess()}
-                      style={{ flex: 1, padding: "10px 14px", borderRadius: "8px", border: "1px solid #e0d9cc", fontSize: "15px", background: "#faf7f0", color: "#1a1a1a", outline: "none" }}
-                    />
+                    <div style={{ position: "relative" as const, flex: 1 }}>
+  <input
+    type="text"
+    placeholder="Type a player surname..."
+    value={currentGuess}
+    onChange={e => {
+  setCurrentGuess(e.target.value);
+  if (e.target.value.length > 1) {
+    const matchingSuggestions = allPlayers
+      .filter((p: string) => p.toLowerCase().includes(e.target.value.toLowerCase()))
+      .slice(0, 6);
+    setXiSuggestions(matchingSuggestions);
+  } else {
+    setXiSuggestions([]);
+  }
+}}
+    onKeyDown={e => { if (e.key === 'Enter') { handleXiGuess(); setXiSuggestions([]); }}}
+    style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #e0d9cc", fontSize: "15px", background: "#faf7f0", color: "#1a1a1a", outline: "none", boxSizing: "border-box" as const }}
+  />
+  {xiSuggestions.length > 0 && (
+    <div style={{ position: "absolute" as const, top: "100%", left: 0, right: 0, background: "#fff", border: "1px solid #e0d9cc", borderRadius: "8px", zIndex: 10, overflow: "hidden", marginTop: "4px" }}>
+      {xiSuggestions.map((s, i) => (
+        <div key={i} onClick={() => { setCurrentGuess(s); setXiSuggestions([]); handleXiGuess(); }}
+          style={{ padding: "10px 14px", fontSize: "14px", color: "#1a1a1a", cursor: "pointer", borderBottom: i < xiSuggestions.length - 1 ? "1px solid #f0ede6" : "none" }}
+          onMouseEnter={e => (e.currentTarget.style.background = '#faf7f0')}
+          onMouseLeave={e => (e.currentTarget.style.background = '#fff')}>
+          {s.split('. ')[1] || s}
+        </div>
+      ))}
+    </div>
+  )}
+</div>
                     <button onClick={handleXiGuess}
                       style={{ background: "#3aaa35", color: "#fff", border: "none", borderRadius: "8px", padding: "10px 16px", fontWeight: 700, fontSize: "14px", cursor: "pointer" }}>
                       Add
