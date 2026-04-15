@@ -82,16 +82,23 @@ const { data: iqData } = await supabase
   .select('variant_label, avg_price, recorded_at')
   .ilike('search_term', `${playerName.toLowerCase()}%`)
   .neq('variant_label', 'All')
-  .order('recorded_at', { ascending: false })
-  .limit(12);
+  .gte('recorded_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+  .order('recorded_at', { ascending: false });
 
 if (iqData) {
-  // Get latest record per variant
-  const latestByVariant = iqData.reduce((acc: any, row: any) => {
-    if (!acc[row.variant_label]) acc[row.variant_label] = row;
+  // Group by variant and calculate 7 day rolling average
+  const grouped = iqData.reduce((acc: any, row: any) => {
+    if (!acc[row.variant_label]) acc[row.variant_label] = [];
+    acc[row.variant_label].push(parseFloat(row.avg_price));
     return acc;
   }, {});
-  setBoxxIQ(Object.values(latestByVariant));
+
+  const averaged = Object.entries(grouped).map(([variant_label, prices]: any) => ({
+    variant_label,
+    avg_price: (prices.reduce((a: number, b: number) => a + b, 0) / prices.length).toFixed(2),
+  }));
+
+  setBoxxIQ(averaged);
 }
 
       if (historyData) {
@@ -195,9 +202,9 @@ if (iqData) {
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
         <div style={{ background: "#3aaa35", color: "#fff", fontSize: "11px", fontWeight: 700, padding: "3px 10px", borderRadius: "20px", letterSpacing: "0.05em" }}>BOXX IQ</div>
 <div style={{ background: "rgba(58,170,53,0.1)", color: "#3aaa35", fontSize: "10px", fontWeight: 600, padding: "3px 8px", borderRadius: "20px", letterSpacing: "0.05em" }}>BETA</div>
-        <span style={{ fontSize: "13px", color: "#888" }}>Variant price tracker</span>
+        <span style={{ fontSize: "13px", color: "#888" }}> </span>
       </div>
-      <span style={{ fontSize: "11px", color: "#aaa" }}>Updated daily · eBay UK</span>
+      <span style={{ fontSize: "11px", color: "#aaa" }}>Prices are shown on a rolling average basis across the previous 7 days - Updated daily · eBay UK</span>
     </div>
 
     <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "10px", marginBottom: "1rem" }}>
