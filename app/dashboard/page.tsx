@@ -241,15 +241,15 @@ export default function DashboardPage() {
             </div>
           )}
         </div>
-        {/* My Vault */}
+        {/* My Collection */}
 <div style={{ marginTop: "2.5rem" }}>
   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
     <div>
-      <h2 style={{ fontSize: "18px", fontWeight: 700, margin: "0 0 4px", letterSpacing: "-0.3px" }}>My Vault</h2>
+      <h2 style={{ fontSize: "18px", fontWeight: 700, margin: "0 0 4px", letterSpacing: "-0.3px" }}>My Collection</h2>
       <p style={{ fontSize: "13px", color: "#888", margin: 0 }}>Track your card collection against live Boxx IQ prices</p>
     </div>
     <Link href="/collection" style={{ background: "#3aaa35", color: "#fff", fontWeight: 700, fontSize: "13px", padding: "10px 20px", borderRadius: "8px", textDecoration: "none" }}>
-      Open My Vault →
+      Open My Collection →
     </Link>
   </div>
   <div style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "2rem", textAlign: "center" }}>
