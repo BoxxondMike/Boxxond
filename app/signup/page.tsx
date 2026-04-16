@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../lib/supabase';
+import Image from 'next/image';
 
 export default function SignUpPage() {
   const [email, setEmail] = useState('');
@@ -34,10 +35,10 @@ export default function SignUpPage() {
   return (
     <main style={{ background: "#faf7f0", minHeight: "100vh", color: "#1a1a1a", fontFamily: "var(--font-dm-sans)", display: "flex", flexDirection: "column" }}>
 
-      {/* Nav */}
+       {/* Nav */}
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 1.25rem", borderBottom: "1px solid #f0ede6" }}>
         <Link href="/" style={{ fontFamily: "var(--font-syne)", fontWeight: 800, fontSize: "22px", letterSpacing: "-1px", color: "#1a1a1a", textDecoration: "none" }}>
-          boxx<span style={{ color: "#3aaa35" }}>ond</span>
+          <Image src="/boxxhq-logo.png" alt="BoxxHQ" height={120} width={480} style={{ objectFit: "contain", maxWidth: "150px", height: "auto" }} />
         </Link>
       </nav>
 

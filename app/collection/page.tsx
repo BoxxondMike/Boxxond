@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Nav from '../../components/Nav';
 import { supabase } from '../../lib/supabase';
+import Link from 'next/link';
 
 export default function CollectionPage() {
   const [user, setUser] = useState<any>(null);
@@ -15,9 +16,9 @@ export default function CollectionPage() {
     const getUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        router.push('/login');
-        return;
-      }
+  setLoading(false);
+  return;
+}
       setUser(session.user);
       fetchCollection(session.user.id);
     };
@@ -77,6 +78,117 @@ export default function CollectionPage() {
 
   const formatPrice = (price: number) => price.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+if (!user && !loading) {
+  return (
+    <main style={{ background: '#faf7f0', minHeight: '100vh', color: '#1a1a1a', fontFamily: 'var(--font-dm-sans)' }}>
+      <Nav />
+
+      {/* Hero */}
+      <div style={{ padding: '4rem 1.25rem 3rem', maxWidth: '960px', margin: '0 auto', textAlign: 'center' }}>
+        <div style={{ display: 'inline-block', background: 'rgba(58,170,53,0.1)', border: '1px solid rgba(58,170,53,0.25)', color: '#3aaa35', fontSize: '11px', fontWeight: 600, padding: '5px 14px', borderRadius: '20px', marginBottom: '1.5rem', letterSpacing: '1px', textTransform: 'uppercase' as const }}>
+          Own Your Collection With BoxxHQ
+        </div>
+        <h1 style={{ fontSize: 'clamp(32px, 6vw, 56px)', fontWeight: 800, margin: '0 0 1rem', letterSpacing: '-1.5px', lineHeight: 1.05 }}>
+          Track your collection.<br /><span style={{ color: '#3aaa35' }}>Know what it's worth.</span>
+        </h1>
+        <p style={{ fontSize: '16px', color: '#666', lineHeight: 1.7, maxWidth: '480px', margin: '0 auto 2rem' }}>
+          Add your football cards and we'll track their value daily using real UK market data. See your P&L, spot trends, and know when is right to sell.
+        </p>
+        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' as const }}>
+          <Link href="/signup" style={{ background: '#3aaa35', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 32px', borderRadius: '8px', textDecoration: 'none' }}>
+            Create Free Account
+          </Link>
+          <Link href="/login" style={{ background: '#fff', color: '#1a1a1a', fontWeight: 700, fontSize: '15px', padding: '14px 32px', borderRadius: '8px', textDecoration: 'none', border: '1px solid #e0d9cc' }}>
+            Log In
+          </Link>
+        </div>
+      </div>
+
+      {/* Mock Collection Preview */}
+      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 1.25rem 3rem' }}>
+        <div style={{ background: '#fff', border: '1px solid #e0d9cc', borderRadius: '16px', padding: '1rem', marginBottom: '2rem' }}>
+          {/* Mock Header */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '12px' }}>
+            <div style={{ fontSize: '16px', fontWeight: 700 }}>My Collection</div>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              {[
+                { label: 'Paid', value: '£1,240' },
+                { label: 'Est. Value', value: '£1,890', green: true },
+                { label: 'P&L', value: '+£650', green: true },
+              ].map(stat => (
+                <div key={stat.label} style={{ background: '#faf7f0', border: '1px solid #e0d9cc', borderRadius: '8px', padding: '8px 14px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '10px', color: '#aaa', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '2px' }}>{stat.label}</div>
+                  <div style={{ fontSize: '16px', fontWeight: 700, color: stat.green ? '#3aaa35' : '#1a1a1a' }}>{stat.value}</div>
+                </div>
+              ))}
+            </div>
+</div>
+
+          {/* Column Headers */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #f0ede6', marginBottom: '4px' }}>
+            <div style={{ width: '200px', minWidth: '160px', fontSize: '11px', color: '#aaa', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Player</div>
+            <div style={{ textAlign: 'center', minWidth: '60px', fontSize: '11px', color: '#aaa', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Paid</div>
+            <div style={{ textAlign: 'center', minWidth: '60px', fontSize: '11px', color: '#aaa', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Value</div>
+            <div style={{ textAlign: 'center', minWidth: '80px', fontSize: '11px', color: '#aaa', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>P&L</div>
+            <div style={{ textAlign: 'center', minWidth: '40px', fontSize: '11px', color: '#aaa', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Trend</div>
+          </div>
+
+          {/* Mock Cards */}
+          {[
+            { player: 'Jude Bellingham', variant: 'Auto', paid: '£650', value: '£790', pnl: '+£140', pct: '+21.5%', trend: '↑' },
+{ player: 'Lamine Yamal', variant: 'PSA 10', paid: '£280', value: '£304', pnl: '+£24', pct: '+8.6%', trend: '↑' },
+{ player: 'Bukayo Saka', variant: 'Prizm', paid: '£95', value: '£119', pnl: '+£24', pct: '+25.3%', trend: '↑' },
+{ player: 'Kylian Mbappé', variant: 'Numbered Parallel', paid: '£215', value: '£677', pnl: '+£462', pct: '+214.9%', trend: '↑' },
+          ].map((card, i) => (
+           <div key={i} style={{ display: 'flex', alignItems: 'center', padding: '16px 0', borderBottom: i < 3 ? '1px solid #f0ede6' : 'none', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+              <div style={{ width: '200px', minWidth: '160px' }}>
+                <div style={{ fontWeight: 600, fontSize: '14px', marginBottom: '3px' }}>{card.player}</div>
+                <span style={{ background: 'rgba(58,170,53,0.1)', color: '#3aaa35', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '20px' }}>{card.variant}</span>
+              </div>
+              <div style={{ textAlign: 'center', minWidth: '60px' }}>
+                <div style={{ fontSize: '14px', fontWeight: 600 }}>{card.paid}</div>
+              </div>
+              <div style={{ textAlign: 'center', minWidth: '60px' }}>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: '#3aaa35' }}>{card.value}</div>
+              </div>
+              <div style={{ textAlign: 'center', minWidth: '80px' }}>
+                <div style={{ fontSize: '14px', fontWeight: 700, color: '#3aaa35' }}>{card.pnl}</div>
+                <div style={{ fontSize: '11px', color: '#3aaa35' }}>{card.pct}</div>
+              </div>
+              <div style={{ textAlign: 'center', minWidth: '40px' }}>
+  <div style={{ fontSize: '20px', color: card.trend === '↑' ? '#3aaa35' : '#dc3545' }}>{card.trend}</div>
+</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Feature Highlights */}
+      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 1.25rem 4rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '16px' }}>
+          {[
+            { icon: '📈', title: 'Daily Value Updates', desc: 'Prices update every night using live data via Boxx IQ.  Built specifically for card collectors' },
+            { icon: '💰', title: 'P&L Tracking', desc: 'Add what you paid and see what your cards are worth today' },
+            { icon: '🏆', title: 'Variants Tracked', desc: 'Auto, PSA 10, Prizm, Numbered Parallels, Short Prints and more across all ranges' },
+          ].map((f, i) => (
+            <div key={i} style={{ background: '#fff', border: '1px solid #e0d9cc', borderRadius: '12px', padding: '1.5rem' }}>
+              <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '6px' }}>{f.title}</div>
+              <div style={{ fontSize: '13px', color: '#888', lineHeight: 1.5 }}>{f.desc}</div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+          <Link href="/signup" style={{ background: '#3aaa35', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 40px', borderRadius: '8px', textDecoration: 'none' }}>
+            Start Tracking For Free →
+          </Link>
+        </div>
+      </div>
+
+    </main>
+  );
+}
+
   return (
     <main style={{ background: '#faf7f0', minHeight: '100vh', color: '#1a1a1a', fontFamily: 'var(--font-dm-sans)' }}>
       <Nav />
@@ -86,7 +198,9 @@ export default function CollectionPage() {
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '12px' }}>
           <div>
-            <h1 style={{ fontSize: '28px', fontWeight: 800, margin: '0 0 4px', letterSpacing: '-0.5px' }}>My Vault</h1>
+            <h1 style={{ fontSize: '28px', fontWeight: 800, margin: '0 0 4px', letterSpacing: '-0.5px' }}>My Vault
+                
+            </h1>
             <p style={{ fontSize: '14px', color: '#888', margin: 0 }}>Tracked against Boxx IQ 7-day rolling averages</p>
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>

@@ -265,19 +265,26 @@ function HomeContent() {
         <p style={{ color: "#666", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 1.5rem" }}>
         </p>
 
-        {/* CTA Buttons */}
-        <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginBottom: "2rem", flexWrap: "wrap" as const }}>
-          <button
-            onClick={() => document.querySelector('input')?.focus()}
-            style={{ background: "#3aaa35", color: "#faf7f0", fontWeight: 700, fontSize: "14px", padding: "12px 24px", border: "none", borderRadius: "8px", cursor: "pointer" }}>
-            Search Cards
-          </button>
-          <Link
-            href={user ? "/dashboard" : "/signup"}
-            style={{ background: "rgba(255,255,255,0.05)", color: "#1a1a1a", fontWeight: 700, fontSize: "14px", padding: "12px 24px", border: "1px solid #e0d9cc", borderRadius: "8px", textDecoration: "none" }}>
-            Set Up Alerts →
-          </Link>
-        </div>
+     {/* CTA Buttons */}
+<div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", marginBottom: "2rem" }}>
+  <button
+    onClick={() => document.querySelector('input')?.focus()}
+    style={{ background: "#3aaa35", color: "#faf7f0", fontWeight: 700, fontSize: "14px", padding: "12px 24px", border: "none", borderRadius: "8px", cursor: "pointer" }}>
+    Search Cards
+  </button>
+  <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" as const, justifyContent: "center" }}>
+    <Link
+      href={user ? "/dashboard" : "/signup"}
+      style={{ background: "rgba(255,255,255,0.05)", color: "#1a1a1a", fontWeight: 700, fontSize: "14px", padding: "12px 24px", border: "1px solid #e0d9cc", borderRadius: "8px", textDecoration: "none" }}>
+      Set Up Alerts →
+    </Link>
+    <Link
+  href="/collection"
+  style={{ background: "rgba(255,255,255,0.05)", color: "#1a1a1a", fontWeight: 700, fontSize: "14px", padding: "12px 24px", border: "1px solid #e0d9cc", borderRadius: "8px", textDecoration: "none" }}>
+  My Collection →
+</Link>
+  </div>
+</div>
 
         {/* Sport Filter */}
         <div style={{ display: "flex", gap: "8px", justifyContent: "center", marginBottom: "1.5rem", flexWrap: "wrap" as const }}>
