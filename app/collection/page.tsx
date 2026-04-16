@@ -92,7 +92,7 @@ if (!user && !loading) {
           Track your collection.<br /><span style={{ color: '#3aaa35' }}>Know what it's worth.</span>
         </h1>
         <p style={{ fontSize: '16px', color: '#666', lineHeight: 1.7, maxWidth: '480px', margin: '0 auto 2rem' }}>
-          Add your football cards and we'll track their value daily using real UK market data. See your P&L, spot trends, and know when is right to sell.
+          Add your cards and we'll track their value daily using real UK market data. See your P&L, spot trends, and know when is right to sell.      -       More sports coming soon
         </p>
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' as const }}>
           <Link href="/signup" style={{ background: '#3aaa35', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 32px', borderRadius: '8px', textDecoration: 'none' }}>
