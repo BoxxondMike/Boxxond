@@ -235,7 +235,7 @@ export default function SetsPage() {
       <div style={{ padding: "3rem 2rem 2rem", maxWidth: "960px", margin: "0 auto" }}>
       
         <h1 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "clamp(32px, 5vw, 52px)", letterSpacing: "-1.5px", margin: "0 0 1rem", lineHeight: 1.05 }}>
-  Checklists &<span style={{ color: "#3aaa35" }}> New releases</span>
+  Checklists &<span style={{ color: "#1F6F3A" }}> New releases</span>
 </h1>
         <p style={{ color: "#666", fontSize: "16px", lineHeight: 1.6, maxWidth: "850px", margin: 0 }}>
           From beginner collections to premium chrome refractors.  Set information covering the main soccer, basketball, baseball and NFL card sets. 

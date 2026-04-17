@@ -325,7 +325,7 @@ useEffect(() => {
         {activeGame === 'roulette' && (
           <>
             <h1 style={{ fontWeight: 800, fontSize: "clamp(36px, 6vw, 60px)", lineHeight: 1.05, margin: "0 0 0.5rem", letterSpacing: "-2px" }}>
-              Player <span style={{ color: "#3aaa35" }}>Roulette</span>
+              Player <span style={{ color: "#1F6F3A" }}>Roulette</span>
             </h1>
             <p style={{ color: "#666", fontSize: "14px", margin: "0 0 1.5rem" }}>Guess the player from their career</p>
             <div style={{ display: "inline-flex", gap: "1.5rem", background: "#fff", border: "1px solid #e0d9cc", borderRadius: "20px", padding: "6px 20px", marginBottom: "1.5rem" }}>
