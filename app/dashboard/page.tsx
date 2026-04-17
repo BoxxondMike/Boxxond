@@ -15,6 +15,7 @@ export default function DashboardPage() {
   const [alertMaxPrice, setAlertMaxPrice] = useState('');
   const [alertType, setAlertType] = useState('player');
   const router = useRouter();
+  const [collectionStats, setCollectionStats] = useState<{ count: number, value: number } | null>(null);
 
   useEffect(() => {
     const getUser = async () => {
@@ -33,6 +34,17 @@ export default function DashboardPage() {
           .select('*')
           .order('created_at', { ascending: false });
         setAlerts(alertsData || []);
+
+        const { data: collectionData } = await supabase
+          .from('user_cards')
+          .select('purchase_price, quantity')
+          .eq('user_id', session.user.id);
+
+        if (collectionData) {
+          const count = collectionData.length;
+          const value = collectionData.reduce((sum: number, c: any) => sum + (parseFloat(c.purchase_price) * (c.quantity || 1)), 0);
+          setCollectionStats({ count, value });
+        }
       }
       setLoading(false);
     };
@@ -229,7 +241,7 @@ export default function DashboardPage() {
                   </div>
                   <div style={{ textAlign: "right", flexShrink: 0 }}>
                     <div style={{ fontWeight: 700, fontSize: "18px", color: "#3aaa35", marginBottom: "6px" }}>
-                      {card.price ? `£${card.price.toFixed(2)}` : 'N/A'}
+                      {card.price ? `£${card.price.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'N/A'}
                     </div>
                     <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
                       <a href={card.item_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: "11px", color: "#888)", textDecoration: "none" }}>View →</a>
@@ -241,22 +253,28 @@ export default function DashboardPage() {
             </div>
           )}
         </div>
-        {/* My Collection */}
+       {/* My Collection */}
 <div style={{ marginTop: "2.5rem" }}>
   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
     <div>
       <h2 style={{ fontSize: "18px", fontWeight: 700, margin: "0 0 4px", letterSpacing: "-0.3px" }}>My Collection</h2>
       <p style={{ fontSize: "13px", color: "#888", margin: 0 }}>Track your card collection against live Boxx IQ prices</p>
     </div>
-    <Link href="/collection" style={{ background: "#3aaa35", color: "#fff", fontWeight: 700, fontSize: "13px", padding: "10px 20px", borderRadius: "8px", textDecoration: "none" }}>
+  </div>
+  <div style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.25rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+    <div>
+      <div style={{ fontSize: "16px", fontWeight: 700, marginBottom: "4px" }}>
+        {collectionStats ? `${collectionStats.count} card${collectionStats.count !== 1 ? 's' : ''} tracked` : '0 cards tracked'}
+      </div>
+      <div style={{ fontSize: "13px", color: "#888" }}>
+        {collectionStats && collectionStats.value > 0 ? `Est. value £${collectionStats.value.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'Add cards to start tracking'}
+      </div>
+    </div>
+    <Link href="/collection" style={{ background: "#1F6F3A", color: "#fff", fontWeight: 700, fontSize: "13px", padding: "10px 20px", borderRadius: "8px", textDecoration: "none" }}>
       Open My Collection →
     </Link>
   </div>
-  <div style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "2rem", textAlign: "center" }}>
-    <div style={{ fontSize: "13px", color: "#888", marginBottom: "12px" }}>Add cards from any player page to start tracking your collection value</div>
-    <Link href="/" style={{ fontSize: "13px", color: "#3aaa35", textDecoration: "none", fontWeight: 600 }}>Browse Players →</Link>
-  </div>
-      </div>
+</div>
       </div>
     </main>
   );
