@@ -235,7 +235,7 @@ function HomeContent() {
 
       {/* Banners */}
       <div style={{ display: "flex" }}>
-        <div style={{ flex: 1, background: "#3aaa35", padding: "10px 1.25rem", textAlign: "center" }}>
+        <div style={{ flex: 1, background: "#1F6F3A", padding: "10px 1.25rem", textAlign: "center" }}>
           <span style={{ color: "#faf7f0", fontSize: "13px", fontWeight: 600 }}>
             🎯 Are you a UK card breaker?{" "}
             <a href="https://instagram.com/boxx_hq" target="_blank" rel="noopener noreferrer"
@@ -247,7 +247,7 @@ function HomeContent() {
         <div style={{ flex: 1, background: "#faf7f0 ", padding: "10px 1.25rem", textAlign: "center" }}>
           <span style={{ color: "#1a1a1a", fontSize: "13px", fontWeight: 600 }}>
             🎰  Think you know your footballers?{" "}
-            <a href="/quiz" style={{ color: "#3aaa35", textDecoration: "underline", fontWeight: 700 }}>
+            <a href="/quiz" style={{ color: "#1F6F3A", textDecoration: "underline", fontWeight: 700 }}>
               Play Player Roulette →
             </a>
           </span>
@@ -256,11 +256,11 @@ function HomeContent() {
 
       {/* Hero */}
       <div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
-        <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#3aaa35", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
+        <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#1F6F3A", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
           Search live eBay UK listings, get daily alerts when new cards drop, and verify PSA graded cards instantly.
         </div>
         <h1 style={{ fontWeight: 800, fontSize: "clamp(36px, 7vw, 68px)", lineHeight: 1.05, margin: "0 0 1.25rem", letterSpacing: "-2px" }}>
-          Know what your<br /><span style={{ color: "#3aaa35" }}>cards are worth</span>
+          Know what your<br /><span style={{ color: "#1F6F3A" }}>cards are worth</span>
         </h1>
         <p style={{ color: "#666", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 1.5rem" }}>
         </p>
@@ -385,7 +385,7 @@ function HomeContent() {
         {/* Stats */}
         <div style={{ textAlign: "center", padding: "0.5rem 0 1.5rem" }}>
           <a href="https://www.topps.com/pages/topps-finest-premier-league" target="_blank" rel="noopener noreferrer"
-            style={{ display: "inline-flex", alignItems: "center", gap: "10px", background: "#3aaa35", borderRadius: "30px", padding: "12px 28px", textDecoration: "none", fontSize: "16px", fontWeight: 700, color: "#faf7f0" }}>
+            style={{ display: "inline-flex", alignItems: "center", gap: "10px", background: "#1F6F3A", borderRadius: "30px", padding: "12px 28px", textDecoration: "none", fontSize: "16px", fontWeight: 700, color: "#faf7f0" }}>
             📸 Look For New Releases <strong style={{ color: "#faf7f0", textDecoration: "underline" }}>Topps® Finest Premier League 2026 Coming 23/04</strong>
           </a>
         </div>

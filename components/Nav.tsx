@@ -61,10 +61,10 @@ export default function Nav({ activePage }: { activePage?: string }) {
 
         {/* Desktop Links */}
         <div className="nav-desktop-links" style={{ fontSize: "15px", fontWeight: 600, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
-          <Link href="/" style={{ color: activePage === 'prices' ? "#3aaa35" : "#888", textDecoration: "none" }}>Prices</Link>
-          <Link href="/sets" style={{ color: activePage === 'sets' ? "#3aaa35" : "#888", textDecoration: "none" }}>Sets & Releases</Link>
-          <Link href="/breaks" style={{ color: activePage === 'breaks' ? "#3aaa35" : "#888", textDecoration: "none" }}>Breaks</Link>
-          <Link href="/quiz" style={{ color: activePage === 'games' ? "#3aaa35" : "#888", textDecoration: "none" }}>Games</Link>
+          <Link href="/" style={{ color: activePage === 'prices' ? "#1F6F3A" : "#888", textDecoration: "none" }}>Prices</Link>
+          <Link href="/sets" style={{ color: activePage === 'sets' ? "#1F6F3A" : "#888", textDecoration: "none" }}>Sets & Releases</Link>
+          <Link href="/breaks" style={{ color: activePage === 'breaks' ? "#1F6F3A" : "#888", textDecoration: "none" }}>Breaks</Link>
+          <Link href="/quiz" style={{ color: activePage === 'games' ? "#1F6F3A" : "#888", textDecoration: "none" }}>Games</Link>
         </div>
 
         {/* Desktop Auth */}
@@ -73,22 +73,21 @@ export default function Nav({ activePage }: { activePage?: string }) {
             <>
               {/* Boxx Intel Button */}
               <button
-                onClick={() => setAskBoxxOpen(true)}
-                style={{
-                  background: '#3aaa35',
-                  color: '#fff',
-                  fontWeight: 700,
-                  fontSize: '14px',
-                  padding: '8px 16px',
-                  borderRadius: '6px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}>
-                Boxx Intel
-              </button>
+  onClick={() => setAskBoxxOpen(true)}
+  style={{
+    background: '#1f6f3a',
+    color: '#fff',
+    fontWeight: 700,
+    fontSize: '13px',
+    padding: '8px 18px',
+    borderRadius: '8px',
+    border: 'none',
+    cursor: 'pointer',
+    letterSpacing: '0.02em',
+    boxShadow: '0 1px 4px rgba(58,170,53,0.3)',
+  }}>
+  Boxx Intel ✦
+</button>
               <Link href="/dashboard" style={{ fontSize: "15px", fontWeight: 600, color: "#888", textDecoration: "none" }}>Dashboard</Link>
               <button onClick={handleSignOut} style={{ background: "#fff", color: "#888", fontSize: "13px", padding: "8px 16px", border: "1px solid #e0d9cc", borderRadius: "6px", cursor: "pointer" }}>
                 Sign Out
