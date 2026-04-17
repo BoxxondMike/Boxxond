@@ -6,6 +6,7 @@ import Nav from '../../../components/Nav';
 import Link from 'next/link';
 import { supabase } from '../../../lib/supabase';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+
 const playerProfiles: Record<string, { club: string; nation: string; position: string; sport: string; related: string[] }> = {
   'jude-bellingham': { club: 'Real Madrid', nation: 'England', position: 'Midfielder', sport: 'Soccer', related: ['cole-palmer', 'bukayo-saka', 'phil-foden', 'declan-rice'] },
   'cole-palmer': { club: 'Chelsea', nation: 'England', position: 'Midfielder', sport: 'Soccer', related: ['jude-bellingham', 'bukayo-saka', 'phil-foden', 'jack-grealish'] },
@@ -43,6 +44,10 @@ const [selectedVariant, setSelectedVariant] = useState('');
 const [purchasePrice, setPurchasePrice] = useState('');
 const [cardAdded, setCardAdded] = useState(false);
 const [user, setUser] = useState<any>(null);
+const [savedIds, setSavedIds] = useState<string[]>([]);
+const [searchSuffix, setSearchSuffix] = useState('');
+const [searchResults, setSearchResults] = useState<any[]>([]);
+const [searchLoading, setSearchLoading] = useState(false);
 
 useEffect(() => {
     const fetchCards = async () => {
@@ -134,10 +139,14 @@ if (iqData) {
     return price.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
-  useEffect(() => {
+ useEffect(() => {
   const getUser = async () => {
     const { data: { session } } = await supabase.auth.getSession();
     setUser(session?.user || null);
+    if (session?.user) {
+      const { data } = await supabase.from('saved_cards').select('item_id');
+      setSavedIds(data?.map((d: any) => d.item_id) || []);
+    }
   };
   getUser();
 }, []);
@@ -168,6 +177,38 @@ const addToCollection = async () => {
   setCardAdded(true);
   setShowAddCard(false);
   setTimeout(() => setCardAdded(false), 3000);
+};
+
+const handleSave = async (item: any) => {
+  if (!user) {
+    window.location.href = '/login';
+    return;
+  }
+  const isAlreadySaved = savedIds.includes(item.itemId);
+  if (isAlreadySaved) {
+    await supabase.from('saved_cards').delete().eq('item_id', item.itemId).eq('user_id', user.id);
+    setSavedIds(savedIds.filter((id: string) => id !== item.itemId));
+  } else {
+    await supabase.from('saved_cards').insert({
+      user_id: user.id,
+      item_id: item.itemId,
+      title: item.title,
+      price: item.price ? parseFloat(item.price.value) : null,
+      currency: item.price?.currency || 'GBP',
+      image_url: item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl || null,
+      item_url: item.itemAffiliateWebUrl || item.itemWebUrl,
+    });
+    setSavedIds([...savedIds, item.itemId]);
+  }
+};
+
+const handlePlayerSearch = async () => {
+  setSearchLoading(true);
+  const q = `${playerName} ${searchSuffix}`.trim();
+  const res = await fetch(`/api/search?q=${encodeURIComponent(q)}&sort=price&playerSearch=true`);
+  const data = await res.json();
+  setSearchResults(data.items || []);
+  setSearchLoading(false);
 };
 
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -340,6 +381,62 @@ const addToCollection = async () => {
   </div>
 )}
 
+{/* Player Search */}
+<div style={{ background: '#fff', border: '1px solid #e0d9cc', borderRadius: '12px', padding: '1.25rem', marginBottom: '2rem' }}>
+  <div style={{ fontSize: '13px', color: '#888', marginBottom: '10px', fontWeight: 500 }}>Search {playerName} cards on eBay</div>
+  <div style={{ display: 'flex', gap: '8px' }}>
+    <div style={{ background: '#faf7f0', border: '1px solid #e0d9cc', borderRadius: '8px', padding: '10px 14px', fontSize: '14px', color: '#aaa', flexShrink: 0 }}>
+      {playerName}
+    </div>
+    <input
+      type="text"
+      placeholder="auto, psa 10, topps chrome..."
+      value={searchSuffix}
+      onChange={e => setSearchSuffix(e.target.value)}
+      onKeyDown={e => e.key === 'Enter' && handlePlayerSearch()}
+      style={{ flex: 1, background: '#faf7f0', border: '1px solid #e0d9cc', borderRadius: '8px', padding: '10px 14px', fontSize: '14px', outline: 'none', fontFamily: 'inherit', color: '#1a1a1a' }}
+    />
+    <button
+      onClick={handlePlayerSearch}
+      style={{ background: '#3aaa35', color: '#fff', border: 'none', borderRadius: '8px', padding: '10px 20px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const }}>
+      {searchLoading ? '...' : 'Search'}
+    </button>
+  </div>
+
+  {/* Search Results */}
+  {searchResults.length > 0 && (
+    <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      {searchResults.map((item: any) => (
+        <div key={item.itemId} style={{ display: 'flex', gap: '1rem', alignItems: 'center', background: '#faf7f0', border: '1px solid #e0d9cc', borderRadius: '10px', padding: '0.75rem 1rem' }}>
+          {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
+            <img src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl} alt={item.title}
+              style={{ width: '60px', height: '60px', objectFit: 'contain', borderRadius: '6px', flexShrink: 0 }} />
+          ) : (
+            <div style={{ width: '60px', height: '60px', background: '#e0d9cc', borderRadius: '6px', flexShrink: 0 }} />
+          )}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontWeight: 500, fontSize: '13px', color: '#1a1a1a', marginBottom: '3px', lineHeight: 1.4 }}>{item.title}</div>
+            <div style={{ fontSize: '11px', color: '#aaa' }}>{item.condition || 'Condition not specified'}</div>
+          </div>
+          <div style={{ textAlign: 'right', flexShrink: 0 }}>
+            <div style={{ fontWeight: 700, fontSize: '18px', color: '#3aaa35', marginBottom: '6px' }}>
+              {item.price ? `£${formatPrice(parseFloat(item.price.value))}` : 'N/A'}
+            </div>
+            <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', alignItems: 'center' }}>
+              <a href={item.itemAffiliateWebUrl || item.itemWebUrl} target="_blank" rel="noopener noreferrer"
+                style={{ color: '#888', fontSize: '12px', textDecoration: 'none' }}>View on eBay →</a>
+              <button onClick={() => handleSave(item)}
+                style={{ background: savedIds.includes(item.itemId) ? 'rgba(58,170,53,0.2)' : '#fff', border: `1px solid ${savedIds.includes(item.itemId) ? 'rgba(58,170,53,0.5)' : '#e0d9cc'}`, borderRadius: '6px', padding: '4px 10px', cursor: 'pointer', fontSize: '12px', color: savedIds.includes(item.itemId) ? '#3aaa35' : '#888' }}>
+                {savedIds.includes(item.itemId) ? '★ Wishlisted' : '☆ Wishlist'}
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
         {/* Results */}
         <div>
          <div id="results-section" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem", flexWrap: "wrap" as const, gap: "10px" }}>
@@ -408,7 +505,14 @@ const addToCollection = async () => {
                     <div style={{ fontWeight: 700, fontSize: "20px", color: "#3aaa35", marginBottom: "6px" }}>
                       {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${formatPrice(parseFloat(item.price.value))}` : 'N/A'}
                     </div>
-                    <a href={item.itemAffiliateWebUrl || item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#888", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'flex-end' }}>
+  <a href={item.itemAffiliateWebUrl || item.itemWebUrl} target="_blank" rel="noopener noreferrer"
+    style={{ color: "#888", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>
+  <button onClick={() => handleSave(item)}
+    style={{ background: savedIds.includes(item.itemId) ? 'rgba(58,170,53,0.2)' : '#fff', border: `1px solid ${savedIds.includes(item.itemId) ? 'rgba(58,170,53,0.5)' : '#e0d9cc'}`, borderRadius: '6px', padding: '4px 10px', cursor: 'pointer', fontSize: '12px', color: savedIds.includes(item.itemId) ? '#3aaa35' : '#888' }}>
+    {savedIds.includes(item.itemId) ? '★ Wishlisted' : '☆ Wishlist'}
+  </button>
+</div>
                   </div>
                 </div>
               ))}

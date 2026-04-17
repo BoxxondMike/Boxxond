@@ -463,10 +463,10 @@ function HomeContent() {
                     <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
                       <a href={item.itemAffiliateWebUrl || item.itemWebUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#888", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>
                       <button
-                        onClick={() => handleSave(item)}
-                        style={{ background: savedIds.includes(item.itemId) ? "rgba(58,170,53,0.2)" : "rgba(255,255,255,0.05)", border: `1px solid ${savedIds.includes(item.itemId) ? "rgba(58,170,53,0.5)" : "#e0d9cc"}`, borderRadius: "6px", padding: "4px 10px", cursor: "pointer", fontSize: "12px", color: savedIds.includes(item.itemId) ? "#3aaa35" : "#888" }}>
-                        {savedIds.includes(item.itemId) ? '★ Saved' : '☆ Save'}
-                      </button>
+  onClick={() => handleSave(item)}
+  style={{ outline: '2px solid red', background: savedIds.includes(item.itemId) ? "rgba(58,170,53,0.2)" : "rgba(255,255,255,0.05)", border: `1px solid ${savedIds.includes(item.itemId) ? "rgba(58,170,53,0.5)" : "#e0d9cc"}`, borderRadius: "6px", padding: "4px 10px", cursor: "pointer", fontSize: "12px", color: savedIds.includes(item.itemId) ? "#3aaa35" : "#888" }}>
+  {savedIds.includes(item.itemId) ? '★ Saved' : '☆ Save'}
+</button>
                     </div>
                   </div>
                 </div>
