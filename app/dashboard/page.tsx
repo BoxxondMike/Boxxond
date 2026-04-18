@@ -16,6 +16,11 @@ export default function DashboardPage() {
   const [alertType, setAlertType] = useState('player');
   const router = useRouter();
   const [collectionStats, setCollectionStats] = useState<{ count: number, value: number } | null>(null);
+  const [username, setUsername] = useState('');
+const [selectedSports, setSelectedSports] = useState<string[]>([]);
+const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
+const [savingProfile, setSavingProfile] = useState(false);
+const [profileSaved, setProfileSaved] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -34,6 +39,18 @@ export default function DashboardPage() {
           .select('*')
           .order('created_at', { ascending: false });
         setAlerts(alertsData || []);
+
+        const { data: profileData } = await supabase
+  .from('user_profiles')
+  .select('*')
+  .eq('user_id', session.user.id)
+  .single();
+
+if (profileData) {
+  setUsername(profileData.username || '');
+  setSelectedSports(profileData.sports || []);
+  setSelectedTeams(profileData.teams || []);
+}
 
         const { data: collectionData } = await supabase
           .from('user_cards')
@@ -88,6 +105,21 @@ export default function DashboardPage() {
     );
   }
 
+  const saveProfile = async () => {
+  if (!user) return;
+  setSavingProfile(true);
+  await supabase.from('user_profiles').upsert({
+    user_id: user.id,
+    username,
+    sports: selectedSports,
+    teams: selectedTeams,
+    updated_at: new Date().toISOString(),
+  }, { onConflict: 'user_id' });
+  setSavingProfile(false);
+  setProfileSaved(true);
+  setTimeout(() => setProfileSaved(false), 3000);
+};
+
   return (
     <main style={{ background: "#faf7f0", minHeight: "100vh", color: "#1a1a1a", fontFamily: "var(--font-dm-sans)" }}>
 
@@ -110,7 +142,7 @@ export default function DashboardPage() {
           {[
             { label: "Wishlist", value: savedCards.length.toString(), desc: "Cards being watched" },
             { label: "Price Alerts", value: alerts.length.toString(), desc: "Active alerts" },
-            { label: "Portfolio Value", value: savedCards.length > 0 ? `£${savedCards.reduce((sum: number, c: any) => sum + (c.price || 0), 0).toFixed(2)}` : "£0", desc: "Total value of saved cards" },
+            { label: "Collection Value", value: collectionStats && collectionStats.value > 0 ? `£${collectionStats.value.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "£0", desc: "Est. value of your collection" },
           ].map((stat) => (
             <div key={stat.label} style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.25rem" }}>
               <div style={{ fontSize: "11px", color: "#aaa", textTransform: "uppercase" as const, letterSpacing: "0.5px", marginBottom: "0.5rem" }}>{stat.label}</div>
@@ -273,6 +305,124 @@ export default function DashboardPage() {
     <Link href="/collection" style={{ background: "#1F6F3A", color: "#fff", fontWeight: 700, fontSize: "13px", padding: "10px 20px", borderRadius: "8px", textDecoration: "none" }}>
       Open My Collection →
     </Link>
+  </div>
+</div>
+{/* Profile */}
+<div style={{ marginTop: "2.5rem" }}>
+  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+    <div>
+      <h2 style={{ fontSize: "18px", fontWeight: 700, margin: "0 0 4px", letterSpacing: "-0.3px" }}>My Profile</h2>
+      <p style={{ fontSize: "13px", color: "#888", margin: 0 }}>Personalise your BoxxHQ experience</p>
+    </div>
+  </div>
+
+  <div style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+
+    {/* Username */}
+    <div>
+      <label style={{ fontSize: "12px", color: "#888", fontWeight: 600, display: "block", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Username</label>
+      <input
+        type="text"
+        placeholder="e.g. cardkinguk"
+        value={username}
+        onChange={e => setUsername(e.target.value)}
+        style={{ background: "#faf7f0", border: "1px solid #e0d9cc", borderRadius: "8px", padding: "10px 14px", fontSize: "14px", outline: "none", fontFamily: "inherit", width: "100%", boxSizing: "border-box" as const }}
+      />
+    </div>
+
+    {/* Sports */}
+    <div>
+      <label style={{ fontSize: "12px", color: "#888", fontWeight: 600, display: "block", marginBottom: "10px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Sports I Collect</label>
+      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" as const }}>
+        {['Football', 'Basketball', 'NFL', 'Baseball', 'Cricket', 'Rugby'].map(sport => (
+          <button
+            key={sport}
+            onClick={() => setSelectedSports(prev => prev.includes(sport) ? prev.filter(s => s !== sport) : [...prev, sport])}
+            style={{
+              background: selectedSports.includes(sport) ? "rgba(58,170,53,0.1)" : "#faf7f0",
+              border: selectedSports.includes(sport) ? "1px solid rgba(58,170,53,0.4)" : "1px solid #e0d9cc",
+              color: selectedSports.includes(sport) ? "#3aaa35" : "#888",
+              borderRadius: "8px",
+              padding: "8px 16px",
+              fontSize: "13px",
+              fontWeight: 600,
+              cursor: "pointer",
+              fontFamily: "inherit",
+            }}>
+            {selectedSports.includes(sport) ? '✓ ' : ''}{sport}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* Teams */}
+<div>
+  <label style={{ fontSize: "12px", color: "#888", fontWeight: 600, display: "block", marginBottom: "10px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Teams I Follow</label>
+  <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" as const, alignItems: "center" }}>
+    <select
+      onChange={e => {
+        const val = e.target.value;
+        if (val && !selectedTeams.includes(val)) {
+          setSelectedTeams(prev => [...prev, val]);
+        }
+        e.target.value = '';
+      }}
+      style={{ background: "#faf7f0", border: "1px solid #e0d9cc", borderRadius: "8px", padding: "10px 14px", fontSize: "14px", outline: "none", fontFamily: "inherit", cursor: "pointer" }}>
+      <option value="">Add a team...</option>
+      {(selectedSports.includes('Football') || selectedSports.length === 0) && (
+        <optgroup label="Premier League">
+          {['Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Leeds', 'Liverpool', 'Man City', 'Man United', 'Newcastle', 'Nottm Forest', 'Spurs', 'Sunderland', 'West Ham', 'Wolves'].map(team => (
+            <option key={team} value={team}>{team}</option>
+          ))}
+        </optgroup>
+      )}
+      {(selectedSports.includes('Basketball') || selectedSports.length === 0) && (
+        <optgroup label="NBA">
+          {['Lakers', 'Warriors', 'Celtics', 'Bulls', 'Heat', 'Knicks', 'Nets', 'Suns', 'Bucks', 'Nuggets', 'Clippers', 'Mavericks', 'Spurs', 'Rockets', 'Thunder'].map(team => (
+            <option key={team} value={team}>{team}</option>
+          ))}
+        </optgroup>
+      )}
+      {(selectedSports.includes('NFL') || selectedSports.length === 0) && (
+        <optgroup label="NFL">
+          {['Chiefs', 'Eagles', '49ers', 'Cowboys', 'Patriots', 'Packers', 'Bills', 'Bengals', 'Ravens', 'Dolphins', 'Rams', 'Seahawks', 'Bears', 'Giants', 'Steelers'].map(team => (
+            <option key={team} value={team}>{team}</option>
+          ))}
+        </optgroup>
+      )}
+      {(selectedSports.includes('Baseball') || selectedSports.length === 0) && (
+        <optgroup label="MLB">
+          {['Yankees', 'Red Sox', 'Dodgers', 'Cubs', 'Mets', 'Giants', 'Cardinals', 'Braves', 'Astros', 'Blue Jays'].map(team => (
+            <option key={team} value={team}>{team}</option>
+          ))}
+        </optgroup>
+      )}
+      <optgroup label="Other">
+        <option value="Other">Other</option>
+      </optgroup>
+    </select>
+    {selectedTeams.map(team => (
+      <div key={team} style={{ background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.4)", color: "#3aaa35", borderRadius: "8px", padding: "8px 12px", fontSize: "13px", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px" }}>
+        {team}
+        <span onClick={() => setSelectedTeams(prev => prev.filter(t => t !== team))} style={{ cursor: "pointer", fontSize: "14px", lineHeight: 1 }}>×</span>
+      </div>
+    ))}
+  </div>
+</div>
+
+    {/* Save */}
+    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+      <button
+        onClick={saveProfile}
+        disabled={savingProfile}
+        style={{ background: "#1F6F3A", color: "#fff", border: "none", borderRadius: "8px", padding: "10px 24px", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+        {savingProfile ? 'Saving...' : 'Save Profile'}
+      </button>
+      {profileSaved && (
+        <span style={{ fontSize: "13px", color: "#3aaa35", fontWeight: 500 }}>✓ Profile saved</span>
+      )}
+    </div>
+
   </div>
 </div>
       </div>

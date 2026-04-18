@@ -48,6 +48,7 @@ const [savedIds, setSavedIds] = useState<string[]>([]);
 const [searchSuffix, setSearchSuffix] = useState('');
 const [searchResults, setSearchResults] = useState<any[]>([]);
 const [searchLoading, setSearchLoading] = useState(false);
+const [lastViewed, setLastViewed] = useState<any>(null);
 
 useEffect(() => {
     const fetchCards = async () => {
@@ -124,6 +125,30 @@ if (iqData) {
     };
     fetchCards();
   }, [slug, sortOrder]);
+
+     useEffect(() => {
+  const checkLastViewed = () => {
+    const stored = localStorage.getItem('boxxhq_last_viewed');
+    if (stored) {
+      try {
+        const item = JSON.parse(stored);
+        if (item.playerName === playerName) {
+          setLastViewed(item);
+        }
+      } catch (e) {}
+    }
+  };
+
+  checkLastViewed();
+  
+  window.addEventListener('focus', checkLastViewed);
+  window.addEventListener('visibilitychange', checkLastViewed);
+  
+  return () => {
+    window.removeEventListener('focus', checkLastViewed);
+    window.removeEventListener('visibilitychange', checkLastViewed);
+  };
+}, [playerName]);
 
  useEffect(() => {
     const sorted = [...results].sort((a: any, b: any) => {
@@ -222,6 +247,21 @@ const handlePlayerSearch = async () => {
     }
     return null;
   };
+  const handleEbayClick = (item: any) => {
+  console.log('handleEbayClick called', item.title);
+  try {
+    localStorage.setItem('boxxhq_last_viewed', JSON.stringify({
+      title: item.title,
+      price: item.price ? parseFloat(item.price.value) : null,
+      itemId: item.itemId,
+      url: item.itemAffiliateWebUrl || item.itemWebUrl,
+      playerName: playerName,
+    }));
+    console.log('saved to localStorage');
+  } catch (e) {
+    console.error('localStorage error', e);
+  }
+};
 
   return (
     <main style={{ background: "#faf7f0", minHeight: "100vh", color: "#1a1a1a", fontFamily: "var(--font-dm-sans)" }}>
@@ -423,8 +463,14 @@ const handlePlayerSearch = async () => {
               {item.price ? `£${formatPrice(parseFloat(item.price.value))}` : 'N/A'}
             </div>
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', alignItems: 'center' }}>
-              <a href={item.itemAffiliateWebUrl || item.itemWebUrl} target="_blank" rel="noopener noreferrer"
-                style={{ color: '#888', fontSize: '12px', textDecoration: 'none' }}>View on eBay →</a>
+              <button
+  onMouseDown={() => {
+    handleEbayClick(item);
+    window.open(item.itemAffiliateWebUrl || item.itemWebUrl, '_blank');
+  }}
+  style={{ background: 'none', border: 'none', color: "#888", fontSize: "12px", cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}>
+  View on eBay →
+</button>
               <button onClick={() => handleSave(item)}
                 style={{ background: savedIds.includes(item.itemId) ? 'rgba(58,170,53,0.2)' : '#fff', border: `1px solid ${savedIds.includes(item.itemId) ? 'rgba(58,170,53,0.5)' : '#e0d9cc'}`, borderRadius: '6px', padding: '4px 10px', cursor: 'pointer', fontSize: '12px', color: savedIds.includes(item.itemId) ? '#3aaa35' : '#888' }}>
                 {savedIds.includes(item.itemId) ? '★ Wishlisted' : '☆ Wishlist'}
@@ -436,90 +482,140 @@ const handlePlayerSearch = async () => {
     </div>
   )}
 </div>
-
-        {/* Results */}
-        <div>
-         <div id="results-section" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem", flexWrap: "wrap" as const, gap: "10px" }}>
-  <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0 }}>Current Listings</h2>
-            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-              <span style={{ fontSize: "12px", color: "#888" }}>Sort:</span>
-              {[['high', 'High to Low'], ['low', 'Low to High']].map(([val, label]) => (
-                <button
-                  key={val}
-                  onClick={() => setSortOrder(val as 'high' | 'low')}
-                  style={{
-                    background: sortOrder === val ? "#3aaa35" : "rgba(255,255,255,0.05)",
-                    color: sortOrder === val ? "#faf7f0" : "#666",
-                    border: `1px solid ${sortOrder === val ? "#3aaa35" : "#e0d9cc"}`,
-                    borderRadius: "6px",
-                    padding: "5px 12px",
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                  }}>
-                  {label}
-                </button>
-              ))}
-            </div>
-            {sortedResults.length > itemsPerPage && (
-  <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "1.5rem", alignItems: "center" }}>
-    <button
-  onClick={() => { setCurrentPage(p => p - 1); }}
-  disabled={currentPage === 1}
-  style={{ background: currentPage === 1 ? "#ffffff" : "rgba(255,255,255,0.05)", border: "1px solid #e0d9cc", color: currentPage === 1 ? "#bbb" : "#666", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: currentPage === 1 ? "default" : "pointer" }}>
-  ← Prev
-</button>
-<span style={{ fontSize: "13px", color: "#888" }}>Page {currentPage} of {Math.ceil(sortedResults.length / itemsPerPage)}</span>
-<button
-  onClick={() => { setCurrentPage(p => p + 1); }}
-  disabled={currentPage === Math.ceil(sortedResults.length / itemsPerPage)}
-  style={{ background: currentPage === Math.ceil(sortedResults.length / itemsPerPage) ? "#ffffff" : "rgba(255,255,255,0.05)", border: `1px solid ${currentPage === Math.ceil(sortedResults.length / itemsPerPage) ? "#e0d9cc" : "rgba(58,170,53,0.3)"}`, color: currentPage === Math.ceil(sortedResults.length / itemsPerPage) ? "#bbb" : "#3aaa35", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: currentPage === Math.ceil(sortedResults.length / itemsPerPage) ? "default" : "pointer" }}>
-  Next →
-</button>
+{lastViewed && (
+  <div style={{ background: 'rgba(58,170,53,0.08)', border: '1px solid rgba(58,170,53,0.25)', borderRadius: '10px', padding: '12px 16px', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' as const, gap: '10px' }}>
+    <div>
+      <div style={{ fontSize: '13px', fontWeight: 600, color: '#1a1a1a', marginBottom: '2px' }}>Did you buy this card?</div>
+      <div style={{ fontSize: '12px', color: '#888', maxWidth: '400px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{lastViewed.title}</div>
+    </div>
+    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+      <button
+        onClick={() => {
+          setPurchasePrice(lastViewed.price ? lastViewed.price.toString() : '');
+          setShowAddCard(true);
+          setLastViewed(null);
+          localStorage.removeItem('boxxhq_last_viewed');
+        }}
+        style={{ background: '#3aaa35', color: '#fff', border: 'none', borderRadius: '6px', padding: '8px 16px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>
+        Add to My Collection →
+      </button>
+      <button
+        onClick={() => { setLastViewed(null); localStorage.removeItem('boxxhq_last_viewed'); }}
+        style={{ background: 'none', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '8px 12px', fontSize: '13px', color: '#888', cursor: 'pointer', fontFamily: 'inherit' }}>
+        Dismiss
+      </button>
+    </div>
   </div>
 )}
-          </div>
 
-          {loading ? (
-            <div style={{ textAlign: "center", color: "#bbb", padding: "3rem 0" }}>Loading {playerName} cards...</div>
-          ) : sortedResults.length === 0 ? (
-            <div style={{ textAlign: "center", color: "#bbb", padding: "3rem 0" }}>No listings found for {playerName}</div>
+  {/* Results */}
+<div>
+  <div id="results-section" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem", flexWrap: "wrap" as const, gap: "10px" }}>
+    <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0 }}>Current Listings</h2>
+    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+      <span style={{ fontSize: "12px", color: "#888" }}>Sort:</span>
+      {[['high', 'High to Low'], ['low', 'Low to High']].map(([val, label]) => (
+        <button
+          key={val}
+          onClick={() => setSortOrder(val as 'high' | 'low')}
+          style={{
+            background: sortOrder === val ? "#3aaa35" : "rgba(255,255,255,0.05)",
+            color: sortOrder === val ? "#faf7f0" : "#666",
+            border: sortOrder === val ? "1px solid #3aaa35" : "1px solid #e0d9cc",
+            borderRadius: "6px",
+            padding: "5px 12px",
+            fontSize: "12px",
+            fontWeight: 600,
+            cursor: "pointer",
+          }}>
+          {label}
+        </button>
+      ))}
+    </div>
+    {sortedResults.length > itemsPerPage && (
+      <div style={{ display: "flex", gap: "10px", justifyContent: "center", alignItems: "center" }}>
+        <button
+          onClick={() => setCurrentPage(p => p - 1)}
+          disabled={currentPage === 1}
+          style={{ background: currentPage === 1 ? "#ffffff" : "rgba(255,255,255,0.05)", border: "1px solid #e0d9cc", color: currentPage === 1 ? "#bbb" : "#666", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: currentPage === 1 ? "default" : "pointer" }}>
+          ← Prev
+        </button>
+        <span style={{ fontSize: "13px", color: "#888" }}>Page {currentPage} of {Math.ceil(sortedResults.length / itemsPerPage)}</span>
+        <button
+          onClick={() => setCurrentPage(p => p + 1)}
+          disabled={currentPage === Math.ceil(sortedResults.length / itemsPerPage)}
+          style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(58,170,53,0.3)", color: "#3aaa35", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: "pointer" }}>
+          Next →
+        </button>
+      </div>
+    )}
+  </div>
+
+  {loading ? (
+    <div style={{ textAlign: "center", color: "#bbb", padding: "3rem 0" }}>Loading {playerName} cards...</div>
+  ) : sortedResults.length === 0 ? (
+    <div style={{ textAlign: "center", color: "#bbb", padding: "3rem 0" }}>No listings found for {playerName}</div>
+  ) : (
+    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+      {sortedResults.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item: any) => (
+        <div key={item.itemId} style={{ display: "flex", gap: "1rem", alignItems: "center", background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1rem 1.25rem" }}>
+          {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
+            <img
+              src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl}
+              alt={item.title}
+              style={{ width: "70px", height: "70px", objectFit: "contain", borderRadius: "6px", background: "rgba(255,255,255,0.05)", flexShrink: 0, cursor: "zoom-in", transition: "transform 0.2s ease" }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'scale(3)'}
+              onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+            />
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              {sortedResults.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item: any) => (
-                <div key={item.itemId} style={{ display: "flex", gap: "1rem", alignItems: "center", background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1rem 1.25rem" }}>
-                  {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
-                    <img
-                      src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl}
-                      alt={item.title}
-                      style={{ width: "70px", height: "70px", objectFit: "contain", borderRadius: "6px", background: "rgba(255,255,255,0.05)", flexShrink: 0 }}
-                    />
-                  ) : (
-                    <div style={{ width: "70px", height: "70px", background: "#f0ede6", borderRadius: "6px", flexShrink: 0 }} />
-                  )}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontWeight: 500, fontSize: "14px", color: "#1a1a1a", marginBottom: "4px", lineHeight: 1.4 }}>{item.title}</div>
-                    <div style={{ fontSize: "12px", color: "#888" }}>{item.condition || 'Condition not specified'}</div>
-                  </div>
-                  <div style={{ textAlign: "right", flexShrink: 0 }}>
-                    <div style={{ fontWeight: 700, fontSize: "20px", color: "#3aaa35", marginBottom: "6px" }}>
-                      {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${formatPrice(parseFloat(item.price.value))}` : 'N/A'}
-                    </div>
-                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'flex-end' }}>
-  <a href={item.itemAffiliateWebUrl || item.itemWebUrl} target="_blank" rel="noopener noreferrer"
-    style={{ color: "#888", fontSize: "12px", textDecoration: "none" }}>View on eBay →</a>
-  <button onClick={() => handleSave(item)}
-    style={{ background: savedIds.includes(item.itemId) ? 'rgba(58,170,53,0.2)' : '#fff', border: `1px solid ${savedIds.includes(item.itemId) ? 'rgba(58,170,53,0.5)' : '#e0d9cc'}`, borderRadius: '6px', padding: '4px 10px', cursor: 'pointer', fontSize: '12px', color: savedIds.includes(item.itemId) ? '#3aaa35' : '#888' }}>
-    {savedIds.includes(item.itemId) ? '★ Wishlisted' : '☆ Wishlist'}
-  </button>
-</div>
-                  </div>
-                </div>
-              ))}
-
-            </div>
+            <div style={{ width: "70px", height: "70px", background: "#f0ede6", borderRadius: "6px", flexShrink: 0 }} />
           )}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontWeight: 500, fontSize: "14px", color: "#1a1a1a", marginBottom: "4px", lineHeight: 1.4 }}>{item.title}</div>
+            <div style={{ fontSize: "12px", color: "#888" }}>{item.condition || 'Condition not specified'}</div>
+          </div>
+          <div style={{ textAlign: "right", flexShrink: 0 }}>
+            <div style={{ fontWeight: 700, fontSize: "20px", color: "#3aaa35", marginBottom: "6px" }}>
+              {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${formatPrice(parseFloat(item.price.value))}` : 'N/A'}
+            </div>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'flex-end' }}>
+             <button
+  onMouseDown={() => {
+    handleEbayClick(item);
+    window.open(item.itemAffiliateWebUrl || item.itemWebUrl, '_blank');
+  }}
+  style={{ background: 'none', border: 'none', color: "#888", fontSize: "12px", cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}>
+  View on eBay →
+</button>
+              <button onClick={() => handleSave(item)}
+                style={{ background: savedIds.includes(item.itemId) ? 'rgba(58,170,53,0.2)' : '#fff', border: savedIds.includes(item.itemId) ? '1px solid rgba(58,170,53,0.5)' : '1px solid #e0d9cc', borderRadius: '6px', padding: '4px 10px', cursor: 'pointer', fontSize: '12px', color: savedIds.includes(item.itemId) ? '#3aaa35' : '#888' }}>
+                {savedIds.includes(item.itemId) ? '★ Wishlisted' : '☆ Wishlist'}
+              </button>
+            </div>
+          </div>
         </div>
+      ))}
+    </div>
+  )}
+</div>
+
+{sortedResults.length > itemsPerPage && (
+  <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "1.5rem", alignItems: "center" }}>
+    <button
+      onClick={() => setCurrentPage(p => p - 1)}
+      disabled={currentPage === 1}
+      style={{ background: currentPage === 1 ? "#ffffff" : "rgba(255,255,255,0.05)", border: "1px solid #e0d9cc", color: currentPage === 1 ? "#bbb" : "#666", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: currentPage === 1 ? "default" : "pointer" }}>
+      ← Prev
+    </button>
+    <span style={{ fontSize: "13px", color: "#888" }}>Page {currentPage} of {Math.ceil(sortedResults.length / itemsPerPage)}</span>
+    <button
+      onClick={() => setCurrentPage(p => p + 1)}
+      disabled={currentPage === Math.ceil(sortedResults.length / itemsPerPage)}
+      style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(58,170,53,0.3)", color: "#3aaa35", borderRadius: "6px", padding: "8px 14px", fontSize: "13px", cursor: "pointer" }}>
+      Next →
+    </button>
+  </div>
+)}
 {/* Related Players */}
 {playerProfiles[slug] && (
   <div style={{ marginTop: "3rem" }}>
