@@ -49,6 +49,7 @@ const [searchSuffix, setSearchSuffix] = useState('');
 const [searchResults, setSearchResults] = useState<any[]>([]);
 const [searchLoading, setSearchLoading] = useState(false);
 const [lastViewed, setLastViewed] = useState<any>(null);
+const [relatedPlayers, setRelatedPlayers] = useState<any[]>([]);
 
 useEffect(() => {
     const fetchCards = async () => {
@@ -111,6 +112,37 @@ if (iqData) {
   }));
 
   setBoxxIQ(averaged);
+}
+// Fetch related players from same team or sport
+const profile = playerProfiles[slug];
+if (profile) {
+  const { data: related } = await supabase
+    .from('players')
+    .select('name, team, nationality, sport')
+    .eq('sport', 'Football')
+    .neq('name', playerName)
+    .eq('team', profile.club)
+    .limit(4);
+  
+  if (related && related.length > 0) {
+    setRelatedPlayers(related);
+  } else {
+    // fallback to hardcoded if no Supabase results
+    const fallback = profile.related.map(s => ({
+      name: s.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
+      slug: s,
+    }));
+    setRelatedPlayers(fallback);
+  }
+} else if (playerProfile) {
+  const { data: related } = await supabase
+    .from('players')
+    .select('name, team, nationality, sport')
+    .eq('sport', playerProfile.sport)
+    .neq('name', playerName)
+    .eq('team', playerProfile.team)
+    .limit(4);
+  setRelatedPlayers(related || []);
 }
 
       if (historyData) {
@@ -617,13 +649,13 @@ const handlePlayerSearch = async () => {
   </div>
 )}
 {/* Related Players */}
-{playerProfiles[slug] && (
+{relatedPlayers.length > 0 && (
   <div style={{ marginTop: "3rem" }}>
     <h2 style={{ fontSize: "18px", fontWeight: 700, margin: "0 0 1.25rem" }}>Related Players</h2>
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "10px" }}>
-      {playerProfiles[slug].related.map((relatedSlug) => {
-        const relatedProfile = playerProfiles[relatedSlug];
-        const relatedName = relatedSlug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
+      {relatedPlayers.map((player: any) => {
+        const relatedSlug = player.slug || player.name.toLowerCase().replace(/ /g, '-');
+        const initials = player.name.split(' ').map((n: string) => n.charAt(0)).join('');
         return (
           <Link key={relatedSlug} href={`/players/${relatedSlug}`} style={{ textDecoration: "none" }}>
             <div
@@ -631,11 +663,11 @@ const handlePlayerSearch = async () => {
               onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(58,170,53,0.3)')}
               onMouseLeave={e => (e.currentTarget.style.borderColor = '#e0d9cc')}>
               <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.2)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 8px", fontSize: "14px", fontWeight: 800, color: "#3aaa35" }}>
-                {relatedName.split(' ').map((n: string) => n.charAt(0)).join('')}
+                {initials}
               </div>
-              <div style={{ fontSize: "12px", fontWeight: 600, color: "#1a1a1a", marginBottom: "3px", lineHeight: 1.3 }}>{relatedName}</div>
-              {relatedProfile && (
-                <div style={{ fontSize: "10px", color: "#aaa" }}>{relatedProfile.nation} · {relatedProfile.club}</div>
+              <div style={{ fontSize: "12px", fontWeight: 600, color: "#1a1a1a", marginBottom: "3px", lineHeight: 1.3 }}>{player.name}</div>
+              {(player.nationality || player.team) && (
+                <div style={{ fontSize: "10px", color: "#aaa" }}>{player.nationality}{player.nationality && player.team ? ' · ' : ''}{player.team}</div>
               )}
             </div>
           </Link>
