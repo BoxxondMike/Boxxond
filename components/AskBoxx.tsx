@@ -8,30 +8,66 @@ interface Message {
   suggestions?: string[];
 }
 
+interface PageContext {
+  page_url?: string;
+  page_type?: 'home' | 'player' | 'set' | 'release' | 'other';
+  player_name?: string;
+  set_name?: string;
+}
+
 interface AskBoxxProps {
   isOpen: boolean;
   onClose: () => void;
   isPro: boolean;
+  pageContext?: PageContext;
+  userId?: string | null;
 }
 
-export default function AskBoxx({ isOpen, onClose, isPro }: AskBoxxProps) {
+export default function AskBoxx({
+  isOpen,
+  onClose,
+  isPro,
+  pageContext = { page_type: 'other' },
+  userId = null,
+}: AskBoxxProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: "Hey! I'm Boxx, your personal card advisor. Ask me about player card prices, what to list your cards for, or anything about the hobby.",
+      content:
+        "Hey! I'm Boxx, your personal card advisor. Ask me about player card prices, what to list your cards for, or anything about the hobby.",
       suggestions: [
-        "How much is a Bellingham PSA 10 worth?",
-        "What should I list my Vini Jr auto for?",
-        "Best cards to buy before the World Cup?",
-      ]
-    }
+        'How much is a Bellingham PSA 10 worth?',
+        'What should I list my Vini Jr auto for?',
+        'Best cards to buy before the World Cup?',
+      ],
+    },
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [messageCount, setMessageCount] = useState(0);
-const MAX_MESSAGES = 5;
+  const MAX_MESSAGES = 5;
+
+  // ---- Peregro analytics: stable conversation + session IDs ----
+  const [conversationId] = useState<string>(() =>
+    typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random()}`
+  );
+
+  const [sessionId] = useState<string>(() => {
+    if (typeof window === 'undefined') return 'ssr';
+    let sid = sessionStorage.getItem('peregro_session_id');
+    if (!sid) {
+      sid =
+        typeof crypto !== 'undefined' && crypto.randomUUID
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random()}`;
+      sessionStorage.setItem('peregro_session_id', sid);
+    }
+    return sid;
+  });
 
   useEffect(() => {
     if (isOpen && isPro) {
@@ -43,36 +79,69 @@ const MAX_MESSAGES = 5;
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // ---- Peregro: fire-and-forget log events ----
+  const logEvent = async (payload: Record<string, unknown>) => {
+    try {
+      await fetch('/api/peregro/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ conversation_id: conversationId, ...payload }),
+      });
+    } catch {
+      // swallow — logging never breaks UX
+    }
+  };
+
   const sendMessage = async (text?: string) => {
-  const userMessage = text || input.trim();
-  if (!userMessage || loading) return;
-  
-  if (messageCount >= MAX_MESSAGES) return;
+    const userMessage = text || input.trim();
+    if (!userMessage || loading) return;
+
+    if (messageCount >= MAX_MESSAGES) return;
 
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+    setMessages((prev) => [...prev, { role: 'user', content: userMessage }]);
     setLoading(true);
 
     try {
-      const res = await fetch('/api/ask-boxx', {
+      const res = await fetch('/api/peregro/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage, history: messages }),
+        body: JSON.stringify({
+          message: userMessage,
+          history: messages,
+          conversation_id: conversationId,
+          session_id: sessionId,
+          user_id: userId,
+          page_context: {
+            page_url:
+              pageContext.page_url ??
+              (typeof window !== 'undefined' ? window.location.pathname : '/'),
+            page_type: pageContext.page_type ?? 'other',
+            player_name: pageContext.player_name,
+            set_name: pageContext.set_name,
+          },
+        }),
       });
 
       const data = await res.json();
-      setMessages(prev => [...prev, {
-  role: 'assistant',
-  content: data.reply || 'Sorry, something went wrong. Try again.',
-  suggestions: data.suggestions || []
-}]);
-setMessageCount(prev => prev + 1);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: data.reply || 'Sorry, something went wrong. Try again.',
+          suggestions: data.suggestions || [],
+        },
+      ]);
+      setMessageCount((prev) => prev + 1);
     } catch {
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: 'Sorry, I had trouble connecting. Try again in a moment.',
-        suggestions: []
-      }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: 'Sorry, I had trouble connecting. Try again in a moment.',
+          suggestions: [],
+        },
+      ]);
     }
 
     setLoading(false);
@@ -86,15 +155,29 @@ setMessageCount(prev => prev + 1);
   };
 
   const clearChat = () => {
-    setMessages([{
-      role: 'assistant',
-      content: "Hey! I'm Boxx, your personal card advisor. Ask me about player card prices, what to list your cards for, or anything about the hobby.",
-      suggestions: [
-        "How much is a Bellingham PSA 10 worth?",
-        "What should I list my Vini Jr auto for?",
-        "Best cards to buy before the World Cup?",
-      ]
-    }]);
+    setMessages([
+      {
+        role: 'assistant',
+        content:
+          "Hey! I'm Boxx, your personal card advisor. Ask me about player card prices, what to list your cards for, or anything about the hobby.",
+        suggestions: [
+          'How much is a Bellingham PSA 10 worth?',
+          'What should I list my Vini Jr auto for?',
+          'Best cards to buy before the World Cup?',
+        ],
+      },
+    ]);
+    setMessageCount(0);
+  };
+
+  // ---- Peregro: intercept eBay link clicks inside assistant messages ----
+  const handleMessageClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName !== 'A') return;
+    const href = target.getAttribute('href') ?? '';
+    if (/ebay\.[a-z.]+/i.test(href)) {
+      logEvent({ event: 'affiliate_click', url: href });
+    }
   };
 
   return (
@@ -114,39 +197,51 @@ setMessageCount(prev => prev + 1);
       />
 
       {/* Panel */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        right: 0,
-        height: '100vh',
-        width: '100%',
-        maxWidth: '420px',
-        background: '#faf7f0',
-        borderLeft: '1px solid #e0d9cc',
-        zIndex: 999,
-        display: 'flex',
-        flexDirection: 'column',
-        transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
-        transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-        boxShadow: '-8px 0 32px rgba(0,0,0,0.12)',
-      }}>
-
-        {/* Header */}
-        <div style={{
-          padding: '16px 20px',
-          borderBottom: '1px solid #e0d9cc',
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          right: 0,
+          height: '100vh',
+          width: '100%',
+          maxWidth: '420px',
+          background: '#faf7f0',
+          borderLeft: '1px solid #e0d9cc',
+          zIndex: 999,
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          background: '#fff',
-          flexShrink: 0,
-        }}>
+          flexDirection: 'column',
+          transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
+          transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          boxShadow: '-8px 0 32px rgba(0,0,0,0.12)',
+        }}
+      >
+        {/* Header */}
+        <div
+          style={{
+            padding: '16px 20px',
+            borderBottom: '1px solid #e0d9cc',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            background: '#fff',
+            flexShrink: 0,
+          }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div>
-              <div style={{ fontWeight: 700, fontSize: '15px', color: '#1a1a1a', letterSpacing: '-0.01em' }}>Boxx Intel</div>
+              <div
+                style={{
+                  fontWeight: 700,
+                  fontSize: '15px',
+                  color: '#1a1a1a',
+                  letterSpacing: '-0.01em',
+                }}
+              >
+                Boxx Intel
+              </div>
               <div style={{ fontSize: '12px', color: '#3aaa35', fontWeight: 500 }}>
-  ● Beta
-</div>
+                ● Beta · powered by Peregro
+              </div>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -162,7 +257,8 @@ setMessageCount(prev => prev + 1);
                 fontSize: '12px',
                 padding: '4px 10px',
                 fontFamily: 'inherit',
-              }}>
+              }}
+            >
               New chat
             </button>
             <button
@@ -176,30 +272,51 @@ setMessageCount(prev => prev + 1);
                 padding: '4px',
                 lineHeight: 1,
                 borderRadius: '6px',
-              }}>✕</button>
+              }}
+            >
+              ✕
+            </button>
           </div>
         </div>
 
         {/* Non-Pro Gate */}
         {!isPro ? (
-          <div style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '40px 32px',
-            textAlign: 'center',
-          }}>
+          <div
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '40px 32px',
+              textAlign: 'center',
+            }}
+          >
             <div style={{ fontSize: '48px', marginBottom: '20px' }}>🔒</div>
-            <div style={{ fontWeight: 700, fontSize: '20px', color: '#1a1a1a', marginBottom: '10px', letterSpacing: '-0.02em' }}>
+            <div
+              style={{
+                fontWeight: 700,
+                fontSize: '20px',
+                color: '#1a1a1a',
+                marginBottom: '10px',
+                letterSpacing: '-0.02em',
+              }}
+            >
               Pro Feature
             </div>
-            <div style={{ fontSize: '14px', color: '#888', lineHeight: 1.6, marginBottom: '28px' }}>
-              Boxx Intel is your AI-powered card advisor. Get live pricing insights, listing advice, and market analysis — exclusive to Pro members.
+            <div
+              style={{
+                fontSize: '14px',
+                color: '#888',
+                lineHeight: 1.6,
+                marginBottom: '28px',
+              }}
+            >
+              Boxx Intel is your AI-powered card advisor. Get live pricing insights, listing
+              advice, and market analysis — exclusive to Pro members.
             </div>
             <a
-            href="/upgrade"
+              href="/upgrade"
               style={{
                 background: '#3aaa35',
                 color: '#fff',
@@ -209,7 +326,8 @@ setMessageCount(prev => prev + 1);
                 borderRadius: '8px',
                 textDecoration: 'none',
                 display: 'inline-block',
-              }}>
+              }}
+            >
               Upgrade to Pro
             </a>
             <div style={{ marginTop: '16px', fontSize: '12px', color: '#aaa' }}>
@@ -219,44 +337,54 @@ setMessageCount(prev => prev + 1);
         ) : (
           <>
             {/* Messages */}
-            <div style={{
-              flex: 1,
-              overflowY: 'auto',
-              padding: '20px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '16px',
-            }}>
+            <div
+              style={{
+                flex: 1,
+                overflowY: 'auto',
+                padding: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+              }}
+              onClick={handleMessageClick}
+            >
               {messages.map((msg, i) => (
                 <div key={i}>
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                  }}>
-                    <div style={{
-                      maxWidth: '85%',
-                      padding: '12px 16px',
-                      borderRadius: msg.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-                      background: msg.role === 'user' ? '#3aaa35' : '#fff',
-                      color: msg.role === 'user' ? '#fff' : '#1a1a1a',
-                      fontSize: '14px',
-                      lineHeight: 1.6,
-                      border: msg.role === 'assistant' ? '1px solid #e0d9cc' : 'none',
-                      boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
-                      whiteSpace: 'pre-wrap',
-                    }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
+                    }}
+                  >
+                    <div
+                      style={{
+                        maxWidth: '85%',
+                        padding: '12px 16px',
+                        borderRadius:
+                          msg.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
+                        background: msg.role === 'user' ? '#3aaa35' : '#fff',
+                        color: msg.role === 'user' ? '#fff' : '#1a1a1a',
+                        fontSize: '14px',
+                        lineHeight: 1.6,
+                        border: msg.role === 'assistant' ? '1px solid #e0d9cc' : 'none',
+                        boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+                        whiteSpace: 'pre-wrap',
+                      }}
+                    >
                       {msg.content}
                     </div>
                   </div>
 
                   {/* Suggestions */}
                   {msg.suggestions && msg.suggestions.length > 0 && (
-                    <div style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '6px',
-                      marginTop: '8px',
-                    }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '6px',
+                        marginTop: '8px',
+                      }}
+                    >
                       {msg.suggestions.map((s, si) => (
                         <button
                           key={si}
@@ -273,11 +401,11 @@ setMessageCount(prev => prev + 1);
                             transition: 'all 0.15s',
                             fontFamily: 'inherit',
                           }}
-                          onMouseEnter={e => {
+                          onMouseEnter={(e) => {
                             e.currentTarget.style.borderColor = '#3aaa35';
                             e.currentTarget.style.color = '#3aaa35';
                           }}
-                          onMouseLeave={e => {
+                          onMouseLeave={(e) => {
                             e.currentTarget.style.borderColor = '#e0d9cc';
                             e.currentTarget.style.color = '#555';
                           }}
@@ -292,24 +420,29 @@ setMessageCount(prev => prev + 1);
 
               {loading && (
                 <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                  <div style={{
-                    padding: '12px 16px',
-                    borderRadius: '16px 16px 16px 4px',
-                    background: '#fff',
-                    border: '1px solid #e0d9cc',
-                    display: 'flex',
-                    gap: '4px',
-                    alignItems: 'center',
-                  }}>
-                    {[0, 1, 2].map(i => (
-                      <div key={i} style={{
-                        width: '6px',
-                        height: '6px',
-                        borderRadius: '50%',
-                        background: '#3aaa35',
-                        animation: 'bounce 1.2s ease-in-out infinite',
-                        animationDelay: `${i * 0.2}s`,
-                      }} />
+                  <div
+                    style={{
+                      padding: '12px 16px',
+                      borderRadius: '16px 16px 16px 4px',
+                      background: '#fff',
+                      border: '1px solid #e0d9cc',
+                      display: 'flex',
+                      gap: '4px',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {[0, 1, 2].map((i) => (
+                      <div
+                        key={i}
+                        style={{
+                          width: '6px',
+                          height: '6px',
+                          borderRadius: '50%',
+                          background: '#3aaa35',
+                          animation: 'bounce 1.2s ease-in-out infinite',
+                          animationDelay: `${i * 0.2}s`,
+                        }}
+                      />
                     ))}
                   </div>
                 </div>
@@ -319,74 +452,99 @@ setMessageCount(prev => prev + 1);
             </div>
 
             {/* Input */}
-<div style={{
-  padding: '16px 20px',
-  borderTop: '1px solid #e0d9cc',
-  background: '#fff',
-  flexShrink: 0,
-}}>
-  {messageCount >= MAX_MESSAGES ? (
-    <div style={{
-      background: '#faf7f0',
-      border: '1px solid #e0d9cc',
-      borderRadius: '12px',
-      padding: '16px',
-      textAlign: 'center',
-    }}>
-      <div style={{ fontSize: '14px', fontWeight: 600, color: '#1a1a1a', marginBottom: '4px' }}>Beta limit reached</div>
-      <div style={{ fontSize: '13px', color: '#888' }}>You've used your 5 free messages. Full access coming soon.</div>
-    </div>
-  ) : (
-    <div style={{
-      display: 'flex',
-      gap: '8px',
-      alignItems: 'center',
-      background: '#faf7f0',
-      border: '1px solid #e0d9cc',
-      borderRadius: '12px',
-      padding: '8px 8px 8px 16px',
-    }}>
-      <input
-        ref={inputRef}
-        value={input}
-        onChange={e => setInput(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder="Ask about any card or player..."
-        style={{
-          flex: 1,
-          background: 'none',
-          border: 'none',
-          outline: 'none',
-          fontSize: '14px',
-          color: '#1a1a1a',
-          fontFamily: 'inherit',
-        }}
-      />
-      <button
-        onClick={() => sendMessage()}
-        disabled={!input.trim() || loading}
-        style={{
-          background: input.trim() && !loading ? '#3aaa35' : '#e0d9cc',
-          border: 'none',
-          borderRadius: '8px',
-          width: '36px',
-          height: '36px',
-          cursor: input.trim() && !loading ? 'pointer' : 'default',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '16px',
-          transition: 'background 0.15s',
-          flexShrink: 0,
-        }}>
-        ↑
-      </button>
-    </div>
-  )}
-  <div style={{ fontSize: '11px', color: '#ccc', textAlign: 'center', marginTop: '8px' }}>
-    Powered by BoxxHQ · Prices from eBay UK
-  </div>
-</div>
+            <div
+              style={{
+                padding: '16px 20px',
+                borderTop: '1px solid #e0d9cc',
+                background: '#fff',
+                flexShrink: 0,
+              }}
+            >
+              {messageCount >= MAX_MESSAGES ? (
+                <div
+                  style={{
+                    background: '#faf7f0',
+                    border: '1px solid #e0d9cc',
+                    borderRadius: '12px',
+                    padding: '16px',
+                    textAlign: 'center',
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      color: '#1a1a1a',
+                      marginBottom: '4px',
+                    }}
+                  >
+                    Beta limit reached
+                  </div>
+                  <div style={{ fontSize: '13px', color: '#888' }}>
+                    You've used your 5 free messages. Full access coming soon.
+                  </div>
+                </div>
+              ) : (
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: '8px',
+                    alignItems: 'center',
+                    background: '#faf7f0',
+                    border: '1px solid #e0d9cc',
+                    borderRadius: '12px',
+                    padding: '8px 8px 8px 16px',
+                  }}
+                >
+                  <input
+                    ref={inputRef}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Ask about any card or player..."
+                    style={{
+                      flex: 1,
+                      background: 'none',
+                      border: 'none',
+                      outline: 'none',
+                      fontSize: '14px',
+                      color: '#1a1a1a',
+                      fontFamily: 'inherit',
+                    }}
+                  />
+                  <button
+                    onClick={() => sendMessage()}
+                    disabled={!input.trim() || loading}
+                    style={{
+                      background: input.trim() && !loading ? '#3aaa35' : '#e0d9cc',
+                      border: 'none',
+                      borderRadius: '8px',
+                      width: '36px',
+                      height: '36px',
+                      cursor: input.trim() && !loading ? 'pointer' : 'default',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '16px',
+                      transition: 'background 0.15s',
+                      flexShrink: 0,
+                    }}
+                  >
+                    ↑
+                  </button>
+                </div>
+              )}
+              <div
+                style={{
+                  fontSize: '11px',
+                  color: '#ccc',
+                  textAlign: 'center',
+                  marginTop: '8px',
+                }}
+              >
+                Powered by BoxxHQ · Prices from eBay UK
+              </div>
+            </div>
           </>
         )}
       </div>
