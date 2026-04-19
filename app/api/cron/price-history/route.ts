@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   const authHeader = request.headers.get('authorization');
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('secret');
-  const batchSize = 30;
+  const batchSize = 50;
 
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}` && secret !== process.env.CRON_SECRET) {
     return Response.json({ error: 'Unauthorised' }, { status: 401 });
