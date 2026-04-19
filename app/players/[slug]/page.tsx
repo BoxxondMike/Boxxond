@@ -7,37 +7,6 @@ import Link from 'next/link';
 import { supabase } from '../../../lib/supabase';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const slug = params.slug;
-  const playerName = slug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
-  
-  return {
-    title: `${playerName} Card Prices UK | BoxxHQ`,
-    description: `Live eBay UK prices for ${playerName} trading cards. Auto, PSA 10, Prizm and more — updated daily. Track your ${playerName} cards on BoxxHQ.`,
-    openGraph: {
-      title: `${playerName} Card Prices UK | BoxxHQ`,
-      description: `Live eBay UK prices for ${playerName} trading cards. Updated daily from eBay UK.`,
-      url: `https://boxxhq.com/players/${slug}`,
-      siteName: 'BoxxHQ',
-      type: 'website',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: `${playerName} Card Prices UK | BoxxHQ`,
-      description: `Live eBay UK prices for ${playerName} trading cards. Updated daily from eBay UK.`,
-    },
-    keywords: [
-      `${playerName} card price`,
-      `${playerName} trading card UK`,
-      `${playerName} Topps Chrome`,
-      `${playerName} PSA 10`,
-      `${playerName} auto card`,
-      `${playerName} card value`,
-      'trading card prices UK',
-      'eBay card prices UK',
-    ],
-  };
-}
 
 const playerProfiles: Record<string, { club: string; nation: string; position: string; sport: string; related: string[] }> = {
   'jude-bellingham': { club: 'Real Madrid', nation: 'England', position: 'Midfielder', sport: 'Soccer', related: ['cole-palmer', 'bukayo-saka', 'phil-foden', 'declan-rice'] },
