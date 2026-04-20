@@ -486,56 +486,64 @@ export default function CollectionPage() {
               const pnl = card.currentValue ? (card.currentValue - parseFloat(card.purchase_price)) * (card.quantity || 1) : null;
               const pnlPct = card.currentValue ? ((card.currentValue - parseFloat(card.purchase_price)) / parseFloat(card.purchase_price)) * 100 : null;
               return (
-                <div key={card.id} style={{ background: '#fff', border: '1px solid #e0d9cc', borderRadius: '12px', padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' as const }}>
-                  <div style={{ flex: 1, minWidth: '200px' }}>
-                    <div style={{ fontWeight: 700, fontSize: '16px', marginBottom: '4px' }}>{playerName}</div>
-                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' as const }}>
-                      <span style={{ background: 'rgba(58,170,53,0.1)', color: '#3aaa35', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '20px' }}>{card.variant_label}</span>
-                      {card.players?.team && <span style={{ fontSize: '12px', color: '#888' }}>{card.players.team}</span>}
-                      {card.is_manual && <span style={{ background: '#f0ede6', color: '#aaa', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '20px' }}>Manual</span>}
-                    </div>
-                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' as const, marginTop: '4px', alignItems: 'center' }}>
-  {card.card_set && <span style={{ fontSize: '12px', color: '#555', fontWeight: 500 }}>{card.card_set}</span>}
-  {card.year && <span style={{ fontSize: '12px', color: '#888' }}>· {card.year}</span>}
-  {card.numbered && <span style={{ background: 'rgba(58,170,53,0.08)', color: '#3aaa35', fontSize: '11px', fontWeight: 600, padding: '1px 6px', borderRadius: '4px' }}>{card.numbered}</span>}
-  {card.grade && card.grade !== 'Raw' && <span style={{ background: '#f0ede6', color: '#555', fontSize: '11px', fontWeight: 600, padding: '1px 6px', borderRadius: '4px' }}>{card.grade}</span>}
+                <div key={card.id} style={{ background: '#fff', border: '1px solid #e0d9cc', borderRadius: '12px', padding: '1.25rem' }}>
+  {/* Player info */}
+  <div style={{ marginBottom: '12px' }}>
+    <div style={{ fontWeight: 700, fontSize: '16px', marginBottom: '4px' }}>{playerName}</div>
+    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' as const, alignItems: 'center' }}>
+      <span style={{ background: 'rgba(58,170,53,0.1)', color: '#3aaa35', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '20px' }}>{card.variant_label}</span>
+      {card.players?.team && <span style={{ fontSize: '12px', color: '#888' }}>{card.players.team}</span>}
+      {card.is_manual && <span style={{ background: '#f0ede6', color: '#aaa', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '20px' }}>Manual</span>}
+    </div>
+    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' as const, marginTop: '4px', alignItems: 'center' }}>
+      {card.card_set && <span style={{ fontSize: '12px', color: '#555', fontWeight: 500 }}>{card.card_set}</span>}
+      {card.year && <span style={{ fontSize: '12px', color: '#888' }}>· {card.year}</span>}
+      {card.numbered && <span style={{ background: 'rgba(58,170,53,0.08)', color: '#3aaa35', fontSize: '11px', fontWeight: 600, padding: '1px 6px', borderRadius: '4px' }}>{card.numbered}</span>}
+      {card.grade && card.grade !== 'Raw' && <span style={{ background: '#f0ede6', color: '#555', fontSize: '11px', fontWeight: 600, padding: '1px 6px', borderRadius: '4px' }}>{card.grade}</span>}
+    </div>
+  </div>
+
+  {/* Stats grid */}
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '12px' }}>
+    <div style={{ background: '#faf7f0', borderRadius: '8px', padding: '8px 10px' }}>
+      <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '2px' }}>Paid</div>
+      <div style={{ fontSize: '15px', fontWeight: 600 }}>£{formatPrice(parseFloat(card.purchase_price))}</div>
+    </div>
+    <div style={{ background: '#faf7f0', borderRadius: '8px', padding: '8px 10px' }}>
+      <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '2px' }}>Est. Value</div>
+      <div style={{ fontSize: '15px', fontWeight: 600, color: '#3aaa35' }}>
+        {card.is_manual ? '—' : card.currentValue ? `£${formatPrice(card.currentValue)}` : '—'}
+      </div>
+    </div>
+    <div style={{ background: pnl === null ? '#faf7f0' : pnl >= 0 ? 'rgba(58,170,53,0.08)' : 'rgba(220,53,69,0.08)', borderRadius: '8px', padding: '8px 10px' }}>
+      <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '2px' }}>P&L</div>
+      <div style={{ fontSize: '15px', fontWeight: 600, color: pnl === null ? '#aaa' : pnl >= 0 ? '#3aaa35' : '#dc3545' }}>
+        {pnl === null ? '—' : `${pnl >= 0 ? '+' : ''}£${formatPrice(pnl)}`}
+      </div>
+      {pnlPct !== null && (
+        <div style={{ fontSize: '11px', color: pnlPct >= 0 ? '#3aaa35' : '#dc3545' }}>
+          {pnlPct >= 0 ? '+' : ''}{pnlPct.toFixed(1)}%
+        </div>
+      )}
+    </div>
+  </div>
+
+  {/* Actions */}
+  {/* Actions */}
+  <div style={{ display: 'flex', gap: '8px' }}>
+    
+      <a href={`https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent((card.players?.name || card.player_name_manual || '') + ' ' + (card.variant_label || '') + ' ' + (card.numbered || '')).trim()}&_sacat=261328`}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ background: 'none', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', color: '#888', textDecoration: 'none' }}>
+      eBay →
+    </a>
+    <button onClick={() => removeCard(card.id)}
+      style={{ background: 'none', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', color: '#aaa', cursor: 'pointer' }}>
+      Remove
+    </button>
+  </div>
 </div>
-                  </div>
-                  <div style={{ textAlign: 'center', minWidth: '80px' }}>
-                    <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '2px' }}>Paid</div>
-                    <div style={{ fontSize: '16px', fontWeight: 600 }}>£{formatPrice(parseFloat(card.purchase_price))}</div>
-                  </div>
-                  <div style={{ textAlign: 'center', minWidth: '80px' }}>
-                    <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '2px' }}>Est. Value</div>
-                    <div style={{ fontSize: '16px', fontWeight: 600, color: '#3aaa35', marginBottom: '4px' }}>
-                      {card.is_manual ? '—' : card.currentValue ? `£${formatPrice(card.currentValue)}` : '—'}
-                    </div>
-                  </div>
-                  <div style={{ textAlign: 'center', minWidth: '80px' }}>
-                    <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '2px' }}>P&L</div>
-                    <div style={{ fontSize: '16px', fontWeight: 600, color: pnl === null ? '#aaa' : pnl >= 0 ? '#3aaa35' : '#dc3545' }}>
-                      {pnl === null ? '—' : `${pnl >= 0 ? '+' : ''}£${formatPrice(pnl)}`}
-                    </div>
-                    {pnlPct !== null && (
-                      <div style={{ fontSize: '11px', color: pnlPct >= 0 ? '#3aaa35' : '#dc3545' }}>
-                        {pnlPct >= 0 ? '+' : ''}{pnlPct.toFixed(1)}%
-                      </div>
-                    )}
-                  </div>
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    
-                      <a href={`https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent(`${card.players?.name || card.player_name_manual} ${card.variant_label || ''} ${card.numbered || ''}`).trim()}&_sacat=261328`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ background: 'none', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', color: '#888', textDecoration: 'none' }}>
-                      eBay →
-                    </a>
-                    <button onClick={() => removeCard(card.id)}
-                      style={{ background: 'none', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', color: '#aaa', cursor: 'pointer' }}>
-                      Remove
-                    </button>
-                  </div>
-                </div>
               );
             })}
           </div>
