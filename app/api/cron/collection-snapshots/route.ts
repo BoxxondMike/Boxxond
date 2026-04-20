@@ -1,16 +1,11 @@
 /**
  * app/api/cron/collection-snapshots/route.ts
  * ----------------------------------------------------------------------------
- * Daily cron: captures a collection valuation snapshot for every user who has
- * any cards in user_cards.
+ * DIAGNOSTIC VERSION — returns the per-card valuation breakdown in the
+ * response, so we can see exactly which cards value and which don't.
  *
- * Also calculates top mover up / top mover down compared to the previous
- * snapshot, so the weekly report has that data ready.
- *
- * Scheduled via vercel.json — see bottom of this file for the snippet to add.
- *
- * Protected by a CRON_SECRET env var so randos can't hammer it from the public
- * URL and skew your data / burn compute.
+ * Once everything's matching properly, swap this back for the production
+ * version that only returns summary counts.
  * ----------------------------------------------------------------------------
  */
 
@@ -21,18 +16,15 @@ import {
   ValuedCard,
 } from '@/lib/collection-valuation';
 
-// Vercel cron invokes with a GET
 export async function GET(req: NextRequest) {
-// Query-string secret check (matches existing cron pattern)
-const secret = req.nextUrl.searchParams.get('secret');
-if (secret !== process.env.CRON_SECRET) {
-  return Response.json({ error: 'Unauthorised' }, { status: 401 });
-}
+  const secret = req.nextUrl.searchParams.get('secret');
+  if (secret !== process.env.CRON_SECRET) {
+    return Response.json({ error: 'Unauthorised' }, { status: 401 });
+  }
 
   const supabase = getAdminSupabase();
-  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  const today = new Date().toISOString().slice(0, 10);
 
-  // Find every user who has any cards
   const { data: users, error: usersErr } = await supabase
     .from('user_cards')
     .select('user_id')
@@ -42,32 +34,22 @@ if (secret !== process.env.CRON_SECRET) {
     return Response.json({ error: usersErr.message }, { status: 500 });
   }
 
-  // Dedupe user_ids
-  const userIds = Array.from(new Set((users ?? []).map((u) => u.user_id)));
+  const userIds: string[] = Array.from(
+    new Set((users ?? []).map((u: any) => u.user_id as string))
+  );
 
-  const results: Array<{ user_id: string; status: string; error?: string }> = [];
+  const results: Array<{
+    user_id: string;
+    status: string;
+    error?: string;
+    breakdown?: any;
+  }> = [];
 
   for (const userId of userIds) {
     try {
       const valuation = await valueUserCollection(supabase, userId);
-
-      // Pull the previous snapshot (if any) to compute movers
-      const { data: prevRows } = await supabase
-        .from('collection_snapshots')
-        .select('snapshot_date, total_value, card_count')
-        .eq('user_id', userId)
-        .order('snapshot_date', { ascending: false })
-        .limit(1);
-
-      const previous = prevRows?.[0];
-
-      // Compute top mover cards by comparing current unit prices with
-      // previous day's price_history (if we can resolve them cheaply).
-      // For the first pass we keep this simple: identify biggest value
-      // card and biggest absolute change from purchase_price.
       const movers = computeTopMovers(valuation.cards);
 
-      // Upsert snapshot (one per user per day)
       const { error: upsertErr } = await supabase
         .from('collection_snapshots')
         .upsert(
@@ -86,7 +68,25 @@ if (secret !== process.env.CRON_SECRET) {
 
       if (upsertErr) throw upsertErr;
 
-      results.push({ user_id: userId, status: 'ok' });
+      // DIAGNOSTIC: return each card's valuation outcome
+      results.push({
+        user_id: userId,
+        status: 'ok',
+        breakdown: {
+          total_value: valuation.total_value,
+          card_count: valuation.card_count,
+          valued_count: valuation.valued_count,
+          unvalued_count: valuation.unvalued_count,
+          cards: valuation.cards.map((c) => ({
+            player: c.player_name,
+            variant: c.variant_label,
+            search_term_attempted: c.search_term_used,
+            unit_price: c.unit_price,
+            total_value: c.total_value,
+            matched: c.total_value !== null,
+          })),
+        },
+      });
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'unknown';
       results.push({ user_id: userId, status: 'error', error: msg });
@@ -101,27 +101,19 @@ if (secret !== process.env.CRON_SECRET) {
     processed: results.length,
     ok,
     failed,
-    errors: results.filter((r) => r.status === 'error'),
+    diagnostic: results,
   });
 }
 
-/**
- * For the first snapshot we don't have "day-over-day movers" yet — we just
- * flag the highest-value card and the biggest purchase-vs-current gain/loss.
- * Once we have a few days of data, swap this for a true day-over-day
- * comparison against yesterday's priced totals.
- */
 function computeTopMovers(cards: ValuedCard[]) {
   const valued = cards.filter((c) => c.total_value !== null);
   if (valued.length === 0) return { up: null, down: null };
 
-  // Cards with a known purchase_price → compute profit/loss
   const withPurchase = valued.filter(
     (c) => c.purchase_price !== null && c.unit_price !== null
   );
 
   if (withPurchase.length === 0) {
-    // Fall back to just the biggest-value card for "up"
     const top = [...valued].sort(
       (a, b) => (b.total_value ?? 0) - (a.total_value ?? 0)
     )[0];
@@ -136,12 +128,12 @@ function computeTopMovers(cards: ValuedCard[]) {
     };
   }
 
-  // Biggest absolute profit
   const scored = withPurchase.map((c) => {
     const delta = (c.unit_price! - c.purchase_price!) * c.quantity;
-    const pct = c.purchase_price! > 0
-      ? ((c.unit_price! - c.purchase_price!) / c.purchase_price!) * 100
-      : 0;
+    const pct =
+      c.purchase_price! > 0
+        ? ((c.unit_price! - c.purchase_price!) / c.purchase_price!) * 100
+        : 0;
     return { c, delta, pct };
   });
 
@@ -170,27 +162,3 @@ function computeTopMovers(cards: ValuedCard[]) {
         : null,
   };
 }
-
-/**
- * ----------------------------------------------------------------------------
- * Add this to your vercel.json in the project root (create it if it doesn't
- * exist, or merge into existing crons):
- *
- * {
- *   "crons": [
- *     {
- *       "path": "/api/cron/collection-snapshots",
- *       "schedule": "0 2 * * *"
- *     }
- *   ]
- * }
- *
- * "0 2 * * *" = every day at 02:00 UTC (quiet time, prices stable).
- *
- * Vercel will automatically call GET /api/cron/collection-snapshots at that
- * time, including the bearer token header with your CRON_SECRET value.
- *
- * Set CRON_SECRET in Vercel env vars (mark Sensitive). Can be any random string
- * — generate one with: openssl rand -hex 32
- * ----------------------------------------------------------------------------
- */
