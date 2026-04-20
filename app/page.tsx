@@ -269,7 +269,7 @@ function HomeContent() {
 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", marginBottom: "2rem" }}>
   <button
     onClick={() => document.querySelector('input')?.focus()}
-    style={{ background: "#3aaa35", color: "#faf7f0", fontWeight: 700, fontSize: "14px", padding: "12px 24px", border: "none", borderRadius: "8px", cursor: "pointer" }}>
+    style={{ background: "#1F6F3A", color: "#faf7f0", fontWeight: 700, fontSize: "14px", padding: "12px 24px", border: "none", borderRadius: "8px", cursor: "pointer" }}>
     Search Cards
   </button>
   <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" as const, justifyContent: "center" }}>
@@ -299,9 +299,9 @@ function HomeContent() {
               key={sport.label}
               onClick={() => setActiveSport(sport.value)}
               style={{
-                background: activeSport === sport.value ? "#3aaa35" : "rgba(255,255,255,0.05)",
+                background: activeSport === sport.value ? "#1F6F3A" : "rgba(255,255,255,0.05)",
                 color: activeSport === sport.value ? "#faf7f0" : "#666",
-                border: `1px solid ${activeSport === sport.value ? "#3aaa35" : "#e0d9cc"}`,
+                border: `1px solid ${activeSport === sport.value ? "#1F6F3A" : "#e0d9cc"}`,
                 borderRadius: "20px",
                 padding: "6px 16px",
                 fontSize: "13px",
@@ -329,7 +329,7 @@ function HomeContent() {
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               style={{ flex: 1, background: "transparent", border: "none", outline: "none", color: "#1a1a1a", fontSize: "15px", padding: "14px 16px" }}
             />
-            <button onClick={handleSearch} style={{ background: "#3aaa35", border: "none", color: "#faf7f0", fontWeight: 700, fontSize: "13px", padding: "0 18px", cursor: "pointer", whiteSpace: "nowrap" as const }}>
+            <button onClick={handleSearch} style={{ background: "#1F6F3A", border: "none", color: "#faf7f0", fontWeight: 700, fontSize: "13px", padding: "0 18px", cursor: "pointer", whiteSpace: "nowrap" as const }}>
               {loading ? '...' : 'Search'}
             </button>
           </div>
@@ -521,7 +521,7 @@ function HomeContent() {
                 style={{ flex: 1, minWidth: "200px", background: "#faf7f0", border: "1px solid #e0d9cc", borderRadius: "8px", padding: "10px 14px", color: "#1a1a1a", fontSize: "14px", outline: "none" }}
               />
               <button onClick={handleCertCheck} disabled={certLoading}
-                style={{ background: "#3aaa35", color: "#faf7f0", fontWeight: 700, fontSize: "13px", padding: "10px 20px", border: "none", borderRadius: "8px", cursor: "pointer" }}>
+                style={{ background: "#1F6F3A", color: "#faf7f0", fontWeight: 700, fontSize: "13px", padding: "10px 20px", border: "none", borderRadius: "8px", cursor: "pointer" }}>
                 {certLoading ? 'Checking...' : 'Verify Cert'}
               </button>
             </div>
@@ -552,7 +552,7 @@ function HomeContent() {
                 {certResult.PSACert?.CardGrade && (
                   <div style={{ marginTop: "1rem", display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" as const }}>
                     <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.3)", borderRadius: "8px", padding: "8px 16px" }}>
-                      <span style={{ fontSize: "13px", color: "#3aaa35", fontWeight: 700 }}>✓ Verified PSA {certResult.PSACert.PSAGrade}</span>
+                      <span style={{ fontSize: "13px", color: "#1F6F3A", fontWeight: 700 }}>✓ Verified PSA {certResult.PSACert.PSAGrade}</span>
                     </div>
                     <a href={`https://www.psacard.com/cert/${certResult.PSACert.CertNumber}`} target="_blank" rel="noopener noreferrer"
                       style={{ fontSize: "12px", color: "#888", textDecoration: "none" }}>
@@ -568,7 +568,7 @@ function HomeContent() {
         <div style={{ padding: "2rem 1.25rem", maxWidth: "1200px", margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
             <span style={{ fontWeight: 700, fontSize: "17px" }}>Trending Players</span>
-            <span style={{ background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.2)", color: "#3aaa35", padding: "3px 10px", borderRadius: "20px", fontSize: "11px" }}>Updated weekly</span>
+            <span style={{ background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.2)", color: "#1F6F3A", padding: "3px 10px", borderRadius: "20px", fontSize: "11px" }}>Updated weekly</span>
           </div>
           <div style={{ position: "relative" as const }}>
             <button onClick={() => {
