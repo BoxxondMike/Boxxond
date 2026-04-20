@@ -257,10 +257,10 @@ function HomeContent() {
       {/* Hero */}
       <div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
         <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#1F6F3A", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
-          Search live eBay UK listings, get daily alerts when new cards drop, and verify PSA graded cards instantly.
+          Search live eBay UK listings, track your collection, get daily alerts when new cards drop, and verify PSA graded cards instantly.
         </div>
         <h1 style={{ fontWeight: 800, fontSize: "clamp(36px, 7vw, 68px)", lineHeight: 1.05, margin: "0 0 1.25rem", letterSpacing: "-2px" }}>
-          Know what your<br /><span style={{ color: "#1F6F3A" }}>cards are worth</span>
+          Know your cards worth<br /><span style={{ color: "#1F6F3A" }}>Track your collection</span>
         </h1>
         <p style={{ color: "#666", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 1.5rem" }}>
         </p>
