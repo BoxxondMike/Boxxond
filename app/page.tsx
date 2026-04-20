@@ -176,14 +176,15 @@ function HomeContent() {
       setSavedIds(savedIds.filter((id: string) => id !== item.itemId));
     } else {
       await supabase.from('saved_cards').insert({
-        user_id: user.id,
-        item_id: item.itemId,
-        title: item.title,
-        price: item.price ? parseFloat(item.price.value) : null,
-        currency: item.price?.currency || 'GBP',
-        image_url: item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl || null,
-        item_url: item.itemAffiliateWebUrl || item.itemWebUrl,
-      });
+  user_id: user.id,
+  item_id: item.itemId,
+  title: item.title,
+  price: item.price ? parseFloat(item.price.value) : null,
+  currency: item.price?.currency || 'GBP',
+  image_url: item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl || null,
+  item_url: item.itemAffiliateWebUrl || item.itemWebUrl,
+  end_date: item.itemEndDate || null,
+});
       setSavedIds([...savedIds, item.itemId]);
     }
   };

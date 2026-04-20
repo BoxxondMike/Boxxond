@@ -269,7 +269,24 @@ if (profileData) {
                   )}
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontWeight: 500, fontSize: "13px", color: "#1a1a1a", marginBottom: "4px", lineHeight: 1.4 }}>{card.title}</div>
-                    <div style={{ fontSize: "11px", color: "#aaa" }}>Saved {new Date(card.created_at).toLocaleDateString('en-GB')}</div>
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' as const }}>
+  <div style={{ fontSize: "11px", color: "#aaa" }}>Saved {new Date(card.created_at).toLocaleDateString('en-GB')}</div>
+  {card.end_date && (() => {
+    const hoursLeft = Math.floor((new Date(card.end_date).getTime() - Date.now()) / (1000 * 60 * 60));
+    if (hoursLeft <= 0) return null;
+    if (hoursLeft <= 24) return (
+      <span style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#dc3545', fontSize: '10px', fontWeight: 700, padding: '2px 6px', borderRadius: '4px' }}>
+        ⏰ Ends in {hoursLeft}h
+      </span>
+    );
+    if (hoursLeft <= 72) return (
+      <span style={{ background: 'rgba(255,165,0,0.1)', border: '1px solid rgba(255,165,0,0.3)', color: '#ff8c00', fontSize: '10px', fontWeight: 700, padding: '2px 6px', borderRadius: '4px' }}>
+        ⏰ Ends in {Math.floor(hoursLeft / 24)}d
+      </span>
+    );
+    return null;
+  })()}
+</div>
                   </div>
                   <div style={{ textAlign: "right", flexShrink: 0 }}>
                     <div style={{ fontWeight: 700, fontSize: "18px", color: "#3aaa35", marginBottom: "6px" }}>
