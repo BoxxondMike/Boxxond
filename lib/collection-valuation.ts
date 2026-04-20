@@ -3,13 +3,11 @@
  * ----------------------------------------------------------------------------
  * Shared helper for valuing a user's collection against the latest prices.
  *
- * Price join convention (BoxxHQ-specific):
- *   - price_history.search_term includes the variant suffix, e.g.
- *     "mbappe auto", "mbappe numbered", "mbappe psa 10".
- *   - For base/no-variant cards, search_term is just the player name.
- *
- * So when valuing a user's card we need to reconstruct the expected
- * search_term by combining lowercase player name + variant suffix.
+ * Two fixes from earlier versions:
+ *   1. Reconstructs search_term with variant suffix (BoxxHQ convention)
+ *   2. Does per-unique-combo lookups rather than pulling all of latest_prices
+ *      into memory — avoids the Supabase 1000-row default limit silently
+ *      dropping matches.
  * ----------------------------------------------------------------------------
  */
 
@@ -37,10 +35,6 @@ export type CollectionValuation = {
   cards: ValuedCard[];
 };
 
-/**
- * Maps user_cards.variant_label → the suffix used in price_history.search_term.
- * Keep this in sync with how the price-history cron names its search terms.
- */
 function variantToSearchSuffix(variantLabel: string): string {
   const v = variantLabel.trim().toLowerCase();
   switch (v) {
@@ -61,10 +55,8 @@ function variantToSearchSuffix(variantLabel: string): string {
     case 'base':
     case 'all':
     case '':
-      return ''; // no suffix — base card
+      return '';
     default:
-      // Unknown variant — fall through with the raw label lowercased.
-      // Worth a log so you see them in cron output.
       return v;
   }
 }
@@ -75,14 +67,11 @@ function buildSearchTerm(playerName: string, variantLabel: string): string {
   return suffix ? `${base} ${suffix}` : base;
 }
 
-/**
- * Value a single user's collection against the latest_prices view.
- */
 export async function valueUserCollection(
   supabase: SupabaseClient,
   userId: string
 ): Promise<CollectionValuation> {
-  // 1. Pull the user's cards with player name via join
+  // 1. Pull the user's cards
   const { data: cards, error: cardsErr } = await supabase
     .from('user_cards')
     .select(
@@ -111,35 +100,67 @@ export async function valueUserCollection(
     };
   }
 
-  // 2. Pull all latest prices — cache in memory keyed by search_term + variant
-  const { data: priceRows, error: priceErr } = await supabase
-    .from('latest_prices')
-    .select('search_term, variant_label, avg_price, listing_count');
+  // 2. Build list of unique (search_term, variant_label) pairs we need prices for
+  type Lookup = { search_term: string; variant_label: string };
+  const lookups: Lookup[] = [];
+  const lookupSet = new Set<string>();
 
-  if (priceErr) throw priceErr;
+  const cardLookups: (Lookup | null)[] = cards.map((c: any) => {
+    const playerName: string | null =
+      c.is_manual && c.player_name_manual
+        ? c.player_name_manual
+        : c.players?.name ?? c.player_name_manual ?? null;
+
+    if (!playerName) return null;
+
+    const searchTerm = buildSearchTerm(playerName, c.variant_label);
+    const key = `${searchTerm}|${c.variant_label}`;
+
+    if (!lookupSet.has(key)) {
+      lookupSet.add(key);
+      lookups.push({ search_term: searchTerm, variant_label: c.variant_label });
+    }
+
+    return { search_term: searchTerm, variant_label: c.variant_label };
+  });
+
+  // 3. Fetch prices for ONLY the needed search_terms (avoids 1000-row limit)
+  const uniqueSearchTerms = Array.from(new Set(lookups.map((l) => l.search_term)));
 
   const priceMap = new Map<string, { avg_price: number; listing_count: number }>();
-  for (const row of priceRows ?? []) {
-    const key = `${row.search_term.toLowerCase().trim()}|${row.variant_label}`;
-    priceMap.set(key, {
-      avg_price: Number(row.avg_price),
-      listing_count: row.listing_count,
-    });
+
+  if (uniqueSearchTerms.length > 0) {
+    const { data: priceRows, error: priceErr } = await supabase
+      .from('latest_prices')
+      .select('search_term, variant_label, avg_price, listing_count')
+      .in('search_term', uniqueSearchTerms);
+
+    if (priceErr) throw priceErr;
+
+    for (const row of priceRows ?? []) {
+      const key = `${row.search_term.toLowerCase().trim()}|${row.variant_label}`;
+      priceMap.set(key, {
+        avg_price: Number(row.avg_price),
+        listing_count: row.listing_count,
+      });
+    }
   }
 
-  // 3. Value each card using the correctly-constructed search_term
-  const valuedCards: ValuedCard[] = cards.map((c: any) => {
+  // 4. Value each card
+  const valuedCards: ValuedCard[] = cards.map((c: any, idx: number) => {
     const qty = c.quantity ?? 1;
     const playerName: string | null =
       c.is_manual && c.player_name_manual
         ? c.player_name_manual
         : c.players?.name ?? c.player_name_manual ?? null;
 
-    if (!playerName) {
+    const lookup = cardLookups[idx];
+
+    if (!playerName || !lookup) {
       return {
         card_id: c.id,
         player_id: c.player_id,
-        player_name: null,
+        player_name: playerName,
         variant_label: c.variant_label,
         quantity: qty,
         purchase_price: c.purchase_price,
@@ -150,8 +171,7 @@ export async function valueUserCollection(
       };
     }
 
-    const searchTerm = buildSearchTerm(playerName, c.variant_label);
-    const priceHit = priceMap.get(`${searchTerm}|${c.variant_label}`);
+    const priceHit = priceMap.get(`${lookup.search_term}|${lookup.variant_label}`);
 
     if (!priceHit) {
       return {
@@ -164,7 +184,7 @@ export async function valueUserCollection(
         unit_price: null,
         total_value: null,
         listing_count: null,
-        search_term_used: searchTerm,
+        search_term_used: lookup.search_term,
       };
     }
 
@@ -178,7 +198,7 @@ export async function valueUserCollection(
       unit_price: priceHit.avg_price,
       total_value: priceHit.avg_price * qty,
       listing_count: priceHit.listing_count,
-      search_term_used: searchTerm,
+      search_term_used: lookup.search_term,
     };
   });
 
