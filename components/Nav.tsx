@@ -96,7 +96,7 @@ export default function Nav({ activePage }: { activePage?: string }) {
           ) : (
             <>
               <Link href="/login" style={{ fontSize: "13px", color: "#888", textDecoration: "none" }}>Log in</Link>
-              <Link href="/signup" style={{ background: "#3aaa35", color: "#1a1a1a", fontWeight: 700, fontSize: "13px", padding: "8px 16px", borderRadius: "6px", textDecoration: "none" }}>
+              <Link href="/signup" style={{ background: "#1f6f3a", color: "#faf7f0", fontWeight: 700, fontSize: "13px", padding: "8px 16px", borderRadius: "6px", textDecoration: "none" }}>
                 Sign Up
               </Link>
             </>
