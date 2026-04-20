@@ -2,18 +2,19 @@
  * lib/collection-valuation.ts
  * ----------------------------------------------------------------------------
  * Shared helper for valuing a user's collection against the latest prices.
- * Used by:
- *   - /api/cron/collection-snapshots (daily cron)
- *   - Collection UI (show live value on the page)
- *   - Weekly report generator
  *
- * Keep the valuation logic in ONE place so nothing drifts.
+ * Price join convention (BoxxHQ-specific):
+ *   - price_history.search_term includes the variant suffix, e.g.
+ *     "mbappe auto", "mbappe numbered", "mbappe psa 10".
+ *   - For base/no-variant cards, search_term is just the player name.
+ *
+ * So when valuing a user's card we need to reconstruct the expected
+ * search_term by combining lowercase player name + variant suffix.
  * ----------------------------------------------------------------------------
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-// A single user card with its current valuation attached
 export type ValuedCard = {
   card_id: string;
   player_id: string | null;
@@ -21,11 +22,10 @@ export type ValuedCard = {
   variant_label: string;
   quantity: number;
   purchase_price: number | null;
-  // Valuation
-  unit_price: number | null;        // latest avg price for this variant
-  total_value: number | null;       // unit_price * quantity
-  listing_count: number | null;     // how many listings that price is based on
-  search_term_used: string | null;  // what we matched on (for debugging)
+  unit_price: number | null;
+  total_value: number | null;
+  listing_count: number | null;
+  search_term_used: string | null;
 };
 
 export type CollectionValuation = {
@@ -38,14 +38,45 @@ export type CollectionValuation = {
 };
 
 /**
+ * Maps user_cards.variant_label → the suffix used in price_history.search_term.
+ * Keep this in sync with how the price-history cron names its search terms.
+ */
+function variantToSearchSuffix(variantLabel: string): string {
+  const v = variantLabel.trim().toLowerCase();
+  switch (v) {
+    case 'auto':
+      return 'auto';
+    case 'psa 10':
+      return 'psa 10';
+    case 'prizm':
+      return 'prizm';
+    case 'numbered parallel':
+    case 'numbered':
+      return 'numbered';
+    case 'short print':
+    case 'sp':
+      return 'short print';
+    case 'world cup':
+      return 'world cup';
+    case 'base':
+    case 'all':
+    case '':
+      return ''; // no suffix — base card
+    default:
+      // Unknown variant — fall through with the raw label lowercased.
+      // Worth a log so you see them in cron output.
+      return v;
+  }
+}
+
+function buildSearchTerm(playerName: string, variantLabel: string): string {
+  const base = playerName.toLowerCase().trim();
+  const suffix = variantToSearchSuffix(variantLabel);
+  return suffix ? `${base} ${suffix}` : base;
+}
+
+/**
  * Value a single user's collection against the latest_prices view.
- *
- * Join logic:
- *   user_cards → players (to get the player's name)
- *   lowercase(player.name) → latest_prices.search_term
- *   user_cards.variant_label → latest_prices.variant_label
- *
- * A card is "unvalued" if no matching (search_term, variant_label) row exists.
  */
 export async function valueUserCollection(
   supabase: SupabaseClient,
@@ -80,8 +111,7 @@ export async function valueUserCollection(
     };
   }
 
-  // 2. Pull all latest prices (small enough to fetch once, faster than
-  //    per-card lookups). Cache in memory by (search_term, variant_label).
+  // 2. Pull all latest prices — cache in memory keyed by search_term + variant
   const { data: priceRows, error: priceErr } = await supabase
     .from('latest_prices')
     .select('search_term, variant_label, avg_price, listing_count');
@@ -90,19 +120,20 @@ export async function valueUserCollection(
 
   const priceMap = new Map<string, { avg_price: number; listing_count: number }>();
   for (const row of priceRows ?? []) {
-    priceMap.set(
-      `${row.search_term.toLowerCase()}|${row.variant_label}`,
-      { avg_price: Number(row.avg_price), listing_count: row.listing_count }
-    );
+    const key = `${row.search_term.toLowerCase().trim()}|${row.variant_label}`;
+    priceMap.set(key, {
+      avg_price: Number(row.avg_price),
+      listing_count: row.listing_count,
+    });
   }
 
-  // 3. Value each card
+  // 3. Value each card using the correctly-constructed search_term
   const valuedCards: ValuedCard[] = cards.map((c: any) => {
     const qty = c.quantity ?? 1;
     const playerName: string | null =
       c.is_manual && c.player_name_manual
         ? c.player_name_manual
-        : c.players?.name ?? null;
+        : c.players?.name ?? c.player_name_manual ?? null;
 
     if (!playerName) {
       return {
@@ -119,7 +150,7 @@ export async function valueUserCollection(
       };
     }
 
-    const searchTerm = playerName.toLowerCase();
+    const searchTerm = buildSearchTerm(playerName, c.variant_label);
     const priceHit = priceMap.get(`${searchTerm}|${c.variant_label}`);
 
     if (!priceHit) {
@@ -164,9 +195,6 @@ export async function valueUserCollection(
   };
 }
 
-/**
- * Lazy singleton — use this in routes where you don't already have a client.
- */
 export function getAdminSupabase(): SupabaseClient {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
