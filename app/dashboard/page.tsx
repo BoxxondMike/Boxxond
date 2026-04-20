@@ -63,6 +63,41 @@ if (profileData) {
           setCollectionStats({ count, value });
         }
       }
+      const { data: collectionData } = await supabase
+  .from('user_cards')
+  .select(`
+    purchase_price,
+    quantity,
+    variant_label,
+    players (name)
+  `)
+  .eq('user_id', session!.user.id);
+
+if (collectionData) {
+  const count = collectionData.length;
+  
+  // Get est value from price_history for each card
+  const cardsWithValue = await Promise.all(collectionData.map(async (card: any) => {
+    if (!card.players) return { purchase_price: card.purchase_price, quantity: card.quantity, currentValue: null };
+    
+    const { data: priceData } = await supabase
+      .from('price_history')
+      .select('avg_price')
+      .ilike('search_term', `${card.players.name.toLowerCase()}%`)
+      .eq('variant_label', card.variant_label)
+      .gte('recorded_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
+
+    const currentValue = priceData && priceData.length > 0
+      ? priceData.reduce((sum: number, p: any) => sum + parseFloat(p.avg_price), 0) / priceData.length
+      : null;
+
+    return { purchase_price: card.purchase_price, quantity: card.quantity, currentValue };
+  }));
+
+  const estValue = cardsWithValue.reduce((sum, c) => sum + (c.currentValue ? c.currentValue * (c.quantity || 1) : 0), 0);
+  
+  setCollectionStats({ count, value: estValue });
+}
       setLoading(false);
     };
     getUser();
