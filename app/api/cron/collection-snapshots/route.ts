@@ -1,11 +1,11 @@
 /**
  * app/api/cron/collection-snapshots/route.ts
  * ----------------------------------------------------------------------------
- * DIAGNOSTIC VERSION — returns the per-card valuation breakdown in the
- * response, so we can see exactly which cards value and which don't.
+ * Daily cron: captures a collection valuation snapshot for every user who has
+ * any cards in user_cards. Calculates top mover up/down compared to purchase
+ * price. Runs at 10:00 UTC via vercel.json.
  *
- * Once everything's matching properly, swap this back for the production
- * version that only returns summary counts.
+ * Protected by ?secret= query string matching CRON_SECRET env var.
  * ----------------------------------------------------------------------------
  */
 
@@ -38,12 +38,7 @@ export async function GET(req: NextRequest) {
     new Set((users ?? []).map((u: any) => u.user_id as string))
   );
 
-  const results: Array<{
-    user_id: string;
-    status: string;
-    error?: string;
-    breakdown?: any;
-  }> = [];
+  const results: Array<{ user_id: string; status: string; error?: string }> = [];
 
   for (const userId of userIds) {
     try {
@@ -68,25 +63,7 @@ export async function GET(req: NextRequest) {
 
       if (upsertErr) throw upsertErr;
 
-      // DIAGNOSTIC: return each card's valuation outcome
-      results.push({
-        user_id: userId,
-        status: 'ok',
-        breakdown: {
-          total_value: valuation.total_value,
-          card_count: valuation.card_count,
-          valued_count: valuation.valued_count,
-          unvalued_count: valuation.unvalued_count,
-          cards: valuation.cards.map((c) => ({
-            player: c.player_name,
-            variant: c.variant_label,
-            search_term_attempted: c.search_term_used,
-            unit_price: c.unit_price,
-            total_value: c.total_value,
-            matched: c.total_value !== null,
-          })),
-        },
-      });
+      results.push({ user_id: userId, status: 'ok' });
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'unknown';
       results.push({ user_id: userId, status: 'error', error: msg });
@@ -101,7 +78,7 @@ export async function GET(req: NextRequest) {
     processed: results.length,
     ok,
     failed,
-    diagnostic: results,
+    errors: results.filter((r) => r.status === 'error'),
   });
 }
 
