@@ -26,6 +26,8 @@ export default function CollectionPage() {
   const [year, setYear] = useState('');
   const [grade, setGrade] = useState('');
   const [purchasePrice, setPurchasePrice] = useState('');
+  const [sortBy, setSortBy] = useState('added_at');
+const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
 
   useEffect(() => {
     const getUser = async () => {
@@ -105,6 +107,15 @@ export default function CollectionPage() {
       .limit(6);
     setPlayerSuggestions(data || []);
   };
+
+  const sortedCards = [...cards].sort((a: any, b: any) => {
+  if (sortBy === 'paid_asc') return parseFloat(a.purchase_price) - parseFloat(b.purchase_price);
+  if (sortBy === 'paid_desc') return parseFloat(b.purchase_price) - parseFloat(a.purchase_price);
+  if (sortBy === 'alpha') return (a.players?.name || a.player_name_manual || '').localeCompare(b.players?.name || b.player_name_manual || '');
+  if (sortBy === 'value_desc') return (b.currentValue || 0) - (a.currentValue || 0);
+  if (sortBy === 'pnl_desc') return ((b.currentValue || 0) - parseFloat(b.purchase_price)) - ((a.currentValue || 0) - parseFloat(a.purchase_price));
+  return new Date(b.added_at).getTime() - new Date(a.added_at).getTime();
+});
 
   const resetForm = () => {
     setSearchPlayer('');
@@ -469,6 +480,35 @@ export default function CollectionPage() {
           </div>
         )}
 
+        {/* Controls */}
+{cards.length > 0 && (
+  <div style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
+    <div style={{ display: 'flex', gap: '8px' }}>
+      <button
+        onClick={() => setViewMode('list')}
+        style={{ background: viewMode === 'list' ? '#1F6F3A' : '#fff', color: viewMode === 'list' ? '#fff' : '#888', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 14px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+        List
+      </button>
+      <button
+        onClick={() => setViewMode('grid')}
+        style={{ background: viewMode === 'grid' ? '#1F6F3A' : '#fff', color: viewMode === 'grid' ? '#fff' : '#888', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 14px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+        Grid
+      </button>
+    </div>
+    <select
+      value={sortBy}
+      onChange={e => setSortBy(e.target.value)}
+      style={{ background: '#fff', border: '1px solid #e0d9cc', borderRadius: '8px', padding: '6px 14px', fontSize: '13px', outline: 'none', fontFamily: 'inherit', cursor: 'pointer' }}>
+      <option value="added_at">Recently Added</option>
+      <option value="alpha">Alphabetical</option>
+      <option value="paid_desc">Paid: High to Low</option>
+      <option value="paid_asc">Paid: Low to High</option>
+      <option value="value_desc">Est. Value: High to Low</option>
+      <option value="pnl_desc">P&L: High to Low</option>
+    </select>
+  </div>
+)}
+
         {/* Cards */}
         {loading ? (
           <div style={{ textAlign: 'center', color: '#bbb', padding: '3rem 0' }}>Loading your collection...</div>
@@ -480,8 +520,8 @@ export default function CollectionPage() {
             <a href='/' style={{ background: '#3aaa35', color: '#fff', fontWeight: 700, fontSize: '14px', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none' }}>Browse Players</a>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {cards.map((card: any) => {
+          <div style={{ display: viewMode === 'grid' ? 'grid' : 'flex', gridTemplateColumns: viewMode === 'grid' ? 'repeat(2, 1fr)' : undefined, flexDirection: viewMode === 'list' ? 'column' : undefined, gap: '12px' }}>
+  {sortedCards.map((card: any) => {
               const playerName = card.players?.name || card.player_name_manual || 'Unknown';
               const pnl = card.currentValue ? (card.currentValue - parseFloat(card.purchase_price)) * (card.quantity || 1) : null;
               const pnlPct = card.currentValue ? ((card.currentValue - parseFloat(card.purchase_price)) / parseFloat(card.purchase_price)) * 100 : null;
