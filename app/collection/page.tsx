@@ -603,7 +603,10 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
                 <div key={card.id} style={{ background: '#fff', border: '1px solid #e0d9cc', borderRadius: '12px', padding: '1.25rem' }}>
                   {card.image_url && (
   <img src={card.image_url} alt={playerName}
-    style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #e0d9cc', marginBottom: '10px' }} />
+    style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #e0d9cc', marginBottom: '10px', cursor: 'zoom-in', transition: 'transform 0.2s ease', zIndex: 1, position: 'relative' as const }}
+    onMouseEnter={e => e.currentTarget.style.transform = 'scale(4)'}
+    onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+  />
 )}
   {/* Player info */}
   <div style={{ marginBottom: '12px' }}>
