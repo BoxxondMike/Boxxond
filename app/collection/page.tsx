@@ -661,21 +661,30 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
       Remove
     </button>
     <button onClick={() => setEditingCardId(editingCardId === card.id ? null : card.id)}
-  style={{ background: 'none', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', color: '#888', cursor: 'pointer' }}>
-  {editingCardId === card.id ? 'Cancel' : '📷 Add Card Image'}
-</button>
+      style={{ background: 'none', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', color: '#888', cursor: 'pointer' }}>
+      {editingCardId === card.id ? 'Cancel' : '📷 Add Card Image'}
+    </button>
   </div>
+
+  {editingCardId === card.id && (
+    <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid #f0ede6' }}>
+      <input 
+        type="file" 
+        accept="image/*"
+        capture="environment"
+        id={`edit-image-${card.id}`}
+        style={{ display: 'none' }}
+        onChange={e => e.target.files?.[0] && uploadEditImage(e.target.files[0], card.id)} 
+      />
+      <button 
+        onClick={() => document.getElementById(`edit-image-${card.id}`)?.click()}
+        style={{ background: '#faf7f0', border: '1px dashed #e0d9cc', borderRadius: '8px', padding: '10px 12px', cursor: 'pointer', fontSize: '13px', color: '#888', fontFamily: 'inherit' }}>
+        {uploadingEditImage ? 'Uploading...' : '📷 Upload card photo'}
+      </button>
+    </div>
+  )}
 </div>
               );
-              {editingCardId === card.id && (
-  <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid #f0ede6' }}>
-    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#faf7f0', border: '1px dashed #e0d9cc', borderRadius: '8px', padding: '10px 12px', cursor: 'pointer', fontSize: '13px', color: '#888', width: 'fit-content' }}>
-      <input type="file" accept="image/*" style={{ display: 'none' }}
-        onChange={e => e.target.files?.[0] && uploadEditImage(e.target.files[0], card.id)} />
-      {uploadingEditImage ? 'Uploading...' : '📷 Upload card photo'}
-    </label>
-  </div>
-)}
             })}
           </div>
         )}
