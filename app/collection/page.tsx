@@ -28,6 +28,11 @@ export default function CollectionPage() {
   const [purchasePrice, setPurchasePrice] = useState('');
   const [sortBy, setSortBy] = useState('added_at');
 const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+const [uploadingImage, setUploadingImage] = useState(false);
+const [cardImageUrl, setCardImageUrl] = useState('');
+const [editingCardId, setEditingCardId] = useState<string | null>(null);
+const [editImageUrl, setEditImageUrl] = useState('');
+const [uploadingEditImage, setUploadingEditImage] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -58,6 +63,7 @@ const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
     year,
     grade,
     numbered,
+    image_url,
     players (
       id,
       name,
@@ -130,23 +136,71 @@ const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
     setGrade('');
     setPurchasePrice('');
     setPlayerSuggestions([]);
+    setCardImageUrl('');
   };
+  const uploadEditImage = async (file: File, cardId: string) => {
+  if (!user) return;
+  setUploadingEditImage(true);
+  
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${user.id}/${cardId}.${fileExt}`;
+  
+  const { error } = await supabase.storage
+    .from('card-images')
+    .upload(fileName, file, { upsert: true });
+    
+  if (!error) {
+    const { data } = supabase.storage
+      .from('card-images')
+      .getPublicUrl(fileName);
+    
+    await supabase.from('user_cards')
+      .update({ image_url: data.publicUrl })
+      .eq('id', cardId);
+      
+    setCards(prev => prev.map(c => c.id === cardId ? { ...c, image_url: data.publicUrl } : c));
+    setEditingCardId(null);
+  }
+  setUploadingEditImage(false);
+};
+
+  const uploadCardImage = async (file: File) => {
+  if (!user) return;
+  setUploadingImage(true);
+  
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+  
+  const { error } = await supabase.storage
+    .from('card-images')
+    .upload(fileName, file);
+    
+  if (!error) {
+    const { data } = supabase.storage
+      .from('card-images')
+      .getPublicUrl(fileName);
+    setCardImageUrl(data.publicUrl);
+  }
+  
+  setUploadingImage(false);
+};
 
   const addCard = async () => {
     if (!user || !purchasePrice) return;
     setAddingCard(true);
 
     const insertData: any = {
-      user_id: user.id,
-      purchase_price: parseFloat(purchasePrice),
-      variant_label: variant || 'Base',
-      card_type: cardType,
-      card_set: cardSet,
-      year: year ? parseInt(year) : null,
-      grade: grade || 'Raw',
-      numbered: numbered || null,
-      is_manual: isManual,
-    };
+  user_id: user.id,
+  purchase_price: parseFloat(purchasePrice),
+  variant_label: variant || 'Base',
+  card_type: cardType,
+  card_set: cardSet,
+  year: year ? parseInt(year) : null,
+  grade: grade || 'Raw',
+  numbered: numbered || null,
+  is_manual: isManual,
+  image_url: cardImageUrl || null,
+};
 
     if (selectedPlayer && !isManual) {
       insertData.player_id = selectedPlayer.id;
@@ -480,6 +534,26 @@ const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
           </div>
         )}
 
+        {/* Card Image */}
+<div>
+  <label style={{ fontSize: '12px', color: '#888', display: 'block', marginBottom: '6px', fontWeight: 500 }}>Card Photo (optional)</label>
+  {cardImageUrl ? (
+    <div style={{ position: 'relative', display: 'inline-block' }}>
+      <img src={cardImageUrl} alt="Card" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #e0d9cc' }} />
+      <button onClick={() => setCardImageUrl('')}
+        style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#dc3545', color: '#fff', border: 'none', borderRadius: '50%', width: '18px', height: '18px', fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        ×
+      </button>
+    </div>
+  ) : (
+    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#faf7f0', border: '1px dashed #e0d9cc', borderRadius: '8px', padding: '10px 12px', cursor: 'pointer', fontSize: '13px', color: '#888' }}>
+      <input type="file" accept="image/*" style={{ display: 'none' }}
+        onChange={e => e.target.files?.[0] && uploadCardImage(e.target.files[0])} />
+      {uploadingImage ? 'Uploading...' : '📷 Upload photo'}
+    </label>
+  )}
+</div>
+
         {/* Controls */}
 {cards.length > 0 && (
   <div style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
@@ -527,6 +601,10 @@ const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
               const pnlPct = card.currentValue ? ((card.currentValue - parseFloat(card.purchase_price)) / parseFloat(card.purchase_price)) * 100 : null;
               return (
                 <div key={card.id} style={{ background: '#fff', border: '1px solid #e0d9cc', borderRadius: '12px', padding: '1.25rem' }}>
+                  {card.image_url && (
+  <img src={card.image_url} alt={playerName}
+    style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #e0d9cc', marginBottom: '10px' }} />
+)}
   {/* Player info */}
   <div style={{ marginBottom: '12px' }}>
     <div style={{ fontWeight: 700, fontSize: '16px', marginBottom: '4px' }}>{playerName}</div>
@@ -582,9 +660,22 @@ const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
       style={{ background: 'none', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', color: '#aaa', cursor: 'pointer' }}>
       Remove
     </button>
+    <button onClick={() => setEditingCardId(editingCardId === card.id ? null : card.id)}
+  style={{ background: 'none', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', color: '#888', cursor: 'pointer' }}>
+  {editingCardId === card.id ? 'Cancel' : '📷 Add Card Image'}
+</button>
   </div>
 </div>
               );
+              {editingCardId === card.id && (
+  <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid #f0ede6' }}>
+    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#faf7f0', border: '1px dashed #e0d9cc', borderRadius: '8px', padding: '10px 12px', cursor: 'pointer', fontSize: '13px', color: '#888', width: 'fit-content' }}>
+      <input type="file" accept="image/*" style={{ display: 'none' }}
+        onChange={e => e.target.files?.[0] && uploadEditImage(e.target.files[0], card.id)} />
+      {uploadingEditImage ? 'Uploading...' : '📷 Upload card photo'}
+    </label>
+  </div>
+)}
             })}
           </div>
         )}
