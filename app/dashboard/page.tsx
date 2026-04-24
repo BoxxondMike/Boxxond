@@ -186,6 +186,28 @@ if (collectionData) {
             </div>
           ))}
         </div>
+        {/* My Collection */}
+<div style={{ marginTop: "2.5rem", marginBottom: "2.5rem" }}>
+  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+    <div>
+      <h2 style={{ fontSize: "18px", fontWeight: 700, margin: "0 0 4px", letterSpacing: "-0.3px" }}>My Collection</h2>
+      <p style={{ fontSize: "13px", color: "#888", margin: 0 }}>Track your card collection against live Boxx IQ prices</p>
+    </div>
+  </div>
+  <div style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.25rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+    <div>
+      <div style={{ fontSize: "16px", fontWeight: 700, marginBottom: "4px" }}>
+        {collectionStats ? `${collectionStats.count} card${collectionStats.count !== 1 ? 's' : ''} tracked` : '0 cards tracked'}
+      </div>
+      <div style={{ fontSize: "13px", color: "#888" }}>
+        {collectionStats && collectionStats.value > 0 ? `Est. value £${collectionStats.value.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'Add cards to start tracking'}
+      </div>
+    </div>
+    <Link href="/collection" style={{ background: "#1F6F3A", color: "#fff", fontWeight: 700, fontSize: "13px", padding: "10px 20px", borderRadius: "8px", textDecoration: "none" }}>
+      Open My Collection →
+    </Link>
+  </div>
+</div>
                 {/* Card Alerts */}
         <div style={{ marginBottom: "2.5rem" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
@@ -198,7 +220,7 @@ if (collectionData) {
           {/* Alert Type Tabs */}
           <div style={{ display: "flex", gap: "0", marginBottom: "1rem", background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "4px", width: "fit-content" }}>
             {[['player', 'Player / Card'], ['team', 'Team']].map(([tab, label]) => (
-              <button key={tab} onClick={() => { setAlertType(tab); setAlertTerm(''); }} style={{ background: alertType === tab ? "#3aaa35" : "transparent", color: alertType === tab ? "#faf7f0" : "#666", fontWeight: 700, fontSize: "13px", padding: "8px 18px", border: "none", borderRadius: "7px", cursor: "pointer" }}>
+              <button key={tab} onClick={() => { setAlertType(tab); setAlertTerm(''); }} style={{ background: alertType === tab ? "#1F6F3A" : "transparent", color: alertType === tab ? "#faf7f0" : "#666", fontWeight: 700, fontSize: "13px", padding: "8px 18px", border: "none", borderRadius: "7px", cursor: "pointer" }}>
                 {label}
               </button>
             ))}
@@ -246,7 +268,7 @@ if (collectionData) {
             />
             <button
               onClick={handleAddAlert}
-              style={{ background: "#3aaa35", color: "#faf7f0", fontWeight: 700, fontSize: "13px", padding: "10px 20px", border: "none", borderRadius: "8px", cursor: "pointer", whiteSpace: "nowrap" as const }}>
+              style={{ background: "#1F6F3A", color: "#faf7f0", fontWeight: 700, fontSize: "13px", padding: "10px 20px", border: "none", borderRadius: "8px", cursor: "pointer", whiteSpace: "nowrap" as const }}>
               Add Alert
             </button>
           </div>
@@ -266,7 +288,7 @@ if (collectionData) {
                     </div>
                   </div>
                   <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                    <Link href={`/?q=${encodeURIComponent(alert.search_term)}`} style={{ fontSize: "12px", color: "#3aaa35", textDecoration: "none" }}>Search now →</Link>
+                    <Link href={`/?q=${encodeURIComponent(alert.search_term)}`} style={{ fontSize: "12px", color: "#1F6F3A", textDecoration: "none" }}>Search now →</Link>
                     <button onClick={() => handleDeleteAlert(alert.id)} style={{ fontSize: "11px", color: "rgba(239,68,68,0.6)", background: "none", border: "none", cursor: "pointer" }}>Remove</button>
                   </div>
                 </div>
@@ -283,7 +305,7 @@ if (collectionData) {
         <div style={{ marginBottom: "2.5rem" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
             <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0, letterSpacing: "-0.3px" }}>Wishlist</h2>
-            <Link href="/" style={{ fontSize: "13px", color: "#3aaa35", textDecoration: "none" }}>+ Add more</Link>
+            <Link href="/" style={{ fontSize: "13px", color: "#1F6F3A", textDecoration: "none" }}>+ Add more</Link>
           </div>
 
           {savedCards.length === 0 ? (
@@ -337,28 +359,7 @@ if (collectionData) {
             </div>
           )}
         </div>
-       {/* My Collection */}
-<div style={{ marginTop: "2.5rem" }}>
-  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-    <div>
-      <h2 style={{ fontSize: "18px", fontWeight: 700, margin: "0 0 4px", letterSpacing: "-0.3px" }}>My Collection</h2>
-      <p style={{ fontSize: "13px", color: "#888", margin: 0 }}>Track your card collection against live Boxx IQ prices</p>
-    </div>
-  </div>
-  <div style={{ background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.25rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-    <div>
-      <div style={{ fontSize: "16px", fontWeight: 700, marginBottom: "4px" }}>
-        {collectionStats ? `${collectionStats.count} card${collectionStats.count !== 1 ? 's' : ''} tracked` : '0 cards tracked'}
-      </div>
-      <div style={{ fontSize: "13px", color: "#888" }}>
-        {collectionStats && collectionStats.value > 0 ? `Est. value £${collectionStats.value.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'Add cards to start tracking'}
-      </div>
-    </div>
-    <Link href="/collection" style={{ background: "#1F6F3A", color: "#fff", fontWeight: 700, fontSize: "13px", padding: "10px 20px", borderRadius: "8px", textDecoration: "none" }}>
-      Open My Collection →
-    </Link>
-  </div>
-</div>
+       
 {/* Profile */}
 <div style={{ marginTop: "2.5rem" }}>
   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
@@ -393,7 +394,7 @@ if (collectionData) {
             style={{
               background: selectedSports.includes(sport) ? "rgba(58,170,53,0.1)" : "#faf7f0",
               border: selectedSports.includes(sport) ? "1px solid rgba(58,170,53,0.4)" : "1px solid #e0d9cc",
-              color: selectedSports.includes(sport) ? "#3aaa35" : "#888",
+              color: selectedSports.includes(sport) ? "#1F6F3A" : "#888",
               borderRadius: "8px",
               padding: "8px 16px",
               fontSize: "13px",
@@ -454,7 +455,7 @@ if (collectionData) {
       </optgroup>
     </select>
     {selectedTeams.map(team => (
-      <div key={team} style={{ background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.4)", color: "#3aaa35", borderRadius: "8px", padding: "8px 12px", fontSize: "13px", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px" }}>
+      <div key={team} style={{ background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.4)", color: "#1F6F3A", borderRadius: "8px", padding: "8px 12px", fontSize: "13px", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px" }}>
         {team}
         <span onClick={() => setSelectedTeams(prev => prev.filter(t => t !== team))} style={{ cursor: "pointer", fontSize: "14px", lineHeight: 1 }}>×</span>
       </div>
@@ -471,7 +472,7 @@ if (collectionData) {
         {savingProfile ? 'Saving...' : 'Save Profile'}
       </button>
       {profileSaved && (
-        <span style={{ fontSize: "13px", color: "#3aaa35", fontWeight: 500 }}>✓ Profile saved</span>
+        <span style={{ fontSize: "13px", color: "#1F6F3A", fontWeight: 500 }}>✓ Profile saved</span>
       )}
     </div>
 
