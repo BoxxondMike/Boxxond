@@ -36,17 +36,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // All player pages from Supabase
-  const { data: players } = await supabase
-    .from('players')
-    .select('name')
-    .eq('sport', 'Football');
+  // All player pages from Supabase (all sports)
+const { data: players } = await supabase
+  .from('players')
+  .select('name');
 
-  const playerPages: MetadataRoute.Sitemap = (players || []).map((player: any) => ({
-    url: `${baseUrl}/players/${player.name.toLowerCase().replace(/ /g, '-')}`,
-    lastModified: new Date(),
-    changeFrequency: 'daily' as const,
-    priority: 0.7,
-  }));
+const playerPages: MetadataRoute.Sitemap = (players || []).map((player: any) => ({
+  url: `${baseUrl}/players/${player.name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .trim()}`,
+  lastModified: new Date(),
+  changeFrequency: 'daily' as const,
+  priority: 0.7,
+}));
 
   return [...staticPages, ...playerPages];
 }
