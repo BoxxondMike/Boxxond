@@ -259,9 +259,9 @@ export default function SetsPage() {
   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "16px", alignItems: "stretch"}}>
     {[
       { slug: 'donruss-road-to-world-cup', label: '🌍 World Cup', color: '#3aaa35' },
-      { slug: 'topps-finest-premier-league-2026', label: '⚡ Coming Soon', color: '#3aaa35' },
+      { slug: 'topps-finest-premier-league-2026', label: '⚡ Out Now', color: '#3aaa35' },
       { slug: 'topps-chrome-ucc-2526', label: '⚡ New Release', color: '#3aaa35' },
-      { slug: 'topps-nfl', label: '🔥 Just Released', color: '#f59e0b' },
+      { slug: 'topps-nfl', label: '🔥 Out Now', color: '#f59e0b' },
     ].map(({ slug, label, color }) => {
       const set = sports.flatMap(s => s.sets).find(s => s.slug === slug);
       if (!set) return null;
