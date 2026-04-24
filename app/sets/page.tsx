@@ -10,7 +10,7 @@ type CardSet = {
   difficulty: string;
   tags: string[];
   status?: string;
-  checklistUrl?: string;
+  checklistUrl?: string
 };
 
 type Sport = {
@@ -39,6 +39,14 @@ const sports: Sport[] = [
   tags: ['Refractors', 'Autos', 'Premier League', 'New Release'],
   status: 'new',
   checklistUrl: 'https://cdn.shopify.com/s/files/1/0739/2015/1805/files/Finest_Premier_League_Checklist.pdf?v=1774359572',
+},
+{
+  slug: 'donruss-road-to-world-cup',
+  name: 'Donruss Road to FIFA World Cup 2026',
+  manufacturer: 'Panini',
+  description: 'Panini Donruss Road to FIFA World Cup 2026 is the first major international set building towards the 2026 World Cup in North America. Covering 30 national teams with a 250-card base set including 50 Rated Rookies, it features Optic Holo parallels, Kaboom inserts and autographs from the biggest names in international football.',
+  difficulty: 'Mid Range',
+  tags: ['World Cup', 'Kaboom', 'Rated Rookies'],
 },
       {
         slug: 'panini-prizm-epl',
@@ -250,10 +258,10 @@ export default function SetsPage() {
   </div>
   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "16px", alignItems: "stretch"}}>
     {[
-      { slug: 'topps-chrome', label: '🔥 Flagship', color: '#3aaa35' },
-      { slug: 'topps-finest-premier-league-2026', label: '🔥 Coming Soon', color: '#3aaa35' },
-      { slug: 'topps-chrome-ucc-2526', label: '🆕 New Release', color: '#3aaa35' },
-      { slug: 'topps-nfl', label: '⚡ Just Released', color: '#f59e0b' },
+      { slug: 'donruss-road-to-world-cup', label: '🌍 World Cup', color: '#3aaa35' },
+      { slug: 'topps-finest-premier-league-2026', label: '⚡ Coming Soon', color: '#3aaa35' },
+      { slug: 'topps-chrome-ucc-2526', label: '⚡ New Release', color: '#3aaa35' },
+      { slug: 'topps-nfl', label: '🔥 Just Released', color: '#f59e0b' },
     ].map(({ slug, label, color }) => {
       const set = sports.flatMap(s => s.sets).find(s => s.slug === slug);
       if (!set) return null;
@@ -265,7 +273,7 @@ export default function SetsPage() {
             onMouseLeave={e => (e.currentTarget.style.borderColor = color === '#f59e0b' ? 'rgba(251,191,36,0.3)' : 'rgba(58,170,53,0.3)')}>
             <div style={{ fontSize: "11px", fontWeight: 700, color, marginBottom: "8px", textTransform: "uppercase" as const, letterSpacing: "0.5px" }}>{label}</div>
             <div style={{ fontWeight: 700, fontSize: "17px", color: "#1a1a1a", marginBottom: "4px", letterSpacing: "-0.3px" }}>{set.name}</div>
-            <div style={{ fontSize: "12px", color: "#666", lineHeight: 1.5, marginBottom: "12px" }}>{set.description.slice(0, 80)}...</div>
+            <div style={{ fontSize: "12px", color: "#666", lineHeight: 1.5, marginBottom: "12px" }}>{set.description?.slice(0, 80)}...</div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" }}>
   <div style={{ fontSize: "12px", color, fontWeight: 600 }}>View Set →</div>
   {set.checklistUrl && (
