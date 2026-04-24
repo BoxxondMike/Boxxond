@@ -512,13 +512,20 @@ export default async function SetPage({ params }: { params: Promise<{ slug: stri
 
       <div style={{ padding: "2.5rem 2rem", maxWidth: "800px", margin: "0 auto" }}>
 
-        <Link href="/sets" style={{ color: "#888", fontSize: "13px", textDecoration: "none", display: "inline-block", marginBottom: "1.5rem" }}>← Back to Release Vault</Link>
+        <Link href="/sets" style={{ color: "#888", fontSize: "13px", textDecoration: "none", display: "inline-block", marginBottom: "1.5rem" }}>← Back to Sets & Releases</Link>
 
         <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "0.75rem", flexWrap: "wrap" as const }}>
           <h1 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 800, fontSize: "clamp(28px, 5vw, 44px)", letterSpacing: "-1px", margin: 0 }}>{set.name}</h1>
           <span style={{ background: difficultyColour[set.difficulty], color: difficultyText[set.difficulty], fontSize: "11px", padding: "3px 10px", borderRadius: "4px", fontWeight: 500 }}>{set.difficulty}</span>
         </div>
-        <div style={{ fontSize: "13px", color: "#3aaa35", fontWeight: 600, marginBottom: "2rem" }}>{set.manufacturer} · {set.year}</div>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "2rem", flexWrap: "wrap" as const }}>
+  <div style={{ fontSize: "13px", color: "#3aaa35", fontWeight: 600 }}>{set.manufacturer} · {set.year}</div>
+  {slug === 'donruss-road-to-world-cup' && (
+    <Link href={`/sets/${slug}/checklist`} style={{ background: "#1F6F3A", color: "#fff", fontSize: "12px", fontWeight: 700, padding: "6px 14px", borderRadius: "6px", textDecoration: "none" }}>
+      View Full Checklist →
+    </Link>
+  )}
+</div>
 
         <section style={{ marginBottom: "2.5rem" }}>
           <h2 style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 700, fontSize: "16px", marginBottom: "0.75rem", color: "#1a1a1a" }}>Overview</h2>
