@@ -144,51 +144,64 @@ useEffect(() => {
     setPlayerSuggestions([]);
     setCardImageUrl('');
   };
-  const uploadEditImage = async (file: File, cardId: string) => {
-  if (!user) return;
-  setUploadingEditImage(true);
-  
-  const fileExt = file.name.split('.').pop();
-  const fileName = `${user.id}/${cardId}.${fileExt}`;
-  
-  const { error } = await supabase.storage
-    .from('card-images')
-    .upload(fileName, file, { upsert: true });
-    
-  if (!error) {
-    const { data } = supabase.storage
-      .from('card-images')
-      .getPublicUrl(fileName);
-    
-    await supabase.from('user_cards')
-      .update({ image_url: data.publicUrl })
-      .eq('id', cardId);
-      
-    setCards(prev => prev.map(c => c.id === cardId ? { ...c, image_url: data.publicUrl } : c));
-    setEditingCardId(null);
-  }
-  setUploadingEditImage(false);
+const compressImage = (file: File): Promise<File> => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxSize = 800;
+      let { width, height } = img;
+      if (width > height && width > maxSize) { height = (height * maxSize) / width; width = maxSize; }
+      else if (height > maxSize) { width = (width * maxSize) / height; height = maxSize; }
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d')!.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(blob => {
+        resolve(new File([blob!], file.name, { type: 'image/jpeg' }));
+      }, 'image/jpeg', 0.8);
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+  });
 };
 
-  const uploadCardImage = async (file: File) => {
+const uploadCardImage = async (file: File) => {
   if (!user) return;
   setUploadingImage(true);
-  
-  const fileExt = file.name.split('.').pop();
-  const fileName = `${user.id}/${Date.now()}.${fileExt}`;
-  
+  const compressed = await compressImage(file);
+  const fileName = `${user.id}/${Date.now()}.jpg`;
   const { error } = await supabase.storage
     .from('card-images')
-    .upload(fileName, file);
-    
+    .upload(fileName, compressed);
   if (!error) {
     const { data } = supabase.storage
       .from('card-images')
       .getPublicUrl(fileName);
     setCardImageUrl(data.publicUrl);
   }
-  
   setUploadingImage(false);
+};
+
+const uploadEditImage = async (file: File, cardId: string) => {
+  if (!user) return;
+  setUploadingEditImage(true);
+  const compressed = await compressImage(file);
+  const fileName = `${user.id}/${cardId}.jpg`;
+  const { error } = await supabase.storage
+    .from('card-images')
+    .upload(fileName, compressed, { upsert: true });
+  if (!error) {
+    const { data } = supabase.storage
+      .from('card-images')
+      .getPublicUrl(fileName);
+    await supabase.from('user_cards')
+      .update({ image_url: data.publicUrl })
+      .eq('id', cardId);
+    setCards(prev => prev.map(c => c.id === cardId ? { ...c, image_url: data.publicUrl } : c));
+    setEditingCardId(null);
+  }
+  setUploadingEditImage(false);
 };
 
   const addCard = async () => {
@@ -607,7 +620,7 @@ useEffect(() => {
             <a href='/' style={{ background: '#3aaa35', color: '#fff', fontWeight: 700, fontSize: '14px', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none' }}>Browse Players</a>
           </div>
         ) : (
-          <div style={{ display: viewMode === 'grid' ? 'grid' : 'flex', gridTemplateColumns: viewMode === 'grid' ? 'repeat(auto-fill, minmax(320px, 1fr))' : undefined, flexDirection: viewMode === 'list' ? 'column' : undefined, gap: '12px' }}>
+          <div style={{ display: viewMode === 'grid' ? 'grid' : 'flex', gridTemplateColumns: viewMode === 'grid' ? 'repeat(auto-fill, minmax(min(320px, 45vw), 1fr))' : undefined, flexDirection: viewMode === 'list' ? 'column' : undefined, gap: '12px' }}>
   {sortedCards.map((card: any) => {
               const playerName = card.players?.name || card.player_name_manual || 'Unknown';
               const pnl = card.currentValue ? (card.currentValue - parseFloat(card.purchase_price)) * (card.quantity || 1) : null;
