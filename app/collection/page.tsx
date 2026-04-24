@@ -34,6 +34,12 @@ const [editingCardId, setEditingCardId] = useState<string | null>(null);
 const [editImageUrl, setEditImageUrl] = useState('');
 const [uploadingEditImage, setUploadingEditImage] = useState(false);
 
+
+useEffect(() => {
+  const saved = localStorage.getItem('collectionViewMode') as 'list' | 'grid';
+  if (saved) setViewMode(saved);
+}, []);
+
   useEffect(() => {
     const getUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -230,17 +236,17 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
       <main style={{ background: '#faf7f0', minHeight: '100vh', color: '#1a1a1a', fontFamily: 'var(--font-dm-sans)' }}>
         <Nav />
         <div style={{ padding: '4rem 1.25rem 3rem', maxWidth: '960px', margin: '0 auto', textAlign: 'center' }}>
-          <div style={{ display: 'inline-block', background: 'rgba(58,170,53,0.1)', border: '1px solid rgba(58,170,53,0.25)', color: '#3aaa35', fontSize: '11px', fontWeight: 600, padding: '5px 14px', borderRadius: '20px', marginBottom: '1.5rem', letterSpacing: '1px', textTransform: 'uppercase' as const }}>
+          <div style={{ display: 'inline-block', background: 'rgba(58,170,53,0.1)', border: '1px solid rgba(58,170,53,0.25)', color: '#1F6F3A', fontSize: '11px', fontWeight: 600, padding: '5px 14px', borderRadius: '20px', marginBottom: '1.5rem', letterSpacing: '1px', textTransform: 'uppercase' as const }}>
             Own Your Collection With BoxxHQ
           </div>
           <h1 style={{ fontSize: 'clamp(32px, 6vw, 56px)', fontWeight: 800, margin: '0 0 1rem', letterSpacing: '-1.5px', lineHeight: 1.05 }}>
-            Track your collection.<br /><span style={{ color: '#3aaa35' }}>Know what it's worth.</span>
+            Track your collection.<br /><span style={{ color: '#1F6F3A' }}>Know what it's worth.</span>
           </h1>
           <p style={{ fontSize: '16px', color: '#666', lineHeight: 1.7, maxWidth: '480px', margin: '0 auto 2rem' }}>
             Add your cards and we'll track their value daily using real UK market data. See your P&L, spot trends, and know when is right to sell. More sports coming soon.
           </p>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' as const }}>
-            <Link href="/signup" style={{ background: '#3aaa35', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 32px', borderRadius: '8px', textDecoration: 'none' }}>
+            <Link href="/signup" style={{ background: '#1F6F3A', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 32px', borderRadius: '8px', textDecoration: 'none' }}>
               Create Free Account
             </Link>
             <Link href="/login" style={{ background: '#fff', color: '#1a1a1a', fontWeight: 700, fontSize: '15px', padding: '14px 32px', borderRadius: '8px', textDecoration: 'none', border: '1px solid #e0d9cc' }}>
@@ -261,7 +267,7 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
                 ].map(stat => (
                   <div key={stat.label} style={{ background: '#faf7f0', border: '1px solid #e0d9cc', borderRadius: '8px', padding: '8px 14px', textAlign: 'center' }}>
                     <div style={{ fontSize: '10px', color: '#aaa', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '2px' }}>{stat.label}</div>
-                    <div style={{ fontSize: '16px', fontWeight: 700, color: stat.green ? '#3aaa35' : '#1a1a1a' }}>{stat.value}</div>
+                    <div style={{ fontSize: '16px', fontWeight: 700, color: stat.green ? '#1F6F3A' : '#1a1a1a' }}>{stat.value}</div>
                   </div>
                 ))}
               </div>
@@ -282,20 +288,20 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
               <div key={i} style={{ display: 'flex', alignItems: 'center', padding: '16px 0', borderBottom: i < 3 ? '1px solid #f0ede6' : 'none', justifyContent: 'space-between' }}>
                 <div style={{ width: '200px', minWidth: '160px' }}>
                   <div style={{ fontWeight: 600, fontSize: '14px', marginBottom: '3px' }}>{card.player}</div>
-                  <span style={{ background: 'rgba(58,170,53,0.1)', color: '#3aaa35', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '20px' }}>{card.variant}</span>
+                  <span style={{ background: 'rgba(58,170,53,0.1)', color: '#1F6F3A', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '20px' }}>{card.variant}</span>
                 </div>
                 <div style={{ textAlign: 'center', minWidth: '60px' }}>
                   <div style={{ fontSize: '14px', fontWeight: 600 }}>{card.paid}</div>
                 </div>
                 <div style={{ textAlign: 'center', minWidth: '60px' }}>
-                  <div style={{ fontSize: '14px', fontWeight: 600, color: '#3aaa35' }}>{card.value}</div>
+                  <div style={{ fontSize: '14px', fontWeight: 600, color: '#1F6F3A' }}>{card.value}</div>
                 </div>
                 <div style={{ textAlign: 'center', minWidth: '80px' }}>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: '#3aaa35' }}>{card.pnl}</div>
-                  <div style={{ fontSize: '11px', color: '#3aaa35' }}>{card.pct}</div>
+                  <div style={{ fontSize: '14px', fontWeight: 700, color: '#1F6F3A' }}>{card.pnl}</div>
+                  <div style={{ fontSize: '11px', color: '#1F6F3A' }}>{card.pct}</div>
                 </div>
                 <div style={{ textAlign: 'center', minWidth: '40px' }}>
-                  <div style={{ fontSize: '20px', color: '#3aaa35' }}>{card.trend}</div>
+                  <div style={{ fontSize: '20px', color: '#1F6F3A' }}>{card.trend}</div>
                 </div>
               </div>
             ))}
@@ -316,7 +322,7 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
             ))}
           </div>
           <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-            <Link href="/signup" style={{ background: '#3aaa35', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 40px', borderRadius: '8px', textDecoration: 'none' }}>
+            <Link href="/signup" style={{ background: '#1F6F3A', color: '#fff', fontWeight: 700, fontSize: '15px', padding: '14px 40px', borderRadius: '8px', textDecoration: 'none' }}>
               Start Tracking For Free →
             </Link>
           </div>
@@ -328,12 +334,12 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
   return (
     <main style={{ background: '#faf7f0', minHeight: '100vh', color: '#1a1a1a', fontFamily: 'var(--font-dm-sans)' }}>
       <Nav />
-      <div style={{ padding: '2.5rem 1.25rem', maxWidth: '960px', margin: '0 auto' }}>
+      <div style={{ padding: '2.5rem 1.25rem', maxWidth: '1400px', margin: '0 auto' }}>
 
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap' as const, gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap' as const, gap: '12px', maxWidth: '960px', margin: '0 auto 2rem' }}>
           <div>
-            <h1 style={{ fontSize: '28px', fontWeight: 800, margin: '0 0 4px', letterSpacing: '-0.5px' }}>My Collection</h1>
+            <h1 style={{ fontSize: '42px', fontWeight: 800, margin: '0 0 4px', letterSpacing: '-1px' }}>My Collection</h1>
             <p style={{ fontSize: '14px', color: '#888', margin: 0 }}>Tracked against Boxx IQ 7-day rolling averages</p>
           </div>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' as const }}>
@@ -349,7 +355,7 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
             ))}
             <button
               onClick={() => setShowAddForm(!showAddForm)}
-              style={{ background: '#3aaa35', color: '#fff', border: 'none', borderRadius: '8px', padding: '12px 20px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' as const }}>
+              style={{ background: '#1F6F3A', color: '#fff', border: 'none', borderRadius: '8px', padding: '12px 20px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' as const }}>
               + Add Card
             </button>
           </div>
@@ -357,23 +363,23 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
 
         {/* Success message */}
         {cardAdded && (
-          <div style={{ background: 'rgba(58,170,53,0.1)', border: '1px solid rgba(58,170,53,0.3)', borderRadius: '8px', padding: '10px 16px', marginBottom: '16px', fontSize: '14px', color: '#3aaa35', fontWeight: 500 }}>
+          <div style={{ background: 'rgba(58,170,53,0.1)', border: '1px solid rgba(58,170,53,0.3)', borderRadius: '8px', padding: '10px 16px', marginBottom: '16px', fontSize: '14px', color: '#1F6F3A', fontWeight: 500 }}>
             ✓ Card added to your collection
           </div>
         )}
 
         {/* Add Card Form */}
         {showAddForm && (
-          <div style={{ background: '#fff', border: '1px solid #e0d9cc', borderRadius: '12px', padding: '24px', marginBottom: '24px' }}>
+          <div style={{ background: '#fff', border: '1px solid #e0d9cc', borderRadius: '12px', padding: '24px', marginBottom: '24px', maxWidth: '960px', margin: '0 auto 24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
               <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0 }}>Add Card</h2>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button onClick={() => setIsManual(false)}
-                  style={{ background: !isManual ? '#3aaa35' : '#faf7f0', color: !isManual ? '#fff' : '#888', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 14px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                  style={{ background: !isManual ? '#1F6F3A' : '#faf7f0', color: !isManual ? '#fff' : '#888', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 14px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
                   Tracked Player
                 </button>
                 <button onClick={() => setIsManual(true)}
-                  style={{ background: isManual ? '#3aaa35' : '#faf7f0', color: isManual ? '#fff' : '#888', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 14px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                  style={{ background: isManual ? '#1F6F3A' : '#faf7f0', color: isManual ? '#fff' : '#888', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 14px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
                   Manual Entry
                 </button>
               </div>
@@ -403,7 +409,7 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
                         ))}
                       </div>
                     )}
-                    {selectedPlayer && <div style={{ fontSize: '12px', color: '#3aaa35', marginTop: '4px' }}>✓ {selectedPlayer.team}</div>}
+                    {selectedPlayer && <div style={{ fontSize: '12px', color: '#1F6F3A', marginTop: '4px' }}>✓ {selectedPlayer.team}</div>}
                   </>
                 ) : (
                   <input type="text" placeholder="e.g. Jamie Vardy" value={manualPlayerName}
@@ -416,18 +422,27 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
               <div>
                 <label style={{ fontSize: '12px', color: '#888', display: 'block', marginBottom: '6px', fontWeight: 500 }}>Card Type</label>
                 <select value={cardType} onChange={e => setCardType(e.target.value)}
-                  style={{ width: '100%', background: '#faf7f0', border: '1px solid #e0d9cc', borderRadius: '8px', padding: '10px 12px', fontSize: '14px', outline: 'none', fontFamily: 'inherit' }}>
-                  <option value="">Select type...</option>
-                  <option>Topps Chrome</option>
-                  <option>Topps Match Attax</option>
-                  <option>Topps EFL</option>
-                  <option>Panini Prizm</option>
-                  <option>Panini Select</option>
-                  <option>Panini Obsidian</option>
-                  <option>Panini Immaculate</option>
-                  <option>Upper Deck</option>
-                  <option>Other</option>
-                </select>
+  style={{ width: '100%', background: '#faf7f0', border: '1px solid #e0d9cc', borderRadius: '8px', padding: '10px 12px', fontSize: '14px', outline: 'none', fontFamily: 'inherit' }}>
+  <option value="">Select type...</option>
+  <option>Topps Chrome</option>
+  <option>Topps Finest</option>
+  <option>Topps Museum</option>
+  <option>Topps Dynasty</option>
+  <option>Topps UCC</option>
+  <option>Topps Now</option>
+  <option>Topps Stadium Club</option>
+  <option>Topps Inception</option>
+  <option>Topps Sapphire</option>
+  <option>Topps EFL</option>
+  <option>Panini Prizm</option>
+  <option>Panini Select</option>
+  <option>Panini Mosaic</option>
+  <option>Panini Contenders</option>
+  <option>Panini Obsidian</option>
+  <option>Panini Immaculate</option>
+  <option>Upper Deck</option>
+  <option>Other</option>
+</select>
               </div>
 
               {/* Set */}
@@ -440,7 +455,20 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
 
               {/* Variant */}
               <div>
-                <label style={{ fontSize: '12px', color: '#888', display: 'block', marginBottom: '6px', fontWeight: 500 }}>Variant</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+  <label style={{ fontSize: '12px', color: '#888', fontWeight: 500 }}>Variant</label>
+  <div style={{ position: 'relative', display: 'inline-block' }}
+    onMouseEnter={e => (e.currentTarget.querySelector('.variant-tip') as HTMLElement).style.display = 'block'}
+    onMouseLeave={e => (e.currentTarget.querySelector('.variant-tip') as HTMLElement).style.display = 'none'}>
+    <span style={{ fontSize: '11px', color: '#aaa', cursor: 'help', border: '1px solid #ddd', borderRadius: '50%', width: '16px', height: '16px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>i</span>
+    <div className="variant-tip" style={{ display: 'none', position: 'absolute', bottom: '120%', left: '50%', transform: 'translateX(-50%)', background: '#1a1a1a', color: '#fff', fontSize: '12px', padding: '8px 12px', borderRadius: '8px', whiteSpace: 'nowrap', zIndex: 100, lineHeight: 1.5 }}>
+  <div>Numbered Auto? Choose <strong>Auto</strong></div>
+  <div>PSA graded? Choose <strong>PSA 10</strong></div>
+  <div>Coloured parallel? Choose <strong>Numbered Parallel</strong></div>
+  <div>Standard card? Choose <strong>Base</strong></div>
+</div>
+  </div>
+</div>
                 <select value={variant} onChange={e => setVariant(e.target.value)}
                   style={{ width: '100%', background: '#faf7f0', border: '1px solid #e0d9cc', borderRadius: '8px', padding: '10px 12px', fontSize: '14px', outline: 'none', fontFamily: 'inherit' }}>
                   <option value="">Select variant...</option>
@@ -467,17 +495,22 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
                 <select value={numbered} onChange={e => setNumbered(e.target.value)}
                   style={{ width: '100%', background: '#faf7f0', border: '1px solid #e0d9cc', borderRadius: '8px', padding: '10px 12px', fontSize: '14px', outline: 'none', fontFamily: 'inherit' }}>
                   <option value="">Not numbered</option>
-                  <option value="/1">/1 (1 of 1)</option>
-                  <option value="/5">/5</option>
-                  <option value="/10">/10</option>
-                  <option value="/25">/25</option>
-                  <option value="/49">/49</option>
-                  <option value="/50">/50</option>
-                  <option value="/75">/75</option>
-                  <option value="/99">/99</option>
-                  <option value="/149">/149</option>
-                  <option value="/199">/199</option>
-                  <option value="/299">/299</option>
+<option value="/1">/1 (1 of 1)</option>
+<option value="/5">/5</option>
+<option value="/10">/10</option>
+<option value="/20">/20</option>
+<option value="/25">/25</option>
+<option value="/40">/40</option>
+<option value="/49">/49</option>
+<option value="/50">/50</option>
+<option value="/75">/75</option>
+<option value="/99">/99</option>
+<option value="/125">/125</option>
+<option value="/149">/149</option>
+<option value="/150">/150</option>
+<option value="/199">/199</option>
+<option value="/299">/299</option>
+<option value="/399">/399</option>
                 </select>
               </div>
 
@@ -527,44 +560,24 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
               </button>
               <button onClick={addCard}
                 disabled={addingCard || !purchasePrice || (!selectedPlayer && !manualPlayerName)}
-                style={{ background: purchasePrice && (selectedPlayer || manualPlayerName) ? '#3aaa35' : '#e0d9cc', color: '#fff', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>
+                style={{ background: purchasePrice && (selectedPlayer || manualPlayerName) ? '#1F6F3A' : '#e0d9cc', color: '#fff', border: 'none', borderRadius: '8px', padding: '10px 24px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>
                 {addingCard ? 'Adding...' : 'Add to Collection'}
               </button>
             </div>
           </div>
         )}
 
-        {/* Card Image */}
-<div>
-  <label style={{ fontSize: '12px', color: '#888', display: 'block', marginBottom: '6px', fontWeight: 500 }}>Card Photo (optional)</label>
-  {cardImageUrl ? (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
-      <img src={cardImageUrl} alt="Card" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #e0d9cc' }} />
-      <button onClick={() => setCardImageUrl('')}
-        style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#dc3545', color: '#fff', border: 'none', borderRadius: '50%', width: '18px', height: '18px', fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        ×
-      </button>
-    </div>
-  ) : (
-    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#faf7f0', border: '1px dashed #e0d9cc', borderRadius: '8px', padding: '10px 12px', cursor: 'pointer', fontSize: '13px', color: '#888' }}>
-      <input type="file" accept="image/*" style={{ display: 'none' }}
-        onChange={e => e.target.files?.[0] && uploadCardImage(e.target.files[0])} />
-      {uploadingImage ? 'Uploading...' : '📷 Upload photo'}
-    </label>
-  )}
-</div>
-
         {/* Controls */}
 {cards.length > 0 && (
   <div style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
     <div style={{ display: 'flex', gap: '8px' }}>
       <button
-        onClick={() => setViewMode('list')}
+        onClick={() => { setViewMode('list'); localStorage.setItem('collectionViewMode', 'list'); }}
         style={{ background: viewMode === 'list' ? '#1F6F3A' : '#fff', color: viewMode === 'list' ? '#fff' : '#888', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 14px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
         List
       </button>
       <button
-        onClick={() => setViewMode('grid')}
+        onClick={() => { setViewMode('grid'); localStorage.setItem('collectionViewMode', 'grid'); }}
         style={{ background: viewMode === 'grid' ? '#1F6F3A' : '#fff', color: viewMode === 'grid' ? '#fff' : '#888', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 14px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
         Grid
       </button>
@@ -594,52 +607,40 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
             <a href='/' style={{ background: '#3aaa35', color: '#fff', fontWeight: 700, fontSize: '14px', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none' }}>Browse Players</a>
           </div>
         ) : (
-          <div style={{ display: viewMode === 'grid' ? 'grid' : 'flex', gridTemplateColumns: viewMode === 'grid' ? 'repeat(2, 1fr)' : undefined, flexDirection: viewMode === 'list' ? 'column' : undefined, gap: '12px' }}>
+          <div style={{ display: viewMode === 'grid' ? 'grid' : 'flex', gridTemplateColumns: viewMode === 'grid' ? 'repeat(auto-fill, minmax(320px, 1fr))' : undefined, flexDirection: viewMode === 'list' ? 'column' : undefined, gap: '12px' }}>
   {sortedCards.map((card: any) => {
               const playerName = card.players?.name || card.player_name_manual || 'Unknown';
               const pnl = card.currentValue ? (card.currentValue - parseFloat(card.purchase_price)) * (card.quantity || 1) : null;
               const pnlPct = card.currentValue ? ((card.currentValue - parseFloat(card.purchase_price)) / parseFloat(card.purchase_price)) * 100 : null;
               return (
                 <div key={card.id} style={{ background: '#fff', border: '1px solid #e0d9cc', borderRadius: '12px', padding: '1.25rem' }}>
-                  {card.image_url && (
-  <img src={card.image_url} alt={playerName}
-    style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #e0d9cc', marginBottom: '10px', cursor: 'zoom-in', transition: 'transform 0.2s ease', zIndex: 1, position: 'relative' as const }}
-    onMouseEnter={e => e.currentTarget.style.transform = 'scale(4)'}
-    onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-  />
-)}
-  {/* Player info */}
-  <div style={{ marginBottom: '12px' }}>
-    <div style={{ fontWeight: 700, fontSize: '16px', marginBottom: '4px' }}>{playerName}</div>
-    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' as const, alignItems: 'center' }}>
-      <span style={{ background: 'rgba(58,170,53,0.1)', color: '#3aaa35', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '20px' }}>{card.variant_label}</span>
-      {card.players?.team && <span style={{ fontSize: '12px', color: '#888' }}>{card.players.team}</span>}
-      {card.is_manual && <span style={{ background: '#f0ede6', color: '#aaa', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '20px' }}>Manual</span>}
-    </div>
-    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' as const, marginTop: '4px', alignItems: 'center' }}>
-      {card.card_set && <span style={{ fontSize: '12px', color: '#555', fontWeight: 500 }}>{card.card_set}</span>}
-      {card.year && <span style={{ fontSize: '12px', color: '#888' }}>· {card.year}</span>}
-      {card.numbered && <span style={{ background: 'rgba(58,170,53,0.08)', color: '#3aaa35', fontSize: '11px', fontWeight: 600, padding: '1px 6px', borderRadius: '4px' }}>{card.numbered}</span>}
-      {card.grade && card.grade !== 'Raw' && <span style={{ background: '#f0ede6', color: '#555', fontSize: '11px', fontWeight: 600, padding: '1px 6px', borderRadius: '4px' }}>{card.grade}</span>}
-    </div>
+  {/* Image + Stats row */}
+  <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
+    {card.image_url && (
+  <div style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+    <img src={card.image_url} alt={playerName}
+      style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #e0d9cc', cursor: 'zoom-in', transition: 'transform 0.2s ease', zIndex: 1, position: 'relative' as const }}
+      onMouseEnter={e => e.currentTarget.style.transform = 'scale(4)'}
+      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+    />
+    <div style={{ fontSize: '9px', color: '#bbb' }}>hover to zoom</div>
   </div>
-
-  {/* Stats grid */}
-  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '12px' }}>
+)}
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', flex: 1 }}>
     <div style={{ background: '#faf7f0', borderRadius: '8px', padding: '8px 10px' }}>
       <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '2px' }}>Paid</div>
-      <div style={{ fontSize: '15px', fontWeight: 600 }}>£{formatPrice(parseFloat(card.purchase_price))}</div>
+      <div style={{ fontSize: '13px', fontWeight: 600 }}>£{formatPrice(parseFloat(card.purchase_price))}</div>
     </div>
     <div style={{ background: '#faf7f0', borderRadius: '8px', padding: '8px 10px' }}>
-      <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '2px' }}>Est. Value</div>
-      <div style={{ fontSize: '15px', fontWeight: 600, color: '#3aaa35' }}>
+      <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '2px', whiteSpace: 'nowrap' as const }}>Est. Value</div>
+      <div style={{ fontSize: '13px', fontWeight: 600, color: '#3aaa35' }}>
         {card.is_manual ? '—' : card.currentValue ? `£${formatPrice(card.currentValue)}` : '—'}
       </div>
     </div>
     <div style={{ background: pnl === null ? '#faf7f0' : pnl >= 0 ? 'rgba(58,170,53,0.08)' : 'rgba(220,53,69,0.08)', borderRadius: '8px', padding: '8px 10px' }}>
       <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '2px' }}>P&L</div>
-      <div style={{ fontSize: '15px', fontWeight: 600, color: pnl === null ? '#aaa' : pnl >= 0 ? '#3aaa35' : '#dc3545' }}>
-        {pnl === null ? '—' : `${pnl >= 0 ? '+' : ''}£${formatPrice(pnl)}`}
+      <div style={{ fontSize: '13px', fontWeight: 600, color: pnl === null ? '#aaa' : pnl >= 0 ? '#3aaa35' : '#dc3545', whiteSpace: 'nowrap' as const }}>
+        {pnl === null ? '—' : `${pnl >= 0 ? '+£' : '-£'}${formatPrice(Math.abs(pnl))}`}
       </div>
       {pnlPct !== null && (
         <div style={{ fontSize: '11px', color: pnlPct >= 0 ? '#3aaa35' : '#dc3545' }}>
@@ -648,12 +649,20 @@ const [uploadingEditImage, setUploadingEditImage] = useState(false);
       )}
     </div>
   </div>
+</div>
 
-  {/* Actions */}
+  {/* Player info */}
+  <div style={{ marginBottom: '12px' }}>
+    <div style={{ fontWeight: 700, fontSize: '16px', marginBottom: '4px' }}>{playerName}</div>
+    <div style={{ fontSize: '13px', color: '#888', marginTop: '4px' }}>
+      {[card.players?.team, card.card_set, card.variant_label, card.numbered, card.grade !== 'Raw' ? card.grade : null].filter(Boolean).join(' · ')}
+    </div>
+  </div>
+
   {/* Actions */}
   <div style={{ display: 'flex', gap: '8px' }}>
     
-      <a href={`https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent((card.players?.name || card.player_name_manual || '') + ' ' + (card.variant_label || '') + ' ' + (card.numbered || '')).trim()}&_sacat=261328`}
+      <a href={`https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent([card.players?.name || card.player_name_manual, card.card_type, card.card_set, card.variant_label, card.numbered].filter(Boolean).join(' ')).trim()}&_sacat=261328`}
       target="_blank"
       rel="noopener noreferrer"
       style={{ background: 'none', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', color: '#888', textDecoration: 'none' }}>
