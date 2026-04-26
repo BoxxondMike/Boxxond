@@ -1,15 +1,15 @@
 {
   "crons": [
     {
-      "path": "/api/send-alerts?secret=boxxond_alerts_2024_xkq92",
+      "path": "/api/send-alerts?secret=boxxhq_alerts_2026_xkq92",
       "schedule": "0 9 * * *"
     },
     {
-      "path": "/api/cron/price-history?secret=boxxond_alerts_2024_xkq92",
+      "path": "/api/cron/price-history?secret=boxxhq_alerts_2026_xkq92",
       "schedule": "0 8 * * *"
     },
     {
-      "path": "/api/cron/collection-snapshots?secret=boxxond_alerts_2024_xkq92",
+      "path": "/api/cron/collection-snapshots?secret=boxxhq_alerts_2026_xkq92",
       "schedule": "0 10 * * *"
     }
   ]
