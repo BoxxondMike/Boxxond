@@ -8,8 +8,22 @@ export async function GET(request) {
   const condition = searchParams.get('condition');
   const isPlayerSearch = searchParams.get('playerSearch') === 'true';
 
-  if (!query) {
+ if (!query) {
     return Response.json({ error: 'No search query provided' }, { status: 400 });
+  }
+
+  // Log search if it's a player search
+  if (isPlayerSearch) {
+    try {
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.SUPABASE_SERVICE_KEY
+      );
+      await supabase.from('search_logs').insert({ player_name: query });
+    } catch (e) {
+      // Fail silently - don't let logging break search
+    }
   }
 
   const token = await getEbayToken();
@@ -43,7 +57,9 @@ if (sortParam === 'newlyListed') sort = 'newlyListed';
   );
 
   const data = await response.json();
-  return Response.json({ items: data.itemSummaries || [] });
+console.log('eBay status:', response.status);
+console.log('eBay data:', JSON.stringify(data).slice(0, 500));
+return Response.json({ items: data.itemSummaries || [] });
 }
 
 async function getEbayToken() {
