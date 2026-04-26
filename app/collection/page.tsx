@@ -666,7 +666,13 @@ const uploadEditImage = async (file: File, cardId: string) => {
 
   {/* Player info */}
   <div style={{ marginBottom: '12px' }}>
-    <div style={{ fontWeight: 700, fontSize: '16px', marginBottom: '4px' }}>{playerName}</div>
+    {card.players?.name ? (
+  <Link href={`/players/${card.players.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()}`} style={{ fontWeight: 700, fontSize: '16px', marginBottom: '4px', color: '#1a1a1a', textDecoration: 'none' }}>
+    {playerName}
+  </Link>
+) : (
+  <div style={{ fontWeight: 700, fontSize: '16px', marginBottom: '4px' }}>{playerName}</div>
+)}
     <div style={{ fontSize: '13px', color: '#888', marginTop: '4px' }}>
       {[card.players?.team, card.card_set, card.variant_label, card.numbered, card.grade !== 'Raw' ? card.grade : null].filter(Boolean).join(' · ')}
     </div>
