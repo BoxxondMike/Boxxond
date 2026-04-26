@@ -63,6 +63,14 @@ function HomeContent() {
     getUser();
   }, []);
 
+  const [trendingPlayers, setTrendingPlayers] = useState<any[]>([]);
+
+useEffect(() => {
+  fetch('/api/trending')
+    .then(r => r.json())
+    .then(d => setTrendingPlayers(d.trending || []));
+}, []);
+
   const fetchRecentSales = async () => {
     const res = await fetch('/api/search?q=Topps+Chrome+refractor+auto+football&featured=true');
     const data = await res.json();
@@ -219,18 +227,19 @@ function HomeContent() {
     <main style={{ background: "#faf7f0", minHeight: "100vh", color: "#1a1a1a", fontFamily: "var(--font-dm-sans)" }}>
 
       <style>{`
-        .result-card { display: flex; gap: 1.5rem; align-items: center; }
-        .result-image { width: 90px; height: 90px; flex-shrink: 0; }
-        .result-price { text-align: right; flex-shrink: 0; }
-        .stats-bar { display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
-        select option { background: #faf7f0; color: #fff; }
-        @media (max-width: 640px) {
-          .result-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
-          .result-image { width: 100% !important; height: 200px !important; }
-          .result-price { text-align: left; width: 100%; display: flex; justify-content: space-between; align-items: center; }
-          .stats-bar { gap: 1.5rem; }
-        }
-      `}</style>
+  .result-card { display: flex; gap: 1.5rem; align-items: center; }
+  .result-image { width: 90px; height: 90px; flex-shrink: 0; }
+  .result-price { text-align: right; flex-shrink: 0; }
+  .stats-bar { display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
+  select option { background: #faf7f0; color: #fff; }
+  @media (max-width: 900px) { .hero-side-panel { display: none !important; } }
+  @media (max-width: 640px) {
+    .result-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .result-image { width: 100% !important; height: 200px !important; }
+    .result-price { text-align: left; width: 100%; display: flex; justify-content: space-between; align-items: center; }
+    .stats-bar { gap: 1.5rem; }
+  }
+`}</style>
 
       <Nav activePage="prices" />
 
@@ -256,7 +265,30 @@ function HomeContent() {
       </div>
 
       {/* Hero */}
-      <div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
+<div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "1400px", margin: "0 auto", display: "grid", gridTemplateColumns: "220px 1fr 220px", gap: "2rem", alignItems: "start" }}>
+
+{/* Left Panel - World Cup */}
+<div style={{ background: "#fff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.25rem" }} className="hero-side-panel">
+  <div style={{ fontSize: "11px", fontWeight: 700, color: "#1F6F3A", textTransform: "uppercase" as const, letterSpacing: "1px", marginBottom: "1rem" }}>🌍 World Cup 2026</div>
+  {[
+    { name: "Lamine Yamal", nation: "Spain" },
+    { name: "Jude Bellingham", nation: "England" },
+    { name: "Erling Haaland", nation: "Norway" },
+    { name: "Kylian Mbappe", nation: "France" },
+    { name: "Lionel Messi", nation: "Argentina" },
+  ].map((p, i) => (
+    <Link key={i} href={`/players/${p.name.toLowerCase().replace(/ /g, '-')}`} style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "8px", padding: "8px 0", borderBottom: i < 4 ? "1px solid #f0ede6" : "none" }}>
+      <div style={{ fontSize: "12px", color: "#aaa", width: "16px", fontWeight: 700 }}>{i + 1}</div>
+      <div>
+        <div style={{ fontSize: "13px", fontWeight: 600, color: "#1a1a1a" }}>{p.name}</div>
+        <div style={{ fontSize: "11px", color: "#888" }}>{p.nation}</div>
+      </div>
+    </Link>
+  ))}
+  <Link href="/sets/donruss-road-to-world-cup" style={{ display: "block", marginTop: "1rem", fontSize: "12px", color: "#1F6F3A", fontWeight: 600, textDecoration: "none" }}>View World Cup Set →</Link>
+</div>
+
+<div style={{ textAlign: "center" }}>
         <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#1F6F3A", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
           Search live eBay UK listings, track your collection, get daily alerts when new cards drop, and verify PSA graded cards instantly.
         </div>
@@ -382,6 +414,24 @@ function HomeContent() {
           )}
         </div>
         </div>
+
+{/* Right Panel - Trending */}
+<div style={{ background: "#fff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.25rem" }} className="hero-side-panel">
+  <div style={{ fontSize: "11px", fontWeight: 700, color: "#1F6F3A", textTransform: "uppercase" as const, letterSpacing: "1px", marginBottom: "1rem" }}>🔥 Trending</div>
+  {trendingPlayers.length > 0 ? trendingPlayers.map((p: any, i: number) => (
+    <Link key={i} href={`/players/${p.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()}`} style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "8px", padding: "8px 0", borderBottom: i < trendingPlayers.length - 1 ? "1px solid #f0ede6" : "none" }}>
+      <div style={{ fontSize: "12px", color: "#aaa", width: "16px", fontWeight: 700 }}>{i + 1}</div>
+      <div>
+        <div style={{ fontSize: "13px", fontWeight: 600, color: "#1a1a1a" }}>{p.name}</div>
+        <div style={{ fontSize: "11px", color: "#888" }}>{p.searches} searches</div>
+      </div>
+    </Link>
+  )) : (
+    <div style={{ fontSize: "13px", color: "#aaa" }}>Building data...</div>
+  )}
+</div>
+</div>
+
 
         {/* Stats */}
         <div style={{ textAlign: "center", padding: "0.5rem 0 1.5rem" }}>
