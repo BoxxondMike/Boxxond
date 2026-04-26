@@ -232,7 +232,10 @@ useEffect(() => {
   .result-price { text-align: right; flex-shrink: 0; }
   .stats-bar { display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
   select option { background: #faf7f0; color: #fff; }
-  @media (max-width: 900px) { .hero-side-panel { display: none !important; } }
+  @media (max-width: 900px) { 
+  .hero-side-panel { display: none !important; } 
+  .hero-grid { display: block !important; }
+}
   @media (max-width: 640px) {
     .result-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
     .result-image { width: 100% !important; height: 200px !important; }
@@ -265,7 +268,7 @@ useEffect(() => {
       </div>
 
       {/* Hero */}
-<div style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "1400px", margin: "0 auto", display: "grid", gridTemplateColumns: "220px 1fr 220px", gap: "2rem", alignItems: "start" }}>
+<div className="hero-grid" style={{ padding: "3rem 1.25rem 2.5rem", maxWidth: "1400px", margin: "0 auto", display: "grid", gridTemplateColumns: "220px 1fr 220px", gap: "2rem", alignItems: "start" }}>
 
 {/* Left Panel - World Cup */}
 <div style={{ background: "#fff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1.25rem" }} className="hero-side-panel">
