@@ -72,53 +72,22 @@ useEffect(() => {
 }, []);
 
   const fetchRecentSales = async () => {
-    const res = await fetch('/api/search?q=Topps+Chrome+refractor+auto+football&featured=true');
-    const data = await res.json();
-    setRecentSales(data.items?.slice(0, 12) || []);
-  };
+  const { data } = await supabase
+    .from('cached_listings')
+    .select('items')
+    .eq('type', 'ending_soon')
+    .single();
+  setRecentSales(data?.items || []);
+};
 
-  const fetchFeaturedCards = async () => {
-    const queries = [
-      'Jude Bellingham PSA auto refractor',
-      'Cole Palmer PSA Topps Chrome',
-      'Bukayo Saka PSA card',
-      'Lamine Yamal PSA rookie card',
-      'Erling Haaland PSA auto',
-      'Kylian Mbappe PSA Prizm',
-      'Bruno Fernandes PSA Chrome',
-      'Phil Foden PSA card',
-      'Declan Rice PSA auto',
-      'Marcus Rashford PSA Topps',
-      'Pedri PSA rookie',
-      'Vinicius Junior PSA Prizm',
-      'Rodri PSA card',
-      'Harry Kane PSA auto',
-      'LeBron James PSA Prizm',
-      'Stephen Curry PSA auto',
-      'Giannis Antetokounmpo PSA',
-      'Luka Doncic PSA rookie',
-      'Patrick Mahomes PSA auto',
-      'Josh Allen PSA Prizm',
-      'Justin Jefferson PSA card',
-      'Shohei Ohtani PSA rookie',
-      'Juan Soto PSA Chrome',
-      'Ronald Acuna PSA auto',
-    ];
-
-    const shuffled = queries.sort(() => Math.random() - 0.5).slice(0, 8);
-
-    const results = await Promise.all(
-      shuffled.map(q =>
-        fetch(`/api/search?q=${encodeURIComponent(q)}&featured=true`)
-          .then(res => res.json())
-          .then(data => data.items?.slice(0, 5) || [])
-      )
-    );
-
-    const combined = results.flat().sort(() => Math.random() - 0.5);
-    const filtered = combined.filter((item: any) => parseFloat(item.price?.value || 0) >= 5);
-    setFeaturedCards(filtered.slice(0, 12));
-  };
+const fetchFeaturedCards = async () => {
+  const { data } = await supabase
+    .from('cached_listings')
+    .select('items')
+    .eq('type', 'listings_we_like')
+    .single();
+  setFeaturedCards(data?.items || []);
+};
   const handleSearchWithQuery = async (q: string) => {
     setLoading(true);
     const searchQuery = activeSport ? `${q} ${activeSport}` : q;
