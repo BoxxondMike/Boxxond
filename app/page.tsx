@@ -426,7 +426,6 @@ useEffect(() => {
       <div style={{ fontSize: "12px", color: "#aaa", width: "16px", fontWeight: 700 }}>{i + 1}</div>
       <div>
         <div style={{ fontSize: "13px", fontWeight: 600, color: "#1a1a1a" }}>{p.name}</div>
-        <div style={{ fontSize: "11px", color: "#888" }}>{p.searches} searches</div>
       </div>
     </Link>
   )) : (
