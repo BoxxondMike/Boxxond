@@ -54,7 +54,7 @@ const [relatedPlayers, setRelatedPlayers] = useState<any[]>([]);
 
 useEffect(() => {
     const fetchCards = async () => {
-      await fetch(`/api/trending/log?name=${encodeURIComponent(playerName)}`);
+      fetch(`/api/trending/log?name=${encodeURIComponent(playerName)}`).catch(() => {});
       const res = await fetch(`/api/search?q=${encodeURIComponent(playerName)}&sort=${sortOrder === 'high' ? 'price' : 'endingSoonest'}&playerSearch=true`);
       const data = await res.json();
       const items = data.items || [];
@@ -83,17 +83,6 @@ console.log('Player name searched:', playerName);
         setHighPrice(Math.max(...prices));
         setLowPrice(Math.min(...prices));
       }
-      useEffect(() => {
-  const canonical = document.querySelector('link[rel="canonical"]');
-  if (canonical) {
-    canonical.setAttribute('href', `https://boxxhq.com/players/${slug}`);
-  } else {
-    const link = document.createElement('link');
-    link.rel = 'canonical';
-    link.href = `https://boxxhq.com/players/${slug}`;
-    document.head.appendChild(link);
-  }
-}, [slug]);
 
       const { data: historyData } = await supabase
         .from('price_history')
@@ -170,6 +159,18 @@ if (profile) {
     };
     fetchCards();
   }, [slug, sortOrder]);
+
+  useEffect(() => {
+  const canonical = document.querySelector('link[rel="canonical"]');
+  if (canonical) {
+    canonical.setAttribute('href', `https://boxxhq.com/players/${slug}`);
+  } else {
+    const link = document.createElement('link');
+    link.rel = 'canonical';
+    link.href = `https://boxxhq.com/players/${slug}`;
+    document.head.appendChild(link);
+  }
+}, [slug]);
 
      useEffect(() => {
   const checkLastViewed = () => {
