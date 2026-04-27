@@ -618,7 +618,7 @@ const handlePlayerSearch = async () => {
             <div style={{ width: "70px", height: "70px", background: "#f0ede6", borderRadius: "6px", flexShrink: 0 }} />
           )}
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 500, fontSize: "14px", color: "#1a1a1a", marginBottom: "4px", lineHeight: 1.4 }}>{item.title}</div>
+            <div style={{ fontWeight: 500, fontSize: "14px", color: "#1a1a1a", marginBottom: "6px", lineHeight: 1.4, wordBreak: 'break-word' as const }}>{item.title}</div>
             <div style={{ fontSize: "12px", color: "#888" }}>{item.condition || 'Condition not specified'}</div>
           </div>
           <div style={{ textAlign: "right", flexShrink: 0 }}>
