@@ -82,6 +82,17 @@ console.log('Player name searched:', playerName);
         setHighPrice(Math.max(...prices));
         setLowPrice(Math.min(...prices));
       }
+      useEffect(() => {
+  const canonical = document.querySelector('link[rel="canonical"]');
+  if (canonical) {
+    canonical.setAttribute('href', `https://boxxhq.com/players/${slug}`);
+  } else {
+    const link = document.createElement('link');
+    link.rel = 'canonical';
+    link.href = `https://boxxhq.com/players/${slug}`;
+    document.head.appendChild(link);
+  }
+}, [slug]);
 
       const { data: historyData } = await supabase
         .from('price_history')

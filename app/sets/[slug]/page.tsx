@@ -22,6 +22,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: `${set.name} prices, parallels and collector guide. Real eBay UK sold prices.`,
     },
     keywords: [`${set.name}`, `${set.name} prices`, `${set.name} parallels`, `${set.manufacturer} cards`, 'trading card prices UK', 'eBay card prices'],
+    alternates: {
+      canonical: `https://boxxhq.com/sets/${slug}`,
+    },
   };
 }
 
