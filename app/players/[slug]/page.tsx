@@ -54,6 +54,7 @@ const [relatedPlayers, setRelatedPlayers] = useState<any[]>([]);
 
 useEffect(() => {
     const fetchCards = async () => {
+      await fetch(`/api/trending/log?name=${encodeURIComponent(playerName)}`);
       const res = await fetch(`/api/search?q=${encodeURIComponent(playerName)}&sort=${sortOrder === 'high' ? 'price' : 'endingSoonest'}&playerSearch=true`);
       const data = await res.json();
       const items = data.items || [];

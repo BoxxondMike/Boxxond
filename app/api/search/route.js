@@ -12,19 +12,6 @@ export async function GET(request) {
     return Response.json({ error: 'No search query provided' }, { status: 400 });
   }
 
-  // Log search if it's a player search
-  if (isPlayerSearch) {
-    try {
-      const { createClient } = await import('@supabase/supabase-js');
-      const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.SUPABASE_SERVICE_KEY
-      );
-      await supabase.from('search_logs').insert({ player_name: query });
-    } catch (e) {
-      // Fail silently - don't let logging break search
-    }
-  }
 
   const token = await getEbayToken();
 
