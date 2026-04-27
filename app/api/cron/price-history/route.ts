@@ -89,7 +89,7 @@ try {
         'X-EBAY-C-ENDUSERCTX': 'affiliateCampaignId=5339145682,affiliateReferenceId=Boxxhq',
       }
     }),
-    fetch('https://api.ebay.com/buy/browse/v1/item_summary/search?q=topps+chrome+football+card&filter=buyingOptions%3A%7BFIXED_PRICE%7D&sort=newlyListed&limit=12', {
+    fetch('https://api.ebay.com/buy/browse/v1/item_summary/search?q=topps+chrome+football+card&filter=buyingOptions%3A%7BFIXED_PRICE%7D,price:%5B30..%5D&sort=newlyListed&limit=12', {
       headers: {
         'Authorization': `Bearer ${ebayToken}`,
         'X-EBAY-C-MARKETPLACE-ID': 'EBAY_GB',
