@@ -311,6 +311,13 @@ const handlePlayerSearch = async () => {
 };
 
   return (
+  <>
+    <style>{`
+      @media (max-width: 640px) {
+        .listing-card { flex-direction: column !important; align-items: flex-start !important; }
+        .listing-price { text-align: left !important; width: 100%; display: flex; justify-content: space-between; align-items: center; }
+      }
+    `}</style>
     <main style={{ background: "#faf7f0", minHeight: "100vh", color: "#1a1a1a", fontFamily: "var(--font-dm-sans)" }}>
       <Nav />
 {/* Player Profile Header */}
@@ -605,7 +612,7 @@ const handlePlayerSearch = async () => {
   ) : (
     <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
       {sortedResults.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item: any) => (
-        <div key={item.itemId} style={{ display: "flex", gap: "1rem", alignItems: "center", background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1rem 1.25rem" }}>
+        <div key={item.itemId} className="listing-card" style={{ display: "flex", gap: "1rem", alignItems: "center", background: "#ffffff", border: "1px solid #e0d9cc", borderRadius: "12px", padding: "1rem 1.25rem" }}>
           {item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl ? (
             <img
               src={item.thumbnailImages?.[0]?.imageUrl || item.image?.imageUrl}
@@ -621,7 +628,7 @@ const handlePlayerSearch = async () => {
             <div style={{ fontWeight: 500, fontSize: "14px", color: "#1a1a1a", marginBottom: "6px", lineHeight: 1.4, overflowWrap: 'break-word' as const, minWidth: 0  }}>{item.title}</div>
             <div style={{ fontSize: "12px", color: "#888" }}>{item.condition || 'Condition not specified'}</div>
           </div>
-          <div style={{ textAlign: "right", flexShrink: 0 }}>
+          <div className="listing-price" style={{ textAlign: "right", flexShrink: 0 }}>
             <div style={{ fontWeight: 700, fontSize: "20px", color: "#3aaa35", marginBottom: "6px" }}>
               {item.price ? `${item.price.currency === 'GBP' ? '£' : '$'}${formatPrice(parseFloat(item.price.value))}` : 'N/A'}
             </div>
@@ -693,5 +700,6 @@ const handlePlayerSearch = async () => {
 )}
       </div>
     </main>
+    </>
   );
 }
