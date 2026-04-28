@@ -54,55 +54,140 @@ useEffect(() => {
   }, []);
 
   const fetchCollection = async (userId: string) => {
-    const { data } = await supabase
-  .from('user_cards')
-  .select(`
-    id,
-    variant_label,
-    purchase_price,
-    quantity,
-    added_at,
-    is_manual,
-    player_name_manual,
-    card_type,
-    card_set,
-    year,
-    grade,
-    numbered,
-    image_url,
-    players (
+  // 1. Get all user cards
+  const { data: cardsData } = await supabase
+    .from('user_cards')
+    .select(`
       id,
-      name,
-      team,
-      nationality
-    )
-  `)
-  .eq('user_id', userId)
-  .order('added_at', { ascending: false });
+      variant_label,
+      purchase_price,
+      quantity,
+      added_at,
+      is_manual,
+      player_name_manual,
+      card_type,
+      card_set,
+      year,
+      grade,
+      numbered,
+      image_url,
+      player_id,
+      players (
+        id,
+        name,
+        team,
+        nationality
+      )
+    `)
+    .eq('user_id', userId)
+    .order('added_at', { ascending: false });
 
-    if (data) {
-      const cardsWithValue = await Promise.all(data.map(async (card: any) => {
-        if (!card.players) return { ...card, currentValue: null };
-        
-        const { data: priceData } = await supabase
-          .from('price_history')
-          .select('avg_price')
-          .ilike('search_term', `${card.players.name.toLowerCase()}%`)
-          .eq('variant_label', card.variant_label)
-          .gte('recorded_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
-          .order('recorded_at', { ascending: false });
-
-        const currentValue = priceData && priceData.length > 0
-          ? priceData.reduce((sum: number, p: any) => sum + parseFloat(p.avg_price), 0) / priceData.length
-          : null;
-
-        return { ...card, currentValue };
-      }));
-
-      setCards(cardsWithValue);
-    }
+  if (!cardsData || cardsData.length === 0) {
+    setCards([]);
     setLoading(false);
-  };
+    return;
+  }
+
+  // 2. Cards eligible for velocity lookup (have player_id, non-base variant)
+  const velocityEligible = cardsData.filter((c: any) =>
+    c.player_id && c.variant_label && c.variant_label !== 'Base'
+  );
+
+  // 3. Single batched query to player_velocity for all eligible cards
+  let velocityMap: Record<string, any> = {};
+  if (velocityEligible.length > 0) {
+    const playerIds = Array.from(new Set(velocityEligible.map((c: any) => c.player_id)));
+
+    const { data: velocityData } = await supabase
+      .from('player_velocity')
+      .select('player_id, variant_label, current_price, price_momentum_30d_pct, market_state, signal_quality, days_with_data_30d')
+      .in('player_id', playerIds);
+
+    // Build lookup: "playerId|variantLabel" -> velocity row
+    if (velocityData) {
+      velocityMap = velocityData.reduce((acc: any, row: any) => {
+        const key = `${row.player_id}|${row.variant_label}`;
+        acc[key] = row;
+        return acc;
+      }, {});
+    }
+  }
+
+  // 4. For Base cards (no velocity), batch fetch from price_history once
+  // (Base cards still use the old approach but in a single query, not N+1)
+  const baseCards = cardsData.filter((c: any) =>
+    c.player_id && c.variant_label === 'Base'
+  );
+  let basePriceMap: Record<string, number> = {};
+  if (baseCards.length > 0) {
+    const playerNames = Array.from(new Set(
+      baseCards.map((c: any) => c.players?.name?.toLowerCase()).filter(Boolean)
+    ));
+
+    const { data: basePriceData } = await supabase
+      .from('price_history')
+      .select('search_term, avg_price, recorded_at, variant_label')
+      .in('variant_label', ['All', 'Base'])
+      .gte('recorded_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
+
+    if (basePriceData) {
+      // Group by player name, average prices
+      const grouped: Record<string, number[]> = {};
+      basePriceData.forEach((row: any) => {
+        const matchedName = playerNames.find(n =>
+          row.search_term.toLowerCase().startsWith(n)
+        );
+        if (matchedName) {
+          if (!grouped[matchedName]) grouped[matchedName] = [];
+          grouped[matchedName].push(parseFloat(row.avg_price));
+        }
+      });
+      basePriceMap = Object.fromEntries(
+        Object.entries(grouped).map(([name, prices]) => [
+          name,
+          prices.reduce((a, b) => a + b, 0) / prices.length
+        ])
+      );
+    }
+  }
+
+  // 5. Stitch it all together
+  const cardsWithValue = cardsData.map((card: any) => {
+    if (!card.players || card.is_manual) {
+      return { ...card, currentValue: null, velocity: null };
+    }
+
+    // Velocity-eligible cards
+    if (card.variant_label && card.variant_label !== 'Base') {
+      const key = `${card.player_id}|${card.variant_label}`;
+      const v = velocityMap[key];
+      if (v) {
+        return {
+          ...card,
+          currentValue: parseFloat(v.current_price),
+          velocity: {
+            momentum: v.price_momentum_30d_pct,
+            state: v.market_state,
+            quality: v.signal_quality,
+            days: v.days_with_data_30d,
+          },
+        };
+      }
+      return { ...card, currentValue: null, velocity: null };
+    }
+
+    // Base cards
+    const baseKey = card.players.name.toLowerCase();
+    return {
+      ...card,
+      currentValue: basePriceMap[baseKey] ?? null,
+      velocity: null,
+    };
+  });
+
+  setCards(cardsWithValue);
+  setLoading(false);
+};
 
   const removeCard = async (cardId: string) => {
     await supabase.from('user_cards').delete().eq('id', cardId);
@@ -242,6 +327,27 @@ const uploadEditImage = async (file: File, cardId: string) => {
   const totalValue = cards.reduce((sum, c) => sum + (c.currentValue ? c.currentValue * (c.quantity || 1) : 0), 0);
   const totalPnl = totalValue - totalPaid;
 
+  const QUALIFIED_QUALITY = ['medium_confidence', 'high_confidence'];
+const qualifyingCards = cards.filter((c: any) =>
+  c.velocity &&
+  QUALIFIED_QUALITY.includes(c.velocity.quality) &&
+  c.velocity.momentum !== null &&
+  c.currentValue
+);
+const portfolioTrend = (() => {
+  if (qualifyingCards.length < 5) return null;
+  const totalWeight = qualifyingCards.reduce(
+    (sum: number, c: any) => sum + (c.currentValue * (c.quantity || 1)),
+    0
+  );
+  if (totalWeight === 0) return null;
+  const weighted = qualifyingCards.reduce(
+    (sum: number, c: any) => sum + (c.velocity.momentum * c.currentValue * (c.quantity || 1)),
+    0
+  );
+  return weighted / totalWeight;
+})();
+
   const formatPrice = (price: number) => price.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   if (!user && !loading) {
@@ -357,15 +463,29 @@ const uploadEditImage = async (file: File, cardId: string) => {
           </div>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' as const }}>
             {[
-              { label: 'Paid', value: `£${formatPrice(totalPaid)}` },
-              { label: 'Est. Value', value: `£${formatPrice(totalValue)}`, green: true },
-              { label: 'P&L', value: `${totalPnl >= 0 ? '+' : ''}£${formatPrice(totalPnl)}`, green: totalPnl >= 0, red: totalPnl < 0 },
-            ].map((stat: any) => (
-              <div key={stat.label} style={{ background: stat.green ? 'rgba(58,170,53,0.1)' : stat.red ? 'rgba(220,53,69,0.1)' : '#fff', border: `1px solid ${stat.green ? 'rgba(58,170,53,0.3)' : stat.red ? 'rgba(220,53,69,0.3)' : '#e0d9cc'}`, borderRadius: '10px', padding: '12px 20px', textAlign: 'center' as const }}>
-                <div style={{ fontSize: '11px', color: '#aaa', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '4px' }}>{stat.label}</div>
-                <div style={{ fontSize: '20px', fontWeight: 700, color: stat.green ? '#3aaa35' : stat.red ? '#dc3545' : '#1a1a1a' }}>{stat.value}</div>
-              </div>
-            ))}
+  { label: 'Paid', value: `£${formatPrice(totalPaid)}` },
+  { label: 'Est. Value', value: `£${formatPrice(totalValue)}`, green: true },
+  {
+    label: 'P&L',
+    value: `${totalPnl >= 0 ? '+' : ''}£${formatPrice(totalPnl)}`,
+    green: totalPnl >= 0,
+    red: totalPnl < 0,
+    subtext: portfolioTrend !== null
+      ? `${portfolioTrend >= 0 ? '↑' : '↓'} ${portfolioTrend >= 0 ? '+' : ''}${portfolioTrend.toFixed(1)}% over 30d`
+      : null,
+    subtextGreen: portfolioTrend !== null && portfolioTrend >= 0,
+  },
+].map((stat: any) => (
+  <div key={stat.label} style={{ background: stat.green ? 'rgba(58,170,53,0.1)' : stat.red ? 'rgba(220,53,69,0.1)' : '#fff', border: `1px solid ${stat.green ? 'rgba(58,170,53,0.3)' : stat.red ? 'rgba(220,53,69,0.3)' : '#e0d9cc'}`, borderRadius: '10px', padding: '12px 20px', textAlign: 'center' as const }}>
+    <div style={{ fontSize: '11px', color: '#aaa', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: '4px' }}>{stat.label}</div>
+    <div style={{ fontSize: '20px', fontWeight: 700, color: stat.green ? '#3aaa35' : stat.red ? '#dc3545' : '#1a1a1a' }}>{stat.value}</div>
+    {stat.subtext && (
+      <div style={{ fontSize: '11px', color: stat.subtextGreen ? '#1F6F3A' : '#dc3545', marginTop: '4px', fontWeight: 600 }}>
+        {stat.subtext}
+      </div>
+    )}
+  </div>
+))}
             <button
               onClick={() => setShowAddForm(!showAddForm)}
               style={{ background: '#1F6F3A', color: '#fff', border: 'none', borderRadius: '8px', padding: '12px 20px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' as const }}>
@@ -631,11 +751,16 @@ const uploadEditImage = async (file: File, cardId: string) => {
   <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
     {card.image_url && (
   <div style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: '4px', flexShrink: 0 }}>
-    <img src={card.image_url} alt={playerName}
-      style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #e0d9cc', cursor: 'zoom-in', transition: 'transform 0.2s ease', zIndex: 1, position: 'relative' as const }}
-      onMouseEnter={e => e.currentTarget.style.transform = 'scale(4)'}
-      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-    />
+   <img 
+  src={card.image_url} 
+  alt={playerName}
+  loading="lazy"
+  width={60}
+  height={60}
+  style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #e0d9cc', cursor: 'zoom-in', transition: 'transform 0.2s ease', zIndex: 1, position: 'relative' as const }}
+  onMouseEnter={e => e.currentTarget.style.transform = 'scale(4)'}
+  onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+/>
     <div style={{ fontSize: '9px', color: '#bbb' }}>hover to zoom</div>
   </div>
 )}
