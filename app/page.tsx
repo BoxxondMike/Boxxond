@@ -406,9 +406,9 @@ const fetchFeaturedCards = async () => {
 
         {/* Stats */}
         <div style={{ textAlign: "center", padding: "0.5rem 0 1.5rem" }}>
-          <a href="https://www.paniniamerica.net/2025-26-panini-donruss-road-to-fifa-world-cup-26-trading-card-box-hobby.html?srsltid=AfmBOorLow1cEIhZRxE12NAnsdklMc61Xc2PlTzQ1kAMKCcXSI0VZ2l6" target="_blank" rel="noopener noreferrer"
+          <a href="http://topps.com/pages/topps-merlin-premier-league" target="_blank" rel="noopener noreferrer"
             style={{ display: "inline-flex", alignItems: "center", gap: "10px", background: "#1F6F3A", borderRadius: "30px", padding: "12px 28px", textDecoration: "none", fontSize: "16px", fontWeight: 700, color: "#faf7f0" }}>
-            📸 Look For New Releases <strong style={{ color: "#faf7f0", textDecoration: "underline" }}>2025-26 Panini Donruss Road To FIFA World Cup 2026™ Out Now</strong>
+            📸 Look For New Releases <strong style={{ color: "#faf7f0", textDecoration: "underline" }}>Merlin Premier League 2026 Pre-orders now</strong>
           </a>
         </div>
 
