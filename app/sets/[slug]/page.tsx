@@ -348,6 +348,26 @@ const sets: Record<string, any> = {
     ],
     priceRange: 'From £20 to £5,000+',
   },
+  'Merlin Premier League': {
+    name: 'Merlin Premier League',
+    manufacturer: 'Topps',
+    year: '2018-Present',
+    difficulty: 'Premium',
+    overview: 'Blending the nostalgia of the 90s with bold Chrome finishes and wizardry-inspired design, this release celebrates the game’s past, present, and future through a truly unique artistic lens.',
+    whatToLookFor: 'Collectors can chase a vibrant array of parallels, including the nostalgic VHS Refractor and the limited Battle of Britpop Refractor, limited to 95 copies. Short-printed variations such as the Merlin Premier League 1996 throwback design.',
+    parallels: [
+      { name: 'Base Sapphire Refractor', printRun: 'Limited', colour: 'Blue' },
+      { name: 'Gold Refractor', printRun: '/50', colour: 'Gold' },
+      { name: 'Orange Refractor', printRun: '/25', colour: 'Orange' },
+      { name: 'Red Refractor', printRun: '/5', colour: 'Red' },
+      { name: 'SuperFractor', printRun: '1/1', colour: 'Gold' },
+    ],
+    tips: [
+      'array of stunning autograph cards, including select gold pen on-card autograph cards',
+      '',
+    ],
+    priceRange: 'From £20 to £5,000+',
+  },
   'topps-now': {
     name: 'Topps NOW',
     manufacturer: 'Topps',

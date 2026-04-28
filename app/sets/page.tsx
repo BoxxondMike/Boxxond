@@ -48,6 +48,15 @@ const sports: Sport[] = [
   difficulty: 'Mid Range',
   tags: ['World Cup', 'Kaboom', 'Rated Rookies'],
 },
+{
+        slug: 'Merlin Premier League',
+        name: 'Merlin Premier Leauge',
+        manufacturer: 'Topps',
+        description: 'The nostalgia of the 90s with bold Chrome finishes and wizardry-inspired design.',
+        difficulty: 'Premium',
+        tags: ['Refractors', 'Autos', 'Rookie Cards'],
+        checklistUrl: 'https://cdn.shopify.com/s/files/1/0739/2015/1805/files/Merlin_Premier_League_2026_Hobby_Box_Checklist_1.pdf?v=1777382734',
+      },
       {
         slug: 'panini-prizm-epl',
         name: 'Panini Prizm EPL',
