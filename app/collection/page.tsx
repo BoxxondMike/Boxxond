@@ -33,7 +33,10 @@ const [cardImageUrl, setCardImageUrl] = useState('');
 const [editingCardId, setEditingCardId] = useState<string | null>(null);
 const [editImageUrl, setEditImageUrl] = useState('');
 const [uploadingEditImage, setUploadingEditImage] = useState(false);
-
+const [identifying, setIdentifying] = useState(false);
+const [identifyError, setIdentifyError] = useState('');
+const [identifyConfidence, setIdentifyConfidence] = useState<'high' | 'medium' | 'low' | null>(null);
+const [identifyNotes, setIdentifyNotes] = useState('');
 
 useEffect(() => {
   const saved = localStorage.getItem('collectionViewMode') as 'list' | 'grid';
@@ -229,6 +232,67 @@ useEffect(() => {
     setPlayerSuggestions([]);
     setCardImageUrl('');
   };
+  const identifyCardFromPhoto = async (file: File) => {
+  setIdentifying(true);
+  setIdentifyError('');
+  setIdentifyConfidence(null);
+  setIdentifyNotes('');
+
+  try {
+    const compressed = await compressImage(file);
+
+    const base64 = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        resolve(result.split(',')[1]); // strip "data:image/jpeg;base64," prefix
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(compressed);
+    });
+
+    const res = await fetch('/api/peregro/identify-card', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageBase64: base64, mediaType: 'image/jpeg' }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || data.error) {
+      setIdentifyError(data.error || 'Could not identify card');
+      setIdentifying(false);
+      return;
+    }
+
+    const id = data.identification;
+
+    // Auto-fill the form with whatever Claude found
+    if (id.player_name) {
+      setSearchPlayer(id.player_name);
+      searchPlayers(id.player_name); // triggers your existing player search
+    }
+    if (id.year) setYear(String(id.year));
+    if (id.brand) setCardType(id.brand);
+    if (id.set_name) setCardSet(id.set_name);
+    if (id.numbered) setNumbered(id.numbered);
+    if (id.variant_guess) setVariant(id.variant_guess);
+    if (id.is_graded && id.grade_company && id.grade_value) {
+      setGrade(`${id.grade_company} ${id.grade_value}`);
+    }
+
+    setIdentifyConfidence(id.confidence || null);
+    setIdentifyNotes(id.notes || '');
+
+    // Also store the image for the card itself
+    await uploadCardImage(file);
+  } catch (error: any) {
+    console.error('Identification error:', error);
+    setIdentifyError('Something went wrong identifying the card');
+  }
+
+  setIdentifying(false);
+};
 const compressImage = (file: File): Promise<File> => {
   return new Promise((resolve) => {
     const img = new Image();
@@ -505,7 +569,23 @@ const portfolioTrend = (() => {
         {showAddForm && (
           <div style={{ background: '#fff', border: '1px solid #e0d9cc', borderRadius: '12px', padding: '24px', marginBottom: '24px', maxWidth: '960px', margin: '0 auto 24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0 }}>Add Card</h2>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+    <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0 }}>Add Card</h2>
+    <input
+      type="file"
+      accept="image/*"
+      capture="environment"
+      id="identify-card-input"
+      style={{ display: 'none' }}
+      onChange={e => e.target.files?.[0] && identifyCardFromPhoto(e.target.files[0])}
+    />
+    <button
+      onClick={() => document.getElementById('identify-card-input')?.click()}
+      disabled={identifying}
+      style={{ background: identifying ? '#e0d9cc' : 'rgba(58,170,53,0.1)', color: identifying ? '#888' : '#1F6F3A', border: '1px solid rgba(58,170,53,0.3)', borderRadius: '6px', padding: '6px 14px', fontSize: '13px', fontWeight: 600, cursor: identifying ? 'default' : 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+      {identifying ? '🔍 Identifying...' : '📷 Identify from Photo'}
+    </button>
+  </div>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button onClick={() => setIsManual(false)}
                   style={{ background: !isManual ? '#1F6F3A' : '#faf7f0', color: !isManual ? '#fff' : '#888', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 14px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
@@ -517,7 +597,26 @@ const portfolioTrend = (() => {
                 </button>
               </div>
             </div>
-
+{identifyError && (
+  <div style={{ background: 'rgba(220,53,69,0.1)', border: '1px solid rgba(220,53,69,0.3)', borderRadius: '8px', padding: '10px 14px', marginBottom: '16px', fontSize: '13px', color: '#dc3545' }}>
+    {identifyError}
+  </div>
+)}
+{identifyConfidence && (
+  <div style={{
+    background: identifyConfidence === 'high' ? 'rgba(58,170,53,0.1)' : identifyConfidence === 'medium' ? 'rgba(184,134,11,0.1)' : 'rgba(184,134,11,0.05)',
+    border: `1px solid ${identifyConfidence === 'high' ? 'rgba(58,170,53,0.3)' : 'rgba(184,134,11,0.3)'}`,
+    borderRadius: '8px',
+    padding: '10px 14px',
+    marginBottom: '16px',
+    fontSize: '13px',
+    color: identifyConfidence === 'high' ? '#1F6F3A' : '#b8860b',
+  }}>
+    <strong>{identifyConfidence === 'high' ? '✓ Identified' : identifyConfidence === 'medium' ? '~ Best guess' : '? Low confidence'}</strong>
+    {identifyNotes && <span style={{ marginLeft: '8px', fontWeight: 400 }}>— {identifyNotes}</span>}
+    <div style={{ fontSize: '12px', color: '#888', marginTop: '4px' }}>Review the fields below and adjust anything wrong before saving.</div>
+  </div>
+)}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
 
               {/* Player */}
