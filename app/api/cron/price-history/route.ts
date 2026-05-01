@@ -81,15 +81,18 @@ export async function GET(request: Request) {
 try {
   const ebayToken = await getEbayToken();
   
-  const [endingSoonRes, featuredRes] = await Promise.all([
-    fetch('https://api.ebay.com/buy/browse/v1/item_summary/search?q=football+soccer+card&filter=buyingOptions%3A%7BFIXED_PRICE%7D&sort=endingSoonest&limit=12', {
+  const endingSoonFilter = encodeURIComponent('buyingOptions:{FIXED_PRICE|AUCTION},price:[5..10000],priceCurrency:GBP,itemLocationCountry:GB');
+const featuredFilter = encodeURIComponent('buyingOptions:{FIXED_PRICE},price:[30..10000],priceCurrency:GBP,itemLocationCountry:GB,conditionIds:{2750|3000|4000|5000}');
+
+const [endingSoonRes, featuredRes] = await Promise.all([
+    fetch(`https://api.ebay.com/buy/browse/v1/item_summary/search?q=football%20card&filter=${endingSoonFilter}&sort=endingSoonest&limit=12`, {
       headers: {
         'Authorization': `Bearer ${ebayToken}`,
         'X-EBAY-C-MARKETPLACE-ID': 'EBAY_GB',
         'X-EBAY-C-ENDUSERCTX': 'affiliateCampaignId=5339145682,affiliateReferenceId=Boxxhq',
       }
     }),
-    fetch('https://api.ebay.com/buy/browse/v1/item_summary/search?q=topps+chrome+football+card&filter=buyingOptions%3A%7BFIXED_PRICE%7D,price:%5B30..10000%5D&sort=newlyListed&limit=12', {
+    fetch(`https://api.ebay.com/buy/browse/v1/item_summary/search?q=topps%20chrome%20football&filter=${featuredFilter}&sort=newlyListed&limit=12`, {
       headers: {
         'Authorization': `Bearer ${ebayToken}`,
         'X-EBAY-C-MARKETPLACE-ID': 'EBAY_GB',
