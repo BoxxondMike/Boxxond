@@ -185,7 +185,7 @@ if (profile) {
     }
   };
 
-  checkLastViewed();
+  checkLastViewed();  
   
   window.addEventListener('focus', checkLastViewed);
   window.addEventListener('visibilitychange', checkLastViewed);
@@ -205,6 +205,11 @@ if (profile) {
     setCurrentPage(1);
     setSortedResults(sorted);
   }, [results, sortOrder]);
+
+const buildEbaySoldUrl = (suffix: string = '') => {
+    const query = `${playerName} ${suffix}`.trim();
+    return `https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent(query)}&LH_Sold=1&LH_Complete=1&_sop=13&_sacat=261328&campid=5339145682&customid=Boxxhq`;
+  };
 
   const formatPrice = (price: number) => {
     return price.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -477,7 +482,16 @@ const handlePlayerSearch = async () => {
 
 {/* Player Search */}
 <div style={{ background: '#fff', border: '1px solid #e0d9cc', borderRadius: '12px', padding: '1.25rem', marginBottom: '2rem' }}>
-  <div style={{ fontSize: '13px', color: '#888', marginBottom: '10px', fontWeight: 500 }}>Search {playerName} cards on eBay</div>
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap' as const, gap: '8px' }}>
+    <div style={{ fontSize: '13px', color: '#888', fontWeight: 500 }}>Search {playerName} cards on eBay</div>
+    
+      <a href={buildEbaySoldUrl(searchSuffix)}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ fontSize: '12px', color: '#3aaa35', fontWeight: 600, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+      📊 Recent Sold Prices →
+    </a>
+  </div>
   <div style={{ display: 'flex', gap: '8px' }}>
     <div style={{ background: '#faf7f0', border: '1px solid #e0d9cc', borderRadius: '8px', padding: '10px 14px', fontSize: '14px', color: '#aaa', flexShrink: 0 }}>
       {playerName}
@@ -565,7 +579,16 @@ const handlePlayerSearch = async () => {
   {/* Results */}
 <div>
   <div id="results-section" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem", flexWrap: "wrap" as const, gap: "10px" }}>
-    <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0 }}>Current Listings</h2>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' as const }}>
+      <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0 }}>Current Listings</h2>
+      
+        <a href={buildEbaySoldUrl()}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ background: 'rgba(58,170,53,0.1)', border: '1px solid rgba(58,170,53,0.3)', color: '#3aaa35', fontSize: '12px', fontWeight: 600, padding: '5px 12px', borderRadius: '20px', textDecoration: 'none', whiteSpace: 'nowrap' as const }}>
+        See Recent Sold Prices →
+      </a>
+    </div>
     <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
       <span style={{ fontSize: "12px", color: "#888" }}>Sort:</span>
       {[['high', 'High to Low'], ['low', 'Low to High']].map(([val, label]) => (
