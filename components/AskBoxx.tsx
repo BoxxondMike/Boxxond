@@ -6,6 +6,7 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   suggestions?: string[];
+  imageUrl?: string;
 }
 
 interface PageContext {
@@ -48,6 +49,9 @@ export default function AskBoxx({
   const inputRef = useRef<HTMLInputElement>(null);
   const [messageCount, setMessageCount] = useState(0);
   const MAX_MESSAGES = 5;
+  const [uploadingImage, setUploadingImage] = useState(false);
+const [imageError, setImageError] = useState('');
+const fileInputRef = useRef<HTMLInputElement>(null);
 
   // ---- Peregro analytics: stable conversation + session IDs ----
   const [conversationId] = useState<string>(() =>
@@ -91,6 +95,120 @@ export default function AskBoxx({
       // swallow — logging never breaks UX
     }
   };
+  const compressImageForChat = (file: File): Promise<File> => {
+  return new Promise((resolve) => {
+    const img = new window.Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxSize = 800;
+      let { width, height } = img;
+      if (width > height && width > maxSize) {
+        height = (height * maxSize) / width;
+        width = maxSize;
+      } else if (height > maxSize) {
+        width = (width * maxSize) / height;
+        height = maxSize;
+      }
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d')!.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(
+        (blob) => {
+          resolve(new File([blob!], file.name, { type: 'image/jpeg' }));
+        },
+        'image/jpeg',
+        0.8
+      );
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+  });
+};
+
+const sendImage = async (file: File) => {
+  if (loading || uploadingImage) return;
+  if (messageCount >= MAX_MESSAGES) return;
+  if (!userId) {
+    setImageError('You need to be logged in to upload photos.');
+    return;
+  }
+
+  setImageError('');
+  setUploadingImage(true);
+
+  try {
+    const compressed = await compressImageForChat(file);
+
+    // Show local preview immediately
+    const localPreview = URL.createObjectURL(compressed);
+    setMessages((prev) => [
+      ...prev,
+      { role: 'user', content: '[Photo uploaded]', imageUrl: localPreview },
+    ]);
+
+    // Convert to base64
+    const base64 = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        resolve(result.split(',')[1]);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(compressed);
+    });
+
+    setLoading(true);
+
+    const res = await fetch('/api/peregro/identify-card-chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        imageBase64: base64,
+        mediaType: 'image/jpeg',
+        conversation_id: conversationId,
+        session_id: sessionId,
+        user_id: userId,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || data.error) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: data.error || 'Sorry, I had trouble identifying that card. Try another photo?',
+          suggestions: [],
+        },
+      ]);
+    } else {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: data.reply,
+          suggestions: data.suggestions || [],
+        },
+      ]);
+      setMessageCount((prev) => prev + 1);
+    }
+  } catch (error) {
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: 'assistant',
+        content: 'Sorry, something went wrong with the upload. Try again?',
+        suggestions: [],
+      },
+    ]);
+  }
+
+  setLoading(false);
+  setUploadingImage(false);
+  if (fileInputRef.current) fileInputRef.current.value = '';
+};
 
   const sendMessage = async (text?: string) => {
     const userMessage = text || input.trim();
@@ -359,7 +477,7 @@ export default function AskBoxx({
                     <div
                       style={{
                         maxWidth: '85%',
-                        padding: '12px 16px',
+                        padding: msg.imageUrl ? '6px' : '12px 16px',
                         borderRadius:
                           msg.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
                         background: msg.role === 'user' ? '#3aaa35' : '#fff',
@@ -371,7 +489,20 @@ export default function AskBoxx({
                         whiteSpace: 'pre-wrap',
                       }}
                     >
-                      {msg.content}
+                      {msg.imageUrl ? (
+                        <img
+                          src={msg.imageUrl}
+                          alt="Uploaded card"
+                          style={{
+                            maxWidth: '240px',
+                            maxHeight: '240px',
+                            borderRadius: '12px',
+                            display: 'block',
+                          }}
+                        />
+                      ) : (
+                        msg.content
+                      )}
                     </div>
                   </div>
 
@@ -493,12 +624,36 @@ export default function AskBoxx({
                     background: '#faf7f0',
                     border: '1px solid #e0d9cc',
                     borderRadius: '12px',
-                    padding: '8px 8px 8px 16px',
+                    padding: '8px 8px 8px 12px',
                   }}
                 >
                   <input
-                    ref={inputRef}
-                    value={input}
+                    ref={fileInputRef}
+    type="file"
+    accept="image/*"
+    capture="environment"
+    style={{ display: 'none' }}
+    onChange={(e) => e.target.files?.[0] && sendImage(e.target.files[0])}
+  />
+  <button
+    onClick={() => fileInputRef.current?.click()}
+    disabled={uploadingImage || loading || !userId}
+    title={!userId ? 'Sign in to upload photos' : 'Upload card photo'}
+    style={{
+      background: 'none',
+      border: 'none',
+      cursor: !userId ? 'default' : 'pointer',
+      padding: '4px 6px',
+      fontSize: '18px',
+      color: !userId ? '#ccc' : uploadingImage ? '#ccc' : '#888',
+      flexShrink: 0,
+    }}
+  >
+    📷
+  </button>
+  <input
+    ref={inputRef}
+    value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Ask about any card or player..."
@@ -534,16 +689,28 @@ export default function AskBoxx({
                   </button>
                 </div>
               )}
-              <div
-                style={{
-                  fontSize: '11px',
-                  color: '#ccc',
-                  textAlign: 'center',
-                  marginTop: '8px',
-                }}
-              >
-                Powered by BoxxHQ · Prices from eBay UK
-              </div>
+              {imageError && (
+  <div
+    style={{
+      fontSize: '12px',
+      color: '#dc3545',
+      textAlign: 'center',
+      marginTop: '8px',
+    }}
+  >
+    {imageError}
+  </div>
+)}
+<div
+  style={{
+    fontSize: '11px',
+    color: '#ccc',
+    textAlign: 'center',
+    marginTop: '8px',
+  }}
+>
+  Powered by BoxxHQ · Prices from eBay UK
+</div>
             </div>
           </>
         )}

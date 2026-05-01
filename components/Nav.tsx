@@ -158,10 +158,11 @@ export default function Nav({ activePage }: { activePage?: string }) {
 
       {/* Boxx Intel Panel */}
       <AskBoxx
-        isOpen={askBoxxOpen}
-        onClose={() => setAskBoxxOpen(false)}
-        isPro={isPro}
-      />
+  isOpen={askBoxxOpen}
+  onClose={() => setAskBoxxOpen(false)}
+  isPro={isPro}
+  userId={user?.id ?? null}
+/>
     </>
   );
 }
