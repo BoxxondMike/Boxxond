@@ -81,7 +81,7 @@ export async function GET(request: Request) {
 try {
   const ebayToken = await getEbayToken();
   
-  const endingSoonFilter = encodeURIComponent('buyingOptions:{FIXED_PRICE|AUCTION},price:[5..10000],priceCurrency:GBP,itemLocationCountry:GB');
+  const endingSoonFilter = encodeURIComponent('buyingOptions:{FIXED_PRICE},price:[5..10000],priceCurrency:GBP,itemLocationCountry:GB');
 const featuredFilter = encodeURIComponent('buyingOptions:{FIXED_PRICE},price:[30..10000],priceCurrency:GBP,itemLocationCountry:GB,conditionIds:{2750|3000|4000|5000}');
 
 const [endingSoonRes, featuredRes] = await Promise.all([
