@@ -46,9 +46,24 @@ export async function GET(request: Request) {
 
         console.log(`Got ${items.length} items for ${term.search_term}`);
 
-        const prices = items
-          .filter((item: any) => item.price?.value)
-          .map((item: any) => parseFloat(item.price.value));
+        // Strip accents and lowercase for comparison
+const stripAccents = (str: string) =>
+  str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+// Get the player's actual name from the search term, removing variant modifiers
+const playerNameOnly = stripAccents(
+  term.search_term
+    .replace(/ (auto|numbered|psa 10|short print|prizm|world cup|topps chrome|topps|fulham|chelsea|arsenal)$/i, '')
+    .trim()
+);
+
+const filteredItems = items.filter((item: any) => {
+  if (!item.price?.value) return false;
+  const title = stripAccents(item.title || '');
+  return title.includes(playerNameOnly);
+});
+
+const prices = filteredItems.map((item: any) => parseFloat(item.price.value));
 
         // Always update last_fetched_at regardless of results
         const { error: updateError } = await supabase
@@ -68,7 +83,7 @@ export async function GET(request: Request) {
           variant_label: term.variant_label,
           player_id: term.player_id,
           avg_price: parseFloat(avg.toFixed(2)),
-          listing_count: items.length,
+          listing_count: filteredItems.length,
         });
 
         saved++;
