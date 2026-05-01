@@ -48,7 +48,7 @@ export default function AskBoxx({
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [messageCount, setMessageCount] = useState(0);
-  const MAX_MESSAGES = 5;
+  const MAX_MESSAGES = 10;
   const [uploadingImage, setUploadingImage] = useState(false);
 const [imageError, setImageError] = useState('');
 const fileInputRef = useRef<HTMLInputElement>(null);
@@ -612,7 +612,7 @@ const sendImage = async (file: File) => {
                     Beta limit reached
                   </div>
                   <div style={{ fontSize: '13px', color: '#888' }}>
-                    You've used your 5 free messages. Full access coming soon.
+                    You've used your 10 free messages. Full access coming soon.
                   </div>
                 </div>
               ) : (
