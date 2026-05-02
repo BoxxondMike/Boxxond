@@ -60,12 +60,13 @@ export default function Nav({ activePage }: { activePage?: string }) {
         </Link>
 
         {/* Desktop Links */}
-        <div className="nav-desktop-links" style={{ fontSize: "15px", fontWeight: 600, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
-          <Link href="/" style={{ color: activePage === 'prices' ? "#1F6F3A" : "#888", textDecoration: "none" }}>Prices</Link>
-          <Link href="/sets" style={{ color: activePage === 'sets' ? "#1F6F3A" : "#888", textDecoration: "none" }}>Sets & Releases</Link>
-          <Link href="/breaks" style={{ color: activePage === 'breaks' ? "#1F6F3A" : "#888", textDecoration: "none" }}>Breaks</Link>
-          <Link href="/quiz" style={{ color: activePage === 'games' ? "#1F6F3A" : "#888", textDecoration: "none" }}>Games</Link>
-        </div>
+<div className="nav-desktop-links" style={{ fontSize: "15px", fontWeight: 600, position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
+  <Link href="/" style={{ color: activePage === 'prices' ? "#1F6F3A" : "#888", textDecoration: "none" }}>Prices</Link>
+  <Link href="/sets" style={{ color: activePage === 'sets' ? "#1F6F3A" : "#888", textDecoration: "none" }}>Sets</Link>
+  <Link href="/checklists" style={{ color: activePage === 'checklists' ? "#1F6F3A" : "#888", textDecoration: "none" }}>Checklists</Link>
+  <Link href="/breaks" style={{ color: activePage === 'breaks' ? "#1F6F3A" : "#888", textDecoration: "none" }}>Breaks</Link>
+  <Link href="/quiz" style={{ color: activePage === 'games' ? "#1F6F3A" : "#888", textDecoration: "none" }}>Games</Link>
+</div>
 
         {/* Desktop Auth */}
         <div className="nav-desktop-links" style={{ gap: "10px", alignItems: "center", flexShrink: 0 }}>
@@ -119,9 +120,10 @@ export default function Nav({ activePage }: { activePage?: string }) {
       {menuOpen && (
         <div style={{ background: "#faf7f0", borderBottom: "1px solid #e0d9cc", padding: "1rem 1.25rem", display: "flex", flexDirection: "column", gap: "0" }}>
           <Link href="/" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'prices' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Prices</Link>
-          <Link href="/sets" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'sets' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Sets & Releases</Link>
-          <Link href="/breaks" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'breaks' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Breaks</Link>
-          <Link href="/quiz" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'games' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Games</Link>
+<Link href="/sets" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'sets' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Sets</Link>
+<Link href="/checklists" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'checklists' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Checklists</Link>
+<Link href="/breaks" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'breaks' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Breaks</Link>
+<Link href="/quiz" onClick={() => setMenuOpen(false)} style={{ color: activePage === 'games' ? "#3aaa35" : "#555", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #e0d9cc", fontSize: "15px" }}>Games</Link>
           {user ? (
             <>
               {/* Mobile Boxx Intel*/}
