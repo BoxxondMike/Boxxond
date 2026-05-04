@@ -261,13 +261,11 @@ const fetchFeaturedCards = async () => {
 </div>
 
 <div style={{ textAlign: "center" }}>
-        <div style={{ display: "inline-block", background: "rgba(58,170,53,0.1)", border: "1px solid rgba(58,170,53,0.25)", color: "#1F6F3A", fontSize: "11px", fontWeight: 500, padding: "5px 14px", borderRadius: "20px", marginBottom: "1.5rem", letterSpacing: "1px", textTransform: "uppercase" as const }}>
-          Search live eBay UK listings, track your collection, get daily alerts when new cards drop, and verify PSA graded cards instantly.
-        </div>
-        <h1 style={{ fontWeight: 800, fontSize: "clamp(36px, 7vw, 68px)", lineHeight: 1.05, margin: "0 0 1.25rem", letterSpacing: "-2px" }}>
-          Know your cards worth<br /><span style={{ color: "#1F6F3A" }}>Track your collection</span>
+        <h1 style={{ fontWeight: 800, fontSize: "clamp(28px, 4.5vw, 44px)", lineHeight: 1.1, margin: "0 0 0.75rem", letterSpacing: "-1.5px" }}>
+          Track. Value. Collect. <span style={{ color: "#1F6F3A" }}>With BoxxHQ</span>
         </h1>
-        <p style={{ color: "#666", fontSize: "15px", lineHeight: 1.6, maxWidth: "500px", margin: "0 auto 1.5rem" }}>
+        <p style={{ color: "#666", fontSize: "14px", lineHeight: 1.6, maxWidth: "560px", margin: "0 auto 1.5rem" }}>
+          Details on new releases with checklists. Create your collection
         </p>
 
      {/* CTA Buttons */}
@@ -411,6 +409,116 @@ const fetchFeaturedCards = async () => {
             📸 Look For New Releases <strong style={{ color: "#faf7f0", textDecoration: "underline" }}>Merlin Premier League 2026 Pre-orders now</strong>
           </a>
         </div>
+
+        {/* Collection Mock-up - Sales Driver */}
+<div style={{ padding: "3rem 1.25rem 2rem", maxWidth: "1200px", margin: "0 auto" }}>
+  <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+    <h2 style={{ fontWeight: 800, fontSize: "clamp(28px, 4vw, 42px)", letterSpacing: "-1.5px", margin: "0 0 0.75rem", lineHeight: 1.1 }}>
+      Build a collection that <span style={{ color: "#1F6F3A" }}>grows with you</span>
+    </h2>
+    <p style={{ color: "#666", fontSize: "15px", lineHeight: 1.6, maxWidth: "560px", margin: "0 auto" }}>
+      Track your cards. See real eBay UK prices update daily. Watch your collection value grow over time.
+    </p>
+  </div>
+
+  {/* Mock collection card */}
+  <div style={{ background: "#fff", border: "1px solid #e0d9cc", borderRadius: "16px", overflow: "hidden", boxShadow: "0 4px 24px rgba(31,111,58,0.06)" }}>
+    {/* Portfolio summary header */}
+    <div style={{ background: "linear-gradient(135deg, #1F6F3A 0%, #2d8a4a 100%)", padding: "1.5rem 2rem", color: "#faf7f0" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" as const, gap: "1rem" }}>
+        <div>
+          <div style={{ fontSize: "11px", textTransform: "uppercase" as const, letterSpacing: "1px", opacity: 0.8, marginBottom: "4px" }}>Portfolio Value</div>
+          <div style={{ fontSize: "36px", fontWeight: 800, letterSpacing: "-1px" }}>£3,247.85</div>
+        </div>
+        <div style={{ display: "flex", gap: "2rem" }}>
+          <div>
+            <div style={{ fontSize: "11px", textTransform: "uppercase" as const, letterSpacing: "1px", opacity: 0.8, marginBottom: "4px" }}>This Week</div>
+            <div style={{ fontSize: "18px", fontWeight: 700, color: "#a8e6b0" }}>+£87.20</div>
+          </div>
+          <div>
+            <div style={{ fontSize: "11px", textTransform: "uppercase" as const, letterSpacing: "1px", opacity: 0.8, marginBottom: "4px" }}>All Time</div>
+            <div style={{ fontSize: "18px", fontWeight: 700, color: "#a8e6b0" }}>+£412.40 (+14.5%)</div>
+          </div>
+          <div>
+            <div style={{ fontSize: "11px", textTransform: "uppercase" as const, letterSpacing: "1px", opacity: 0.8, marginBottom: "4px" }}>Cards</div>
+            <div style={{ fontSize: "18px", fontWeight: 700 }}>24</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {/* Card grid */}
+    <div style={{ padding: "0.75rem 1.5rem 0", fontSize: "11px", color: "#aaa", fontStyle: "italic" as const, textAlign: "center" as const }}>
+      Mock-up — your real collection uses your uploaded card images
+    </div>
+    <div style={{ padding: "1.5rem", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(130px, 1fr))", gap: "12px" }}>
+      {[
+        { name: "Jude Bellingham", initial: "JB", set: "Topps Chrome", year: "2023-24", value: 425, change: 32, gradient: "linear-gradient(135deg, #c8102e 0%, #8b0a1f 100%)", brandColour: "#c8102e" },
+        { name: "Lamine Yamal", initial: "LY", set: "Panini Prizm", year: "2024", value: 680, change: 95, gradient: "linear-gradient(135deg, #a50044 0%, #004d98 100%)", brandColour: "#a50044" },
+        { name: "Cole Palmer", initial: "CP", set: "Topps Chrome RC", year: "2024", value: 215, change: 18, gradient: "linear-gradient(135deg, #034694 0%, #021f4a 100%)", brandColour: "#034694" },
+        { name: "Erling Haaland", initial: "EH", set: "Chrome Sapphire", year: "2024", value: 540, change: -12, gradient: "linear-gradient(135deg, #6cabdd 0%, #1c2c5b 100%)", brandColour: "#6cabdd" },
+        { name: "Bukayo Saka", initial: "BS", set: "Panini Prizm Auto", year: "2024", value: 385, change: 24, gradient: "linear-gradient(135deg, #ef0107 0%, #870207 100%)", brandColour: "#ef0107" },
+        { name: "Kylian Mbappé", initial: "KM", set: "Donruss Kaboom", year: "2024", value: 720, change: 56, gradient: "linear-gradient(135deg, #004170 0%, #001a2e 100%)", brandColour: "#004170" },
+        { name: "Phil Foden", initial: "PF", set: "Topps Finest", year: "2026", value: 295, change: 8, gradient: "linear-gradient(135deg, #6cabdd 0%, #1c2c5b 100%)", brandColour: "#6cabdd" },
+      ].map((card, i) => (
+        <div key={i} style={{ background: "#fff", border: "1px solid #e0d9cc", borderRadius: "10px", padding: "0.6rem", display: "flex", flexDirection: "column" as const, transition: "transform 0.15s ease" }}>
+          {/* Stylised card mock */}
+          <div style={{ width: "100%", aspectRatio: "5/7", background: card.gradient, borderRadius: "6px", marginBottom: "8px", position: "relative" as const, overflow: "hidden", boxShadow: "inset 0 0 0 2px rgba(255,255,255,0.15), 0 2px 8px rgba(0,0,0,0.15)" }}>
+            {/* Refractor shimmer */}
+            <div style={{ position: "absolute" as const, inset: 0, background: "linear-gradient(115deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.18) 50%, rgba(255,255,255,0) 70%)" }} />
+
+            {/* Photo area (top 62%) */}
+            <div style={{ position: "absolute" as const, top: "6px", left: "6px", right: "6px", height: "62%", background: "rgba(0,0,0,0.25)", borderRadius: "3px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+              {/* Player silhouette */}
+              <svg viewBox="0 0 40 50" style={{ width: "55%", height: "auto", opacity: 0.5 }}>
+                <circle cx="20" cy="14" r="7" fill="rgba(255,255,255,0.9)" />
+                <path d="M 8 50 Q 8 30 20 30 Q 32 30 32 50 Z" fill="rgba(255,255,255,0.9)" />
+              </svg>
+              {/* Card number top-left */}
+              <div style={{ position: "absolute" as const, top: "4px", left: "5px", color: "rgba(255,255,255,0.7)", fontSize: "7px", fontWeight: 700, letterSpacing: "0.5px" }}>
+                #{(i + 1) * 17}
+              </div>
+              {/* Year top-right */}
+              <div style={{ position: "absolute" as const, top: "4px", right: "5px", color: "rgba(255,255,255,0.7)", fontSize: "7px", fontWeight: 700, letterSpacing: "0.5px" }}>
+                {card.year}
+              </div>
+            </div>
+
+            {/* Name plate (bottom 30%) */}
+            <div style={{ position: "absolute" as const, bottom: "6px", left: "6px", right: "6px", height: "26%", background: "rgba(0,0,0,0.45)", borderRadius: "3px", display: "flex", flexDirection: "column" as const, alignItems: "center", justifyContent: "center", padding: "4px", textAlign: "center" as const }}>
+              <div style={{ color: "#faf7f0", fontSize: "9px", fontWeight: 800, letterSpacing: "0.5px", textTransform: "uppercase" as const, lineHeight: 1.1 }}>
+                {card.name.split(' ').slice(-1)[0]}
+              </div>
+              <div style={{ color: "rgba(255,255,255,0.6)", fontSize: "6px", fontWeight: 600, letterSpacing: "0.5px", textTransform: "uppercase" as const, marginTop: "2px" }}>
+                {card.set}
+              </div>
+            </div>
+          </div>
+          <div style={{ fontSize: "12px", fontWeight: 700, color: "#1a1a1a", marginBottom: "2px", letterSpacing: "-0.2px", lineHeight: 1.2 }}>{card.name}</div>
+          <div style={{ fontSize: "10px", color: "#888", marginBottom: "8px", lineHeight: 1.3 }}>{card.set}</div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: "auto" }}>
+            <div style={{ fontSize: "14px", fontWeight: 800, color: "#1F6F3A", letterSpacing: "-0.3px" }}>£{card.value}</div>
+            <div style={{ fontSize: "10px", fontWeight: 700, color: card.change >= 0 ? "#1F6F3A" : "#ef4444" }}>
+              {card.change >= 0 ? "+" : ""}£{card.change}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* CTA bar */}
+    <div style={{ borderTop: "1px solid #f0ede6", padding: "1.25rem 1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" as const, gap: "1rem", background: "#faf7f0" }}>
+      <div style={{ fontSize: "13px", color: "#666" }}>
+       Real eBay UK prices.
+      </div>
+      <Link
+        href={user ? "/collection" : "/signup"}
+        style={{ background: "#1F6F3A", color: "#faf7f0", fontWeight: 700, fontSize: "14px", padding: "10px 22px", borderRadius: "8px", textDecoration: "none", whiteSpace: "nowrap" as const }}>
+        {user ? "View Your Collection →" : "Start Your Collection →"}
+      </Link>
+    </div>
+  </div>
+</div>
 
         {/* Search Results */}
         {results.length > 0 && (
