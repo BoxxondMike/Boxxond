@@ -65,7 +65,7 @@ export default function ChecklistPage() {
 
         <div style={{ marginBottom: '2rem' }}>
           {checklist.setBadge && (
-            <div style={{ display: 'inline-block', background: 'rgba(58,170,53,0.1)', border: '1px solid rgba(58,170,53,0.25)', color: '#3aaa35', fontSize: '11px', fontWeight: 600, padding: '4px 12px', borderRadius: '20px', marginBottom: '0.75rem', letterSpacing: '1px', textTransform: 'uppercase' as const }}>
+            <div style={{ display: 'inline-block', background: 'rgba(58,170,53,0.1)', border: '1px solid rgba(58,170,53,0.25)', color: '#1F6F3A', fontSize: '11px', fontWeight: 600, padding: '4px 12px', borderRadius: '20px', marginBottom: '0.75rem', letterSpacing: '1px', textTransform: 'uppercase' as const }}>
               {checklist.setBadge}
             </div>
           )}
@@ -122,8 +122,8 @@ export default function ChecklistPage() {
         </div>
 
         {/* Sections */}
-        {Object.entries(filtered).map(([section, cards]) => {
-          const sectionColor = checklist.sectionColors?.[section] || '#3aaa35';
+        {Object.entries(filtered).filter(([section]) => openSections[section]).map(([section, cards]) => {
+          const sectionColor = checklist.sectionColors?.[section] || '#1F6F3A';
           return (
             <div key={section} style={{ background: '#fff', border: '1px solid #e0d9cc', borderRadius: '12px', marginBottom: '12px', overflow: 'hidden' }}>
               <button
@@ -143,7 +143,7 @@ export default function ChecklistPage() {
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                     <thead>
                       <tr style={{ background: '#faf7f0' }}>
-                        <th style={{ textAlign: 'left', padding: '8px 20px', fontSize: '11px', fontWeight: 600, color: '#aaa', textTransform: 'uppercase' as const, letterSpacing: '0.5px', width: '60px' }}>#</th>
+                        <th style={{ textAlign: 'left', padding: '8px 20px', fontSize: '11px', fontWeight: 600, color: '#aaa', textTransform: 'uppercase' as const, letterSpacing: '0.5px', width: '90px', whiteSpace: 'nowrap' as const }}>#</th>
                         <th style={{ textAlign: 'left', padding: '8px 20px', fontSize: '11px', fontWeight: 600, color: '#aaa', textTransform: 'uppercase' as const, letterSpacing: '0.5px' }}>Player</th>
                         <th style={{ textAlign: 'left', padding: '8px 20px', fontSize: '11px', fontWeight: 600, color: '#aaa', textTransform: 'uppercase' as const, letterSpacing: '0.5px' }}>{checklist.filterDimension.label}</th>
                         <th style={{ textAlign: 'right', padding: '8px 20px', fontSize: '11px', fontWeight: 600, color: '#aaa', textTransform: 'uppercase' as const, letterSpacing: '0.5px' }}>eBay</th>
@@ -154,11 +154,11 @@ export default function ChecklistPage() {
                         <tr key={i} style={{ borderTop: '1px solid #f0ede6' }}
                           onMouseEnter={e => e.currentTarget.style.background = '#faf7f0'}
                           onMouseLeave={e => e.currentTarget.style.background = '#fff'}>
-                          <td style={{ padding: '12px 20px', color: '#aaa', fontWeight: 600 }}>{card.num}</td>
+                          <td style={{ padding: '12px 20px', color: '#aaa', fontWeight: 600, whiteSpace: 'nowrap' as const }}>{card.num}</td>
                           <td style={{ padding: '12px 20px', fontWeight: 600, color: '#1a1a1a' }}>
                             {card.name}
                             {card.isRookie && (
-                              <span style={{ marginLeft: '8px', background: 'rgba(58,170,53,0.15)', color: '#3aaa35', fontSize: '10px', fontWeight: 700, padding: '2px 6px', borderRadius: '3px', letterSpacing: '0.05em' }}>RC</span>
+                              <span style={{ marginLeft: '8px', background: 'rgba(58,170,53,0.15)', color: '#1F6F3A', fontSize: '10px', fontWeight: 700, padding: '2px 6px', borderRadius: '3px', letterSpacing: '0.05em' }}>RC</span>
                             )}
                           </td>
                           <td style={{ padding: '12px 20px', color: '#666' }}>{(card as any)[filterField]}</td>
@@ -167,7 +167,7 @@ export default function ChecklistPage() {
                               <a href={`https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent(`${card.name} ${checklist.ebaySearchSuffix}`)}&_sacat=261328&campid=5339145682&customid=Boxxhq`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              style={{ fontSize: '12px', color: '#3aaa35', fontWeight: 600, textDecoration: 'none' }}>
+                              style={{ fontSize: '12px', color: '#1F6F3A', fontWeight: 600, textDecoration: 'none' }}>
                               eBay →
                             </a>
                           </td>
