@@ -1,4 +1,5 @@
 import { donrussRoadToWorldCup } from './donruss-road-to-world-cup';
+import { toppsFinestPremierLeague2026 } from './topps-finest-premier-league-2026';
 
 export type ChecklistCard = {
   num: number | string;
@@ -25,6 +26,7 @@ export type Checklist = {
 
 const checklists: Record<string, Checklist> = {
   'donruss-road-to-world-cup': donrussRoadToWorldCup,
+  'topps-finest-premier-league-2026': toppsFinestPremierLeague2026,
 };
 
 export function getChecklistBySlug(slug: string): Checklist | undefined {

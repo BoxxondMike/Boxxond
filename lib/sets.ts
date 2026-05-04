@@ -51,7 +51,7 @@ export const cardSets: CardSet[] = [
       'Finest Idols legends inserts are strong long-term holds',
     ],
     priceRange: 'From £5 to £3,000+',
-    checklistType: 'pdf',
+    checklistType: 'interactive',
     checklistUrl: 'https://cdn.shopify.com/s/files/1/0739/2015/1805/files/Finest_Premier_League_Checklist.pdf?v=1774359572',
   },
   {
