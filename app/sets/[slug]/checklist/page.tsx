@@ -59,9 +59,11 @@ export default function ChecklistPage() {
       <Nav />
       <div style={{ padding: '2.5rem 1.25rem', maxWidth: '960px', margin: '0 auto' }}>
 
-        <Link href={`/sets/${slug}`} style={{ color: '#888', fontSize: '13px', textDecoration: 'none', display: 'inline-block', marginBottom: '1.5rem' }}>
-          ← Back to Set Guide
-        </Link>
+        <button
+  onClick={() => window.history.back()}
+  style={{ color: '#888', fontSize: '13px', textDecoration: 'none', display: 'inline-block', marginBottom: '1.5rem', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>
+  ← Back
+</button>
 
         <div style={{ marginBottom: '2rem' }}>
           {checklist.setBadge && (
@@ -77,10 +79,15 @@ export default function ChecklistPage() {
 
         {/* Section Filter */}
         <div style={{ display: 'flex', gap: '8px', marginBottom: '1rem', flexWrap: 'wrap' as const }}>
-          <button onClick={() => setOpenSections(Object.fromEntries(Object.keys(checklist.sections).map(k => [k, true])))}
-            style={{ background: '#1F6F3A', color: '#fff', border: 'none', borderRadius: '6px', padding: '6px 14px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>
-            All
-          </button>
+          {(() => {
+  const allOpen = Object.values(openSections).every(Boolean) && Object.values(openSections).length === Object.keys(checklist.sections).length;
+  return (
+    <button onClick={() => setOpenSections(Object.fromEntries(Object.keys(checklist.sections).map(k => [k, true])))}
+      style={{ background: allOpen ? '#1F6F3A' : '#fff', color: allOpen ? '#fff' : '#888', border: '1px solid #e0d9cc', borderRadius: '6px', padding: '6px 14px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>
+      All
+    </button>
+  );
+})()}
           {Object.keys(checklist.sections).map(section => {
             const isOnlyOpen = openSections[section] && Object.values(openSections).filter(Boolean).length === 1;
             return (
