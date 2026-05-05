@@ -153,27 +153,33 @@ export async function POST(request: Request) {
 // ============================================================================
  
 async function findRelevantPlayers(message: string, ctx: PageContext) {
-  // Combine the message with page context so we catch players the visitor
-  // hasn't explicitly named (e.g. they're on /players/mbappe).
-  const searchTerms = [message.toLowerCase(), ctx.player_name?.toLowerCase() ?? '']
+  // Combine message with page context
+  const searchText = [
+    message.toLowerCase(),
+    ctx.player_name?.toLowerCase() ?? '',
+  ]
     .filter(Boolean)
     .join(' ');
- 
-  const words = searchTerms.split(/\s+/);
- 
+
+  // Extract candidate words (length > 2 to keep "eze", "son" etc but drop noise like "is", "of")
+  const words = searchText
+    .split(/\s+/)
+    .map((w) => w.replace(/[^a-z0-9]/g, '')) // strip punctuation
+    .filter((w) => w.length > 2);
+
+  if (words.length === 0) return [];
+
+  // Build an OR query that searches each word against the name column
+  // Postgres ILIKE is case-insensitive, %word% matches anywhere in the string
+  const orConditions = words.map((w) => `name.ilike.%${w}%`).join(',');
+
   const { data: players } = await supabase
     .from('players')
-    .select('name, team, sport, nationality')
-    .limit(200);
- 
-  if (!players) return [];
- 
-  return players
-    .filter((player: any) => {
-      const nameLower = player.name.toLowerCase();
-      return words.some((word: string) => word.length > 3 && nameLower.includes(word));
-    })
-    .slice(0, 5);
+    .select('name, team, sport, nationality, id')
+    .or(orConditions)
+    .limit(10);
+
+  return players ?? [];
 }
  
 async function getPriceContext(
