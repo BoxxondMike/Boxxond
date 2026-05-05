@@ -142,7 +142,7 @@ export const cardSets: CardSet[] = [
       'Strong UK collector demand given the Premier League focus',
     ],
     priceRange: 'From £5 to £2,000+',
-    checklistType: 'pdf',
+    checklistType: 'interactive',
     checklistUrl: 'https://cdn.shopify.com/s/files/1/0739/2015/1805/files/Merlin_Premier_League_2026_Hobby_Box_Checklist_1.pdf?v=1777382734',
   },
   {
