@@ -262,10 +262,10 @@ const fetchFeaturedCards = async () => {
 
 <div style={{ textAlign: "center" }}>
         <h1 style={{ fontWeight: 800, fontSize: "clamp(28px, 4.5vw, 44px)", lineHeight: 1.1, margin: "0 0 0.75rem", letterSpacing: "-1.5px" }}>
-          Track. Value. Collect. <span style={{ color: "#1F6F3A" }}>With BoxxHQ</span>
+          Track. Value. Collect. <span style={{ color: "#1F6F3A" }}></span>
         </h1>
         <p style={{ color: "#666", fontSize: "14px", lineHeight: 1.6, maxWidth: "560px", margin: "0 auto 1.5rem" }}>
-          Details on new releases with checklists. Create your collection
+          Details on new releases with checklists. Track live prices from ebay
         </p>
 
      {/* CTA Buttons */}
