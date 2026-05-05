@@ -210,6 +210,10 @@ const fetchFeaturedCards = async () => {
     .result-image { width: 100% !important; height: 200px !important; }
     .result-price { text-align: left; width: 100%; display: flex; justify-content: space-between; align-items: center; }
     .stats-bar { gap: 1.5rem; }
+    .portfolio-header { padding: 1.25rem 1.25rem !important; }
+    .portfolio-value-amount { font-size: 28px !important; }
+    .portfolio-stats { gap: 1rem !important; flex-wrap: wrap; width: 100%; }
+    .portfolio-stats > div { flex: 1; min-width: 90px; }
   }
 `}</style>
 
@@ -424,24 +428,24 @@ const fetchFeaturedCards = async () => {
   {/* Mock collection card */}
   <div style={{ background: "#fff", border: "1px solid #e0d9cc", borderRadius: "16px", overflow: "hidden", boxShadow: "0 4px 24px rgba(31,111,58,0.06)" }}>
     {/* Portfolio summary header */}
-    <div style={{ background: "linear-gradient(135deg, #1F6F3A 0%, #2d8a4a 100%)", padding: "1.5rem 2rem", color: "#faf7f0" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" as const, gap: "1rem" }}>
-        <div>
+    <div className="portfolio-header" style={{ background: "linear-gradient(135deg, #1F6F3A 0%, #2d8a4a 100%)", padding: "1.5rem 2rem", color: "#faf7f0" }}>
+      <div className="portfolio-header-inner" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" as const, gap: "1.25rem" }}>
+        <div className="portfolio-value-block">
           <div style={{ fontSize: "11px", textTransform: "uppercase" as const, letterSpacing: "1px", opacity: 0.8, marginBottom: "4px" }}>Portfolio Value</div>
-          <div style={{ fontSize: "36px", fontWeight: 800, letterSpacing: "-1px" }}>£3,247.85</div>
+          <div className="portfolio-value-amount" style={{ fontSize: "36px", fontWeight: 800, letterSpacing: "-1px", whiteSpace: "nowrap" as const }}>£3,247.85</div>
         </div>
-        <div style={{ display: "flex", gap: "2rem" }}>
+        <div className="portfolio-stats" style={{ display: "flex", gap: "2rem" }}>
           <div>
             <div style={{ fontSize: "11px", textTransform: "uppercase" as const, letterSpacing: "1px", opacity: 0.8, marginBottom: "4px" }}>This Week</div>
-            <div style={{ fontSize: "18px", fontWeight: 700, color: "#a8e6b0" }}>+£87.20</div>
+            <div style={{ fontSize: "18px", fontWeight: 700, color: "#a8e6b0", whiteSpace: "nowrap" as const }}>+£87.20</div>
           </div>
           <div>
             <div style={{ fontSize: "11px", textTransform: "uppercase" as const, letterSpacing: "1px", opacity: 0.8, marginBottom: "4px" }}>All Time</div>
-            <div style={{ fontSize: "18px", fontWeight: 700, color: "#a8e6b0" }}>+£412.40 (+14.5%)</div>
+            <div style={{ fontSize: "18px", fontWeight: 700, color: "#a8e6b0", whiteSpace: "nowrap" as const }}>+£412.40 (+14.5%)</div>
           </div>
           <div>
             <div style={{ fontSize: "11px", textTransform: "uppercase" as const, letterSpacing: "1px", opacity: 0.8, marginBottom: "4px" }}>Cards</div>
-            <div style={{ fontSize: "18px", fontWeight: 700 }}>24</div>
+            <div style={{ fontSize: "18px", fontWeight: 700 }}>25</div>
           </div>
         </div>
       </div>
